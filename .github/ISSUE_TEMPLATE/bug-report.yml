@@ -1,0 +1,59 @@
+name: 🐞 Bug Report
+description: Create a report to help us improve UTMOSv2.
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for taking the time to report a bug! Please fill out the sections below to help us reproduce and fix the issue.
+  
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: ☑️ Checks
+      options:
+        - label: I have searched [existing/past issues](https://github.com/sarulab-speech/UTMOSv2/issues) and found no similar issue.
+          required: true
+
+  - type: textarea
+    id: description
+    attributes:
+      label: ✏️ Description
+      description: A clear and concise description of what the bug is.
+      placeholder: Include screenshots, logs, and any other relevant information to receive the most helpful response.
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: Environment
+      description: Please specify the software and hardware you used to produce the bug.
+      placeholder: OS, Python version, UTMOSv2 version, etc.
+    validations:
+      required: true
+  
+  - type: textarea
+    id: expected-behavior
+    attributes:
+      label: Expected behavior
+      description: A clear and concise description of what you expected to happen.
+      placeholder: Describe the expected behavior.
+    validations:
+      required: true
+  
+  - type: textarea
+    id: steps-to-reproduce
+    attributes:
+      label: Steps to reproduce
+      description: Please provide detailed steps to reproduce the bug.
+      placeholder: |
+        1.
+        2.
+        3.
+    validations:
+      required: true
+
+  - type: textarea
+    id: additional-notes
+    attributes:
+      label: Additional notes
+      description: Add any other context about the problem here.

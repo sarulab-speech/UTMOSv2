@@ -1,0 +1,31 @@
+name: Lint and Format
+
+on: push
+
+jobs:
+  ckecks:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        ref: ${{ github.head_ref }}
+        fetch-depth: 0
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.12'
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install ruff
+    - name: Run Ruff (lint)
+      run: ruff check --output-format=github .
+    - name: Run Ruff (format)
+      run: |
+        ruff format .
+    - name: Commit changes
+      uses: stefanzweifel/git-auto-commit-action@v5
+      with:
+        commit_message: Apply automatic code formatting

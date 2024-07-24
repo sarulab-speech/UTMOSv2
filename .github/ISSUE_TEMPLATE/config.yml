@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 🖐️ Questions / 💬 Discussions
+    url: https://github.com/sarulab-speech/UTMOSv2/discussions
+    about: Get help with using UTMOSv2, share ideas, and discuss features.
