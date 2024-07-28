@@ -138,6 +138,7 @@ def get_inference_data(cfg) -> pd.DataFrame:
         data["utt_id"] = data["file_path"].apply(
             lambda x: x.split("/")[-1].replace(".wav", "")
         )
+        data["file_path"] = data["file_path"].apply(lambda x: Path(x))
         data["sys_id"] = data["utt_id"].apply(lambda x: x.split("-")[0])
         if cfg.inference.val_list_path:
             with open(cfg.inference.val_list_path, "r") as f:
@@ -164,6 +165,7 @@ def get_train_data(cfg) -> pd.DataFrame:
             d["utt_id"] = d["file_path"].apply(
                 lambda x: x.split("/")[-1].replace(".wav", "")
             )
+            d["file_path"] = d["file_path"].apply(lambda x: Path(x))
             mos_list = pd.read_csv(dt["mos_list"], header=None)
             mos_list.columns = ["utt_id", "mos"]
             mos_list["utt_id"] = mos_list["utt_id"].apply(
