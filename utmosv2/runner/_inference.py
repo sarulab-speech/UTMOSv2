@@ -30,9 +30,9 @@ def run_inference(
             x = t[:-1]
             x = [t.to(device, non_blocking=True) for t in x]
             with autocast():
-                output = model(*x).squeeze()
-            test_preds.append(output.squeeze().cpu().numpy())
-    test_preds = np.concatenate(test_preds) if cfg.input_dir else np.array(test_preds)
+                output = model(*x).squeeze(1)
+            test_preds.append(output.cpu().numpy())
+    test_preds = np.concatenate(test_preds)
     if cfg.reproduce:
         test_metrics = calc_metrics(test_data, test_preds)
         print_metrics(test_metrics)
