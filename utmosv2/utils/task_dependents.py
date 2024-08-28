@@ -81,7 +81,10 @@ def get_model(cfg, device: torch.device) -> nn.Module:
                 / cfg.weight
                 / f"fold{cfg.now_fold}_s{cfg.split.seed}_best_model.pth"
             ).as_posix()
-        model.load_state_dict(torch.load(weight_path))
+        weights=torch.load(weight_path,map_location="cpu")
+        weights["ssl.encoder.model.encoder.pos_conv_embed.conv.weight_g"]=weights["ssl.encoder.model.encoder.pos_conv_embed.conv.parametrizations.weight.original0"]
+        weights["ssl.encoder.model.encoder.pos_conv_embed.conv.weight_v"]=weights["ssl.encoder.model.encoder.pos_conv_embed.conv.parametrizations.weight.original1"]
+        model.load_state_dict(weights,strict=False)
         print(f"Loaded weight from {weight_path}")
     return model
 
