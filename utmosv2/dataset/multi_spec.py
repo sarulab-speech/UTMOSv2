@@ -85,6 +85,7 @@ def _make_melspec(cfg, spec_cfg, y: np.ndarray) -> np.ndarray:
         n_fft=spec_cfg.n_fft,
         hop_length=spec_cfg.hop_length,
         n_mels=spec_cfg.n_mels,
+        win_length=spec_cfg.win_length,
     )
     spec = librosa.power_to_db(spec, ref=np.max)
     if spec_cfg.norm is not None:
