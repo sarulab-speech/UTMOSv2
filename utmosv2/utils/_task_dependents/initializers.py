@@ -95,28 +95,6 @@ def get_metrics() -> dict[str, Callable[[np.ndarray, np.ndarray], float]]:
     }
 
 
-def calc_metrics(data: pd.DataFrame, preds: np.ndarray) -> dict[str, float]:
-    data = data.copy()
-    data["preds"] = preds
-    data_sys = data.groupby("sys_id", as_index=False)[["mos", "preds"]].mean()
-    res = {}
-    for name, d in {"utt": data, "sys": data_sys}.items():
-        res[f"{name}_mse"] = np.mean((d["mos"].values - d["preds"].values) ** 2)
-        res[f"{name}_lcc"] = np.corrcoef(d["mos"].values, d["preds"].values)[0][1]
-        res[f"{name}_srcc"] = scipy.stats.spearmanr(d["mos"].values, d["preds"].values)[
-            0
-        ]
-        res[f"{name}_ktau"] = scipy.stats.kendalltau(
-            d["mos"].values, d["preds"].values
-        )[0]
-    return res
-
-
-def configure_defaults(cfg):
-    if cfg.id_name is None:
-        cfg.id_name = "utt_id"
-
-
 def _get_testdata(cfg, data: pd.DataFrame) -> pd.DataFrame:
     with open(cfg.inference.val_list_path, "r") as f:
         val_lists = [s.replace("\n", "") + ".wav" for s in f.readlines()]
@@ -180,14 +158,6 @@ def get_train_data(cfg) -> pd.DataFrame:
     return data
 
 
-def show_inference_data(data: pd.DataFrame):
-    print(
-        data[[c for c in data.columns if c != "mos"]]
-        .rename(columns={"dataset": "predict_dataset"})
-        .head()
-    )
-
-
 def _get_test_save_name(cfg) -> str:
     return f"{cfg.config_name}_[fold{cfg.inference.fold}_tta{cfg.inference.num_tta}_s{cfg.split.seed}]"
 
@@ -209,32 +179,3 @@ def save_test_preds(
     with open(save_path, "w") as f:
         json.dump(test_metrics, f)
     print(f"Test predictions are saved to {save_path}")
-
-
-def make_submission_file(cfg, data: pd.DataFrame, test_preds: np.ndarray):
-    submit = pd.DataFrame({cfg.id_name: data[cfg.id_name], "prediction": test_preds})
-    (
-        cfg.inference.submit_save_path
-        / f"{_get_test_save_name(cfg)}_({cfg.predict_dataset})"
-    ).mkdir(parents=True, exist_ok=True)
-    sub_file = (
-        cfg.inference.submit_save_path
-        / f"{_get_test_save_name(cfg)}_({cfg.predict_dataset})"
-        / "answer.txt"
-    )
-    submit.to_csv(
-        sub_file,
-        index=False,
-        header=False,
-    )
-    print(f"Submission file is saved to {sub_file}")
-
-
-def save_preds(cfg, data: pd.DataFrame, test_preds: np.ndarray):
-    pred = pd.DataFrame({cfg.id_name: data[cfg.id_name], "mos": test_preds})
-    if cfg.out_path is None:
-        print("Predictions:")
-        print(pred)
-    else:
-        pred.to_csv(cfg.out_path, index=False)
-        print(f"Predictions are saved to {cfg.out_path}")

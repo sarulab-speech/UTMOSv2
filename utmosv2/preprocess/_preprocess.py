@@ -1,10 +1,10 @@
 import os
+from pathlib import Path
 
 import librosa
 import numpy as np
 import pandas as pd
 from tqdm import tqdm
-from pathlib import Path
 
 
 def _clip_audio(cfg, data: pd.DataFrame, data_name: str = "bvcc"):

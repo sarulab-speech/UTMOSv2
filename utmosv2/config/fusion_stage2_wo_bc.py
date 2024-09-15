@@ -3,7 +3,7 @@ from types import SimpleNamespace
 
 from torchvision import transforms
 
-from utmosv2.transform.xymasking import XYMasking
+from utmosv2.transform import XYMasking
 
 batch_size = 16
 num_folds = 5
