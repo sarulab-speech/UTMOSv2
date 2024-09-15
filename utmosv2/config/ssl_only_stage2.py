@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -24,7 +26,7 @@ dataset = SimpleNamespace(
     ),
 )
 
-external_data = "all"
+external_data: list[str] | str = "all"
 use_bvcc = True
 
 

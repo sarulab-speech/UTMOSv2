@@ -1,7 +1,11 @@
-import pandas as pd
+from typing import TYPE_CHECKING
+
 import torch
 
 from utmosv2.dataset import MultiSpecDataset, SSLExtDataset
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 class SSLLMultiSpecExtDataset(torch.utils.data.Dataset):

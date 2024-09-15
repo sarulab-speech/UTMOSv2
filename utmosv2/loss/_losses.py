@@ -22,7 +22,7 @@ class PairwizeDiffLoss(nn.Module):
             "l1": torch.abs,
             "l2_squared": lambda x: x**2,
         }[self.norm]
-        loss = F.relu(norm_fn(s - t) - self.margin)
+        loss = F.relu(norm_fn(s - t) - self.margin)  # type: ignore
         return loss.mean().div(2)
 
 

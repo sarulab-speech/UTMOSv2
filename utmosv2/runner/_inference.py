@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
-import pandas as pd
 import torch
 from torch.cuda.amp import autocast
 from tqdm import tqdm
 
 from utmosv2.utils import calc_metrics, print_metrics
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def run_inference(
@@ -18,7 +22,7 @@ def run_inference(
     device: torch.device,
 ) -> tuple[np.ndarray, dict[str, float] | None]:
     model.eval()
-    test_preds = []
+    test_preds_ls = []
     pbar = tqdm(
         test_dataloader,
         total=len(test_dataloader),
@@ -31,8 +35,8 @@ def run_inference(
             x = [t.to(device, non_blocking=True) for t in x]
             with autocast():
                 output = model(*x).squeeze(1)
-            test_preds.append(output.cpu().numpy())
-    test_preds = np.concatenate(test_preds)
+            test_preds_ls.append(output.cpu().numpy())
+    test_preds = np.concatenate(test_preds_ls)
     if cfg.reproduce:
         test_metrics = calc_metrics(test_data, test_preds)
         print_metrics(test_metrics)

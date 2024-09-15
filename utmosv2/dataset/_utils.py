@@ -1,10 +1,11 @@
 import json
+from pathlib import Path
 
 import librosa
 import numpy as np
 
 
-def load_audio(cfg, file: str) -> np.ndarray:
+def load_audio(cfg, file: Path) -> np.ndarray:
     if file.suffix == ".wav":
         y, sr = librosa.load(file, sr=None)
         y = librosa.resample(y, orig_sr=sr, target_sr=cfg.sr)

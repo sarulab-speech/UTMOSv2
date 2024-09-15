@@ -87,7 +87,7 @@ def get_optimizer(cfg, model: nn.Module) -> optim.Optimizer:
 
 def get_scheduler(
     cfg, optimizer: optim.Optimizer, n_iterations: int
-) -> optim.lr_scheduler._LRScheduler:
+) -> optim.lr_scheduler.LRScheduler:
     if cfg.print_config:
         print(f"Using scheduler: {cfg.scheduler}")
     if cfg.scheduler is None:

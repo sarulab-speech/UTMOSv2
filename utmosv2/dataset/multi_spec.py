@@ -1,6 +1,7 @@
+from typing import TYPE_CHECKING
+
 import librosa
 import numpy as np
-import pandas as pd
 import torch
 
 from utmosv2.dataset._utils import (
@@ -9,6 +10,9 @@ from utmosv2.dataset._utils import (
     load_audio,
     select_random_start,
 )
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 class MultiSpecDataset(torch.utils.data.Dataset):

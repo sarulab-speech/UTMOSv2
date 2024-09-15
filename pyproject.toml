@@ -31,5 +31,12 @@ dependencies = [
 ]
 requires-python = ">=3.9"
 
+[project.optional-dependencies]
+checking = ["ruff", "mypy", "types-setuptools", "types-tqdm"]
+
 [tool.setuptools]
 py-modules = []
+
+[tool.mypy]
+python_version = "3.11"
+ignore_missing_imports = true
