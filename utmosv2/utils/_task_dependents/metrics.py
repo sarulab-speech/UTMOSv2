@@ -9,7 +9,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
 
-def calc_metrics(data: pd.DataFrame, preds: np.ndarray) -> dict[str, float]:
+def calc_metrics(data: "pd.DataFrame", preds: np.ndarray) -> dict[str, float]:
     data = data.copy()
     data["preds"] = preds
     data_sys = data.groupby("sys_id", as_index=False)[["mos", "preds"]].mean()

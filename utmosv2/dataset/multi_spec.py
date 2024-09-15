@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 class MultiSpecDataset(torch.utils.data.Dataset):
-    def __init__(self, cfg, data: pd.DataFrame, phase: str, transform=None):
+    def __init__(self, cfg, data: "pd.DataFrame", phase: str, transform=None):
         self.cfg = cfg
         self.data = data
         self.phase = phase
@@ -59,7 +59,7 @@ class MultiSpecDataset(torch.utils.data.Dataset):
 
 
 class MultiSpecExtDataset(MultiSpecDataset):
-    def __init__(self, cfg, data: pd.DataFrame, phase: str, transform=None):
+    def __init__(self, cfg, data: "pd.DataFrame", phase: str, transform=None):
         super().__init__(cfg, data, phase, transform)
         self.dataset_map = get_dataset_map(cfg)
 

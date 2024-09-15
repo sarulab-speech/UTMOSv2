@@ -153,7 +153,7 @@ def run_train(
     model: torch.nn.Module,
     train_dataloader: torch.utils.data.DataLoader,
     valid_dataloader: torch.utils.data.DataLoader,
-    valid_data: pd.DataFrame,
+    valid_data: "pd.DataFrame",
     oof_preds: np.ndarray,
     now_fold: int,
     criterion: torch.nn.Module,

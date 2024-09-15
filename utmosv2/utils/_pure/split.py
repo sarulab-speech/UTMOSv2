@@ -16,7 +16,7 @@ if TYPE_CHECKING:
 
 
 def split_data(
-    cfg, data: pd.DataFrame
+    cfg, data: "pd.DataFrame"
 ) -> Generator[tuple[np.ndarray, np.ndarray], None, None]:
     if cfg.print_config:
         print(f"Using split: {cfg.split.type}")

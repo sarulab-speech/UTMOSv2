@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 class SSLDataset(torch.utils.data.Dataset):
-    def __init__(self, cfg, data: pd.DataFrame, phase: str):
+    def __init__(self, cfg, data: "pd.DataFrame", phase: str):
         self.cfg = cfg
         self.data = data
         self.phase = phase
@@ -38,7 +38,7 @@ class SSLDataset(torch.utils.data.Dataset):
 
 
 class SSLExtDataset(SSLDataset):
-    def __init__(self, cfg, data: pd.DataFrame, phase: str):
+    def __init__(self, cfg, data: "pd.DataFrame", phase: str):
         super().__init__(cfg, data, phase)
         self.dataset_map = get_dataset_map(cfg)
 
