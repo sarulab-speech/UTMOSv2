@@ -4,15 +4,23 @@ from collections.abc import Generator
 from typing import TYPE_CHECKING
 
 import numpy as np
-from sklearn.model_selection import (
-    GroupKFold,
-    KFold,
-    StratifiedGroupKFold,
-    StratifiedKFold,
-)
+
+from utmosv2.utils._pure import _LazyImport
 
 if TYPE_CHECKING:
     import pandas as pd
+    from sklearn.model_selection import (
+        GroupKFold,
+        KFold,
+        StratifiedGroupKFold,
+        StratifiedKFold,
+    )
+else:
+    model_selection = _LazyImport("sklearn.model_selection")
+    GroupKFold = model_selection.GroupKFold
+    KFold = model_selection.KFold
+    StratifiedGroupKFold = model_selection.StratifiedGroupKFold
+    StratifiedKFold = model_selection.StratifiedKFold
 
 
 def split_data(
