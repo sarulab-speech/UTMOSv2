@@ -1,6 +1,4 @@
-from utmosv2.utils.pure import (
-    configure_args,
-    configure_inference_args,
+from utmosv2.utils._pure import (
     get_dataloader,
     get_loss,
     get_optimizer,
@@ -9,9 +7,8 @@ from utmosv2.utils.pure import (
     save_oof_preds,
     split_data,
 )
-from utmosv2.utils.task_dependents import (
+from utmosv2.utils._task_dependents import (
     calc_metrics,
-    configure_defaults,
     get_data,
     get_dataset,
     get_inference_data,
@@ -25,8 +22,6 @@ from utmosv2.utils.task_dependents import (
 )
 
 __all__ = [
-    "configure_args",
-    "configure_inference_args",
     "get_dataloader",
     "get_loss",
     "get_optimizer",
@@ -35,7 +30,6 @@ __all__ = [
     "save_oof_preds",
     "split_data",
     "calc_metrics",
-    "configure_defaults",
     "get_data",
     "get_dataset",
     "get_inference_data",

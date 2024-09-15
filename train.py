@@ -8,9 +8,8 @@ import wandb
 from dotenv import load_dotenv
 
 from utmosv2.runner import run_train
+from utmosv2.settings import configure_args, configure_defaults
 from utmosv2.utils import (
-    configure_args,
-    configure_defaults,
     get_dataloader,
     get_dataset,
     get_loss,

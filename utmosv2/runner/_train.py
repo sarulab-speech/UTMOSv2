@@ -14,7 +14,7 @@ from tqdm import tqdm
 from utmosv2.utils import calc_metrics, print_metrics
 
 
-def _train_1epoch(
+def train_1epoch(
     cfg,
     model: torch.nn.Module,
     train_dataloader: torch.utils.data.DataLoader,
@@ -86,7 +86,7 @@ def _train_1epoch(
     return {name: v / len(train_dataloader) for name, v in train_loss.items()}
 
 
-def _validate_1epoch(
+def validate_1epoch(
     cfg,
     model: torch.nn.Module,
     valid_dataloader: torch.utils.data.DataLoader,
@@ -164,10 +164,10 @@ def run_train(
 
     for epoch in range(cfg.run.num_epochs):
         print(f"[Epoch {epoch + 1}/{cfg.run.num_epochs}]")
-        train_loss = _train_1epoch(
+        train_loss = train_1epoch(
             cfg, model, train_dataloader, criterion, optimizer, scheduler, device
         )
-        valid_loss, _, valid_preds = _validate_1epoch(
+        valid_loss, _, valid_preds = validate_1epoch(
             cfg, model, valid_dataloader, criterion, metrics, device
         )
 
