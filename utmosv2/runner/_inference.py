@@ -18,7 +18,7 @@ def run_inference(
     model: torch.nn.Module,
     test_dataloader: torch.utils.data.DataLoader,
     cycle: int,
-    test_data: pd.DataFrame,
+    test_data: "pd.DataFrame",
     device: torch.device,
 ) -> tuple[np.ndarray, dict[str, float] | None]:
     model.eval()

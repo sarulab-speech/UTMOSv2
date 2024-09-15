@@ -25,7 +25,7 @@ class XYMasking:
         self.fill_value = fill_value
         self.p = p
 
-    def __call__(self, img: torch.Tensor) -> torch.Tensor:
+    def __call__(self, img: "torch.Tensor") -> "torch.Tensor":
         if np.random.rand() < self.p:
             return img
         _, width, height = img.shape

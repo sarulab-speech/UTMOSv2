@@ -9,7 +9,7 @@ if TYPE_CHECKING:
 
 
 class SSLLMultiSpecExtDataset(torch.utils.data.Dataset):
-    def __init__(self, cfg, data: pd.DataFrame, phase: str, transform=None):
+    def __init__(self, cfg, data: "pd.DataFrame", phase: str, transform=None):
         self.data = data
         self.ssl = SSLExtDataset(cfg, data, phase)
         self.multi_spec = MultiSpecDataset(cfg, data, phase, transform)
