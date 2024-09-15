@@ -16,11 +16,11 @@ if TYPE_CHECKING:
         StratifiedKFold,
     )
 else:
-    model_selection = _LazyImport("sklearn.model_selection")
-    GroupKFold = model_selection.GroupKFold
-    KFold = model_selection.KFold
-    StratifiedGroupKFold = model_selection.StratifiedGroupKFold
-    StratifiedKFold = model_selection.StratifiedKFold
+    _model_selection = _LazyImport("sklearn.model_selection")
+    GroupKFold = _model_selection.GroupKFold
+    KFold = _model_selection.KFold
+    StratifiedGroupKFold = _model_selection.StratifiedGroupKFold
+    StratifiedKFold = _model_selection.StratifiedKFold
 
 
 def split_data(
