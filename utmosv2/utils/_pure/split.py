@@ -1,15 +1,18 @@
 from __future__ import annotations
 
 from collections.abc import Generator
+from typing import TYPE_CHECKING
 
 import numpy as np
-import pandas as pd
 from sklearn.model_selection import (
     GroupKFold,
     KFold,
     StratifiedGroupKFold,
     StratifiedKFold,
 )
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def split_data(

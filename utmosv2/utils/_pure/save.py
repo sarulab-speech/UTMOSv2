@@ -1,5 +1,9 @@
-import numpy as np
+from typing import TYPE_CHECKING
+
 import pandas as pd
+
+if TYPE_CHECKING:
+    import numpy as np
 
 
 def save_oof_preds(cfg, data: pd.DataFrame, oof_preds: np.ndarray, fold: int):

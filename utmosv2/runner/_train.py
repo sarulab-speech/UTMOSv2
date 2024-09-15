@@ -3,15 +3,18 @@ from __future__ import annotations
 import os
 from collections import defaultdict
 from collections.abc import Callable
+from typing import TYPE_CHECKING
 
 import numpy as np
-import pandas as pd
 import torch
 import wandb
 from torch.cuda.amp import GradScaler, autocast
 from tqdm import tqdm
 
 from utmosv2.utils import calc_metrics, print_metrics
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def train_1epoch(
@@ -24,7 +27,7 @@ def train_1epoch(
     device: torch.device,
 ) -> dict[str, float]:
     model.train()
-    train_loss = defaultdict(float)
+    train_loss: defaultdict[str, float] = defaultdict(float)
     scaler = GradScaler()
     print(f"  (lr: {scheduler.get_last_lr()[0]:.6f})")
     pbar = tqdm(train_dataloader, total=len(train_dataloader))
@@ -95,7 +98,7 @@ def validate_1epoch(
     device: torch.device,
 ) -> tuple[dict[str, float], dict[str, float], np.ndarray]:
     model.eval()
-    valid_loss = defaultdict(float)
+    valid_loss: defaultdict[str, float] = defaultdict(float)
     valid_metrics = {name: 0.0 for name in metrics}
     valid_preds = []
     pbar = tqdm(valid_dataloader, total=len(valid_dataloader))
@@ -136,13 +139,13 @@ def validate_1epoch(
             )
             valid_preds.append(output)
 
-    valid_loss = {name: v / len(valid_dataloader) for name, v in valid_loss.items()}
+    valid_loss_dic = {name: v / len(valid_dataloader) for name, v in valid_loss.items()}
     valid_metrics = {
         name: v / len(valid_dataloader) for name, v in valid_metrics.items()
     }
-    valid_preds = np.concatenate(valid_preds)
+    valid_preds_arr = np.concatenate(valid_preds)
 
-    return valid_loss, valid_metrics, valid_preds
+    return valid_loss_dic, valid_metrics, valid_preds_arr
 
 
 def run_train(
@@ -174,19 +177,17 @@ def run_train(
         print(f"Validation dataset: {cfg.validation_dataset}")
         if cfg.validation_dataset == "each":
             dataset = valid_data["dataset"].unique()
-            val_metrics = [
+            val_metrics_ls = [
                 calc_metrics(
                     valid_data[valid_data["dataset"] == ds],
                     valid_preds[valid_data["dataset"] == ds],
                 )
                 for ds in dataset
             ]
-            print(val_metrics)
             val_metrics = {
-                name: sum([m[name] for m in val_metrics]) / len(val_metrics)
-                for name in val_metrics[0].keys()
+                name: sum([m[name] for m in val_metrics_ls]) / len(val_metrics_ls)
+                for name in val_metrics_ls[0].keys()
             }
-            print(val_metrics)
         elif cfg.validation_dataset == "all":
             print("Validation dataset: ALL")
             val_metrics = calc_metrics(valid_data, valid_preds)

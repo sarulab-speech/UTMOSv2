@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from types import SimpleNamespace
 
 from torchvision import transforms
@@ -20,7 +22,7 @@ split = SimpleNamespace(
     kind="dataset",
 )
 
-external_data = "all"
+external_data: list[str] | str = "all"
 use_bvcc = True
 
 predict_dataset = "ysaito"

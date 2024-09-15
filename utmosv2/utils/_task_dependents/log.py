@@ -1,4 +1,7 @@
-import pandas as pd
+from typing import TYPE_CHECKING
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def show_inference_data(data: pd.DataFrame):

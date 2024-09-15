@@ -1,8 +1,12 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import numpy as np
-import pandas as pd
 import scipy.stats
+
+if TYPE_CHECKING:
+    import pandas as pd
 
 
 def calc_metrics(data: pd.DataFrame, preds: np.ndarray) -> dict[str, float]:

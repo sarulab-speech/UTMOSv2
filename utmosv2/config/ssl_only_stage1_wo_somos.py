@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -24,7 +26,7 @@ dataset = SimpleNamespace(
     ),
 )
 
-external_data = [
+external_data: list[str] | str = [
     "sarulab",
     "blizzard2008",
     "blizzard2009",

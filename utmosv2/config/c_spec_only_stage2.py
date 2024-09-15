@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 from types import SimpleNamespace
 
@@ -20,7 +22,7 @@ split = SimpleNamespace(
     group="sys_id",
 )
 
-external_data = ["sarulab"]
+external_data: list[str] | str = ["sarulab"]
 use_bvcc = False
 
 

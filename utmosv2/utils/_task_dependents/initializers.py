@@ -41,6 +41,7 @@ def get_data(cfg) -> pd.DataFrame:
 def get_dataset(cfg, data: pd.DataFrame, phase: str) -> torch.utils.data.Dataset:
     if cfg.print_config:
         print(f"Using dataset: {cfg.dataset.name}")
+    res: torch.utils.data.Dataset
     if cfg.dataset.name == "multi_spec":
         res = MultiSpecDataset(cfg, data, phase, cfg.transform)
     elif cfg.dataset.name == "ssl":
@@ -59,6 +60,7 @@ def get_dataset(cfg, data: pd.DataFrame, phase: str) -> torch.utils.data.Dataset
 def get_model(cfg, device: torch.device) -> nn.Module:
     if cfg.print_config:
         print(f"Using model: {cfg.model.name}")
+    model: nn.Module
     if cfg.model.name == "multi_specv2":
         model = MultiSpecModelV2(cfg)
     elif cfg.model.name == "sslext":
