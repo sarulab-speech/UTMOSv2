@@ -5,11 +5,11 @@ body:
   - type: markdown
     attributes:
       value: Thanks for taking the time to report a bug! Please fill out the sections below to help us reproduce and fix the issue.
-  
+
   - type: checkboxes
     id: checks
     attributes:
-      label: ☑️ Checks
+      label: ✅ Checks
       options:
         - label: I have searched [existing/past issues](https://github.com/sarulab-speech/UTMOSv2/issues) and found no similar issue.
           required: true
@@ -25,25 +25,25 @@ body:
 
   - type: textarea
     attributes:
-      label: Environment
+      label: 💻 Environment
       description: Please specify the software and hardware you used to produce the bug.
       placeholder: OS, Python version, UTMOSv2 version, etc.
     validations:
       required: true
-  
+
   - type: textarea
     id: expected-behavior
     attributes:
-      label: Expected behavior
+      label: 🌟 Expected behavior
       description: A clear and concise description of what you expected to happen.
       placeholder: Describe the expected behavior.
     validations:
       required: true
-  
+
   - type: textarea
     id: steps-to-reproduce
     attributes:
-      label: Steps to reproduce
+      label: 🚶‍♀️ Steps to reproduce
       description: Please provide detailed steps to reproduce the bug.
       placeholder: |
         1.
@@ -55,5 +55,5 @@ body:
   - type: textarea
     id: additional-notes
     attributes:
-      label: Additional notes
+      label: 🗒️ Additional notes
       description: Add any other context about the problem here.
