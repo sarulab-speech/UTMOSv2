@@ -33,7 +33,7 @@ checking = ["ruff", "mypy", "types-setuptools", "types-tqdm"]
 train = ["scikit-learn>=1.3.2", "wandb>=0.17.0", "python-dotenv>=1.0.1"]
 
 [tool.setuptools]
-py-modules = []
+packages = ["utmosv2"]
 
 [tool.mypy]
 python_version = "3.11"
