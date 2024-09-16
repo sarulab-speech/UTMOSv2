@@ -11,6 +11,25 @@
 To train UTMOSv2 following the methods described in the paper or used in the competition, please refer to [this document](reproduction.md).
 
 <h2 align="center">
+  <div> 📩 Install Training Dependencies 📩 </div>
+  <a href="https://github.com/sarulab-speech/UTMOSv2/blob/main/docs/training.md#---install-training-dependencies---------">
+    <img width="80%" height="6px" src="image/line2.svg">
+  </a>
+</h2>
+
+To install the dependencies required for training, run the following command:
+
+```bash
+pip install -e .[train]
+```
+
+> [!NOTE]
+> If you are using zsh, make sure to escape the square brackets like this:
+> ```zsh
+> pip install -e '.[train]'
+> ```
+
+<h2 align="center">
   <div>🚀 Train UTMOSv2 Using Your Own Data 🚀</div>
   <a href="https://github.com/sarulab-speech/UTMOSv2/blob/main/docs/training.md#---train-utmosv2-using-your-own-data---------">
     <img width="80%" height="6px" src="image/line2.svg">
