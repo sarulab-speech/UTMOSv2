@@ -4,6 +4,7 @@ import glob
 import json
 from collections.abc import Callable
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import numpy as np
 import pandas as pd
@@ -27,6 +28,9 @@ from utmosv2.model import (
 )
 from utmosv2.preprocess import add_sys_mean, preprocess, preprocess_test
 
+if TYPE_CHECKING:
+    from utmosv2.dataset._schema import DatasetSchema
+
 
 def get_data(cfg) -> pd.DataFrame:
     train_mos_list = pd.read_csv(cfg.input_dir / "sets/train_mos_list.txt", header=None)
@@ -38,7 +42,9 @@ def get_data(cfg) -> pd.DataFrame:
     return data
 
 
-def get_dataset(cfg, data: pd.DataFrame, phase: str) -> torch.utils.data.Dataset:
+def get_dataset(
+    cfg, data: pd.DataFrame | list[DatasetSchema], phase: str
+) -> torch.utils.data.Dataset:
     if cfg.print_config:
         print(f"Using dataset: {cfg.dataset.name}")
     res: torch.utils.data.Dataset

@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from collections.abc import Callable
 from typing import TYPE_CHECKING
 
@@ -16,11 +18,13 @@ from utmosv2.dataset._utils import (
 if TYPE_CHECKING:
     import pandas as pd
 
+    from utmosv2.dataset._schema import DatasetSchema
+
 
 class MultiSpecDataset(BaseDataset):
     def __getitem__(self, idx):
-        row = self.data.iloc[idx]
-        file = row["file_path"]
+        row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
+        file = row.file_path
         y = load_audio(self.cfg, file)
         specs = []
         length = int(self.cfg.dataset.spec_frames.frame_sec * self.cfg.sr)
@@ -45,7 +49,7 @@ class MultiSpecDataset(BaseDataset):
                 specs.append(spec)
         spec = torch.stack(specs).float()
 
-        target = row["mos"]
+        target = row.mos or 0.0
         target = torch.tensor(target, dtype=torch.float32)
 
         return spec, target
@@ -55,7 +59,7 @@ class MultiSpecExtDataset(MultiSpecDataset):
     def __init__(
         self,
         cfg,
-        data: "pd.DataFrame",
+        data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
         transform: Callable[[torch.Tensor], torch.Tensor] | None = None,
     ):
@@ -64,9 +68,10 @@ class MultiSpecExtDataset(MultiSpecDataset):
 
     def __getitem__(self, idx):
         spec, target = super().__getitem__(idx)
+        row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
 
         d = np.zeros(len(self.dataset_map))
-        d[self.dataset_map[self.data.iloc[idx]["dataset"]]] = 1
+        d[self.dataset_map[row.dataset]] = 1
         d = torch.tensor(d, dtype=torch.float32)
 
         return spec, d, target

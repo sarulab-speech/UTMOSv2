@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import abc
 from collections.abc import Callable
 from typing import TYPE_CHECKING
@@ -7,12 +9,14 @@ import torch
 if TYPE_CHECKING:
     import pandas as pd
 
+    from utmosv2.dataset._schema import DatasetSchema
+
 
 class BaseDataset(torch.utils.data.Dataset, abc.ABC):
     def __init__(
         self,
         cfg,
-        data: "pd.DataFrame",
+        data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
         transform: Callable[[torch.Tensor], torch.Tensor] | None = None,
     ):

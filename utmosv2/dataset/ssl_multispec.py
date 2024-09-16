@@ -11,12 +11,14 @@ from utmosv2.dataset._base import BaseDataset
 if TYPE_CHECKING:
     import pandas as pd
 
+    from utmosv2.dataset._schema import DatasetSchema
+
 
 class SSLLMultiSpecExtDataset(BaseDataset):
     def __init__(
         self,
         cfg,
-        data: "pd.DataFrame",
+        data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
         transform: Callable[[torch.Tensor], torch.Tensor] | None = None,
     ):

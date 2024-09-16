@@ -39,3 +39,9 @@ def configure_inference_args(cfg, args):
 def configure_defaults(cfg):
     if cfg.id_name is None:
         cfg.id_name = "utt_id"
+
+
+def configure_execution(cfg):
+    cfg.data_config = None
+    cfg.phase = "prediction"
+    cfg.print_config = False

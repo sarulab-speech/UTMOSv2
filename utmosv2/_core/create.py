@@ -1,0 +1,48 @@
+import importlib
+from pathlib import Path
+from types import SimpleNamespace
+
+import torch
+
+from utmosv2._core._constants import _UTMOSV2_CHACHE
+from utmosv2._core._download import download_pretrained_weights_from_github
+from utmosv2._core.model import UTMOSv2Model
+from utmosv2._settings import configure_execution
+
+
+def create_model(
+    pretrained: bool = True,
+    config: str = "fusion_stage3",
+    fold: int = 0,
+    checkpoint_path: Path | str | None = None,
+    seed: int = 42,
+):
+    _cfg = importlib.import_module(f"utmosv2.config.{config}")
+    # Avoid issues with pickling `types.ModuleType`,
+    # making it easier to use with multiprocessing, DDP, etc.
+    cfg = SimpleNamespace(
+        **{k: v for k, v in _cfg.__dict__.items() if not k.startswith("__")}
+    )
+    configure_execution(cfg)
+
+    model = UTMOSv2Model(cfg)
+
+    if pretrained:
+        if checkpoint_path is None:
+            checkpoint_path = (
+                _UTMOSV2_CHACHE
+                / "models"
+                / config
+                / f"fold{fold}_s{seed}_best_model.pth"
+            )
+            if not checkpoint_path.exists():
+                download_pretrained_weights_from_github(config)
+        if isinstance(checkpoint_path, str):
+            checkpoint_path = Path(checkpoint_path)
+        if not checkpoint_path.exists():
+            raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
+
+        model.load_state_dict(torch.load(checkpoint_path))
+        print(f"Loaded checkpoint from {checkpoint_path}")
+
+    return model
