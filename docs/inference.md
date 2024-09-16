@@ -26,9 +26,17 @@ By default, the data-domain ID for the MOS prediction is set to sarulab-data. To
 
 For example, to make predictions with the data-domain ID set to somos, use the following command:
 
-```bash
-python inference.py --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv --predict_dataset somos
-```
+- If you are using in your Python code:
+
+   ```python
+   mos = model.predict(input_dir="/path/to/wav/dir/", predict_dataset="somos")
+   ```
+
+- If you are using the inference script:
+
+   ```bash
+   python inference.py --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv --predict_dataset somos
+   ```
 
 <h2 align="center">
   <div>✂️ Predicting Only a Subset of Files ✂️</div>
@@ -39,9 +47,26 @@ python inference.py --input_dir /path/to/wav/dir/ --out_path /path/to/output/fil
 
 By default, all `.wav` files in the `--input_dir` are used for prediction. To specify only a subset of these files, use the `--val_list_path` flag:
 
-```bash
-python inference.py --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv --val_list_path /path/to/your/val/list.txt
-```
+- If you are using in your Python code:
+
+   ```python
+   mos = model.predict(input_dir="/path/to/wav/dir/", val_list_path="/path/to/your/val/list.txt")
+   ```
+
+   or, you can provide the list directly:
+
+   ```python
+   mos = model.predict(
+       input_dir="/path/to/wav/dir/",
+       val_list=["sys00691-utt0682e32", "sys00691-utt31fd854", "sys00691-utt33a4826", ...]
+   )
+   ```
+
+- If you are using the inference script:
+
+   ```bash
+   python inference.py --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv --val_list_path /path/to/your/val/list.txt
+   ```
 
 The list of `.wav` files specified here should contain utt-id separated by new lines, as shown below. The file extension `.wav` is optional and can be included or omitted.
 
@@ -61,9 +86,18 @@ sys00691-utt33a4826
 
 In the paper, predictions are made repeatedly for five randomly selected frames of the input speech waveform for all five folds, and the average is used. To specify this for more accurate predictions, do the following:
 
-```bash
-python inference.py --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv --fold -1 --num_repetitions 5
-```
+- If you are using in your Python code:
+
+   ```python
+   model = utmosv2.create_model(fold=2)
+   mos = model.predict(input_dir="/path/to/wav/dir/", num_repetitions=5)
+   ```
+
+- If you are using the inference script:
+
+   ```bash
+   python inference.py --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv --fold 2 --num_repetitions 5
+   ```
 
 Here, the `--fold` option specifies the fold number to be used. If set to `-1`, all folds will be used. The `--num_repetitions` option specifies the number of repetitions.
 
@@ -76,9 +110,18 @@ Here, the `--fold` option specifies the fold number to be used. If set to `-1`, 
 
 To specify a configuration file for predictions, do the following:
 
-```bash
-python inference.py --config configuration_file_name --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv
-```
+- If you are using in your Python code:
+
+   ```python
+   model = utmosv2.create_model(config="configuration_file_name")
+   mos = model.predict(input_dir="/path/to/wav/dir/")
+   ```
+
+- If you are using the inference script:
+
+   ```bash
+   python inference.py --config configuration_file_name --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv
+   ```
 
 By default, `fusion_stage3`, which is the entire model of UTMOSv2, is used.
 
@@ -89,15 +132,22 @@ By default, `fusion_stage3`, which is the entire model of UTMOSv2, is used.
   </a>
 </h2>
 
-To make predictions using your own weights, specify the path to the weights with the `--weight` option:
+If you are using in your Python code, specify the checkpoint path with the `checkpoint_path` argument to make predictions using your own weights:
+
+```python
+model = utmosv2.create_model(checkpoint_path="/path/to/your/weight.pth")
+mos = model.predict(input_dir="/path/to/wav/dir/")
+```
+
+If you are using the inference script, specify the path to the weights with the `--weight` option to make predictions using your own weights:
 
 ```bash
 python inference.py --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv --weight /path/to/your/weight.pth
 ```
 
-The `--weight` option can specify either the configuration file name or the path to the weight `.pth` file. By default, `models/{config_name}/fold{now_fold}_s{seed}_best_model.pth` is used.
+The `checkpoint_path` argument and `--weight` option can specify either the configuration file name or the path to the weight `.pth` file. By default, `models/{config_name}/fold{now_fold}_s{seed}_best_model.pth` is used.
 
-The weights must be compatible with the model specified by `--config_name`.
+The weights must be compatible with the model specified by `config` argument or `--config_name` option.
 
 > [!NOTE]
 > In this case, the same weights specified will be used for all folds. To use different weights for each fold, you can do the following:
