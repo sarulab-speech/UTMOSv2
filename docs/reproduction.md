@@ -14,7 +14,26 @@ For details on training and inference options, please refer to the [training gui
 We used a 40GB A100 GPU for training and inference.
 
 <h2 align="left">
-  <div>1. 📦 Prepare Training Data</div>
+  <div>1. 📩 Install Training Dependencies</div>
+  <a href="https://github.com/sarulab-speech/UTMOSv2/blob/main/docs/reproduction.md#---install-training-dependencies---------">
+    <img width="85%" height="6px" src="image/line4.svg">
+  </a>
+</h2>
+
+To install the dependencies required for training, run the following command:
+
+```bash
+pip install -e .[train]
+```
+
+> [!NOTE]
+> If you are using zsh, make sure to escape the square brackets like this:
+> ```zsh
+> pip install -e '.[train]'
+> ```
+
+<h2 align="left">
+  <div>2. 📦 Prepare Training Data</div>
   <a href="https://github.com/sarulab-speech/UTMOSv2/blob/main/docs/reproduction.md#--1--prepare-training-data--------">
     <img width="85%" height="6px" src="image/line4.svg">
   </a>
@@ -112,7 +131,7 @@ data2
 ```
 
 <h2 align="left">
-  <div>2. 🔍 Reproducing the Experiments in the Paper and the Competition: Training</div>
+  <div>3. 🔍 Reproducing the Experiments in the Paper and the Competition: Training</div>
   <a href="https://github.com/sarulab-speech/UTMOSv2/blob/main/docs/reproduction.md#--2--reproducing-the-experiments-in-the-paper-and-the-competition-training--------">
     <img width="85%" height="6px" src="image/line4.svg">
   </a>
@@ -166,7 +185,7 @@ python train.py --reproduce --config c_fusion_stage3 --weight c_fusion_stage2
 ```
 
 <h2 align="left">
-  <div>3. 📊 Reproducing the Experiments in the Paper and the Competition: Inference</div>
+  <div>4. 📊 Reproducing the Experiments in the Paper and the Competition: Inference</div>
   <a href="https://github.com/sarulab-speech/UTMOSv2/blob/main/docs/reproduction.md#--3--reproducing-the-experiments-in-the-paper-and-the-competition-inference--------">
     <img width="85%" height="6px" src="image/line4.svg">
   </a>
