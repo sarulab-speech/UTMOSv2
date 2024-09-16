@@ -7,8 +7,8 @@ import torch
 import wandb
 from dotenv import load_dotenv
 
+from utmosv2._settings import configure_args, configure_defaults
 from utmosv2.runner import run_train
-from utmosv2.settings import configure_args, configure_defaults
 from utmosv2.utils import (
     get_dataloader,
     get_dataset,

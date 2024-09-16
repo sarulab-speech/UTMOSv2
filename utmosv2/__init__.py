@@ -1,14 +1,4 @@
-from utmosv2 import (
-    config,
-    dataset,
-    loss,
-    model,
-    preprocess,
-    runner,
-    settings,
-    transform,
-    utils,
-)
+from utmosv2 import config, dataset, loss, model, preprocess, runner, transform, utils
 
 __all__ = [
     "config",
@@ -17,7 +7,6 @@ __all__ = [
     "model",
     "preprocess",
     "runner",
-    "settings",
     "transform",
     "utils",
 ]
