@@ -44,6 +44,58 @@
 > [!NOTE]
 > To clone the repository and use the pretrained UTMOSv2 model, make sure you have `git lfs` installed. If it is not installed, you can follow the instructions at [https://git-lfs.github.com/](https://git-lfs.github.com/) to install it.
 
+<h3 align="center">
+  <div>🛠️ Using in your Python code 🛠️</div>
+  <a href="https://github.com/sarulab-speech/UTMOSv2/tree/doc-user-friendly-api?tab=readme-ov-file#--%EF%B8%8F-using-in-your-python-code-%EF%B8%8F--------">
+    <img width="70%" height="6px" src="docs/image/line3.svg">
+  </a>
+</h3>
+
+<div align="center">
+✨⚡️&emsp;With the UTMOSv2 library, you can easily integrate it into your Python code,&emsp;⚡️✨<br>
+✨&ensp;allowing you to quickly create models and make predictions with minimal effort!!&ensp;✨
+</div>
+
+<br>
+
+If you want to make predictions using the UTMOSv2 library, follow these steps:
+
+1. Install the UTMOSv2 library from GitHub
+
+   ```bash
+   # Prevents LFS files from being temporarily downloaded during the installation process
+   GIT_LFS_SKIP_SMUDGE=1 pip install git+https://github.com/sarulab-speech/UTMOSv2.git
+   ```
+
+2. Make predictions
+   - To predict the MOS of a single wav file:
+
+      ```python
+      import utmosv2
+      model = utmosv2.create_model(pretrained=True)
+      mos = model.predict(input_path="/path/to/wav/file.wav")
+      ```
+
+   - To predict the MOS of all `.wav` files in a folder:
+  
+      ```python
+      import utmosv2
+      model = utmosv2.create_model(pretrained=True)
+      mos = model.predict(input_dir="/path/to/wav/dir/")
+      ```
+
+> [!NOTE]
+> Either `input_path` or `input_dir` must be specified, but not both.
+
+<h3 align="center">
+  <div>📜 Using the inference script 📜</div>
+  <a href="https://github.com/sarulab-speech/UTMOSv2/tree/doc-user-friendly-api?tab=readme-ov-file#---using-the-inference-script---------">
+    <img width="70%" height="6px" src="docs/image/line3.svg">
+  </a>
+</h3>
+
+If you want to make predictions using the inference script, follow these steps:
+
 1. Clone this repository and navigate to UTMOSv2 folder
 
    ```bash
@@ -75,10 +127,12 @@
 > If `--out_path` is not specified, the prediction results will be output to the standard output. This is particularly useful when the number of files to be predicted is small.
 
 > [!NOTE]
-> Either `--input_dir` or `--input_path` must be specified, but not both.
+> Either `--input_path` or `--input_dir` must be specified, but not both.
+
+<br>
 
 > [!NOTE]
-> This is a method for making quick and simple predictions. For more accurate predictions and detailed usage of the inference script, please refer to the [inference guide](docs/inference.md).
+> These methods provide quick and simple predictions. For more accurate predictions and detailed usage of the inference script, please refer to the [inference guide](docs/inference.md).
 
 🤗 You can try a simple demonstration on Hugging Face Space:
 <a href="https://huggingface.co/spaces/sarulab-speech/UTMOSv2">
