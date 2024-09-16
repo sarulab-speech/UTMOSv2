@@ -4,8 +4,8 @@ import importlib
 import numpy as np
 import torch
 
+from utmosv2._settings import configure_defaults, configure_inference_args
 from utmosv2.runner import run_inference
-from utmosv2.settings import configure_defaults, configure_inference_args
 from utmosv2.utils import (
     get_dataloader,
     get_dataset,
