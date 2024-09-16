@@ -1,8 +1,11 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 import numpy as np
 import torch
 
+from utmosv2.dataset._base import BaseDataset
 from utmosv2.dataset._utils import (
     extend_audio,
     get_dataset_map,
@@ -14,15 +17,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
 
-class SSLDataset(torch.utils.data.Dataset):
-    def __init__(self, cfg, data: "pd.DataFrame", phase: str):
-        self.cfg = cfg
-        self.data = data
-        self.phase = phase
-
-    def __len__(self):
-        return len(self.data)
-
+class SSLDataset(BaseDataset):
     def __getitem__(self, idx):
         row = self.data.iloc[idx]
         file = row["file_path"]
