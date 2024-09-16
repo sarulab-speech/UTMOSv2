@@ -1,9 +1,11 @@
+from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import librosa
 import numpy as np
 import torch
 
+from utmosv2.dataset._base import BaseDataset
 from utmosv2.dataset._utils import (
     extend_audio,
     get_dataset_map,
@@ -15,16 +17,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
 
-class MultiSpecDataset(torch.utils.data.Dataset):
-    def __init__(self, cfg, data: "pd.DataFrame", phase: str, transform=None):
-        self.cfg = cfg
-        self.data = data
-        self.phase = phase
-        self.transform = transform
-
-    def __len__(self):
-        return len(self.data)
-
+class MultiSpecDataset(BaseDataset):
     def __getitem__(self, idx):
         row = self.data.iloc[idx]
         file = row["file_path"]
@@ -59,7 +52,13 @@ class MultiSpecDataset(torch.utils.data.Dataset):
 
 
 class MultiSpecExtDataset(MultiSpecDataset):
-    def __init__(self, cfg, data: "pd.DataFrame", phase: str, transform=None):
+    def __init__(
+        self,
+        cfg,
+        data: "pd.DataFrame",
+        phase: str,
+        transform: Callable[[torch.Tensor], torch.Tensor] | None = None,
+    ):
         super().__init__(cfg, data, phase, transform)
         self.dataset_map = get_dataset_map(cfg)
 
