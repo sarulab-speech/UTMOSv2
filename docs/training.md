@@ -20,6 +20,7 @@ To train UTMOSv2 following the methods described in the paper or used in the com
 To install the dependencies required for training, run the following command:
 
 ```bash
+pip install --upgrade pip  # enable PEP 660 support
 pip install -e .[train]
 ```
 
@@ -97,7 +98,7 @@ The `--weight` option can specify either the configuration file name or the path
   </a>
 </h2>
 
-To use Weights & Biases (wandb) for experiment tracking, specify the `--wandb` option. You will also need to set the `WANDB_API_KEY` in your `.env` file or environment variables.
+To use Weights & Biases (wandb) for experiment tracking, specify the `--wandb` option. You will also need to set the `WANDB_API_KEY` in your `.env` file or environment variables, or follow the prompt during execution to input your API key directly in the command line.
 
 ```bash
 python train.py --config spec_only --data_config data_config.json --wandb

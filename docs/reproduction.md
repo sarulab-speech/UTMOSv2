@@ -23,6 +23,7 @@ We used a 40GB A100 GPU for training and inference.
 To install the dependencies required for training, run the following command:
 
 ```bash
+pip install --upgrade pip  # enable PEP 660 support
 pip install -e .[train]
 ```
 
