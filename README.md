@@ -10,10 +10,25 @@
 </h1>
 
 <p align="center">
+  🎤✨ Official implementation of ✨🎤<br>
+  ⋆⭒˚.⋆𝜗𝜚 “<a href="http://arxiv.org/abs/2409.09305">The T05 System for The VoiceMOS Challenge 2024:</a>⋆౨ৎﾟ.*✧︎*。<br>
+  <a href="http://arxiv.org/abs/2409.09305">Transfer Learning from Deep Image Classifier to Naturalness MOS Prediction of High-Quality Synthetic Speech</a>”<br>
+  *̣̥·𖤐🏅🎉&ensp;accepted by IEEE Spoken Language Technology Workshop (SLT) 2024.&ensp;🎉🏅𖤐*̣̥·
+</p>
+
+<p align="center">
+  ꔫ･-･ꔫ･-･ꔫ･-･ꔫ･-･ꔫ･-･ꔫ･-･ꔫ･-･ꔫ
+</p>
+
+<p align="center">
   ✨&emsp;&emsp;UTMOSv2 achieved 1st place in 7 out of 16 metrics&emsp;&emsp;✨<br>
   ✨🏆&emsp;&emsp;&emsp;&emsp;and 2nd place in the remaining 9 metrics&emsp;&emsp;&emsp;&emsp;🏆✨<br>
   ✨&emsp;&emsp;&emsp;&emsp;in the <a href="https://sites.google.com/view/voicemos-challenge/past-challenges/voicemos-challenge-2024">VoiceMOS Challenge 2024</a> Track1!&emsp;&emsp;&emsp;&emsp;✨
 </p>
+
+<!-- <p align="center">
+   ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧
+</p> -->
 
 <div align="center">
   <a target="_blank" href="https://www.python.org">
@@ -25,10 +40,19 @@
   <a target="_blank" href="https://huggingface.co/spaces/sarulab-speech/UTMOSv2">
     <img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue" alt="Hugging Face Spaces"/>
   </a>
+  <a target="_blank" href="http://arxiv.org/abs/2409.09305">
+    <img src="https://img.shields.io/badge/arXiv-2409.09305-b31b1b.svg" alt="arXiv"/>
+  </a>
   <a target="_blank" href="https://colab.research.google.com/github/sarulab-speech/UTMOSv2/blob/main/quickstart.ipynb">
     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
   </a>
 </div>
+
+<!-- <div align="center">
+  <a target="_blank" href="http://arxiv.org/abs/2409.09305">
+    <img src="https://img.shields.io/badge/arXiv-2409.09305-b31b1b.svg" alt="arXiv"/>
+  </a>
+</div> -->
 
 <br>
 
@@ -163,3 +187,21 @@ If you want to train UTMOSv2 yourself, please refer to the [training guide](docs
 </h2>
 
 Details of the datasets used in this project can be found in the [datasets documentation](docs/datasets.md).
+
+<h2 align="left">
+  <div>🔖 Citation</div>
+  <a href="https://github.com/sarulab-speech/UTMOSv2/tree/main?tab=readme-ov-file#---citation--------">
+    <img width="85%" height="6px" src="docs/image/line2.svg">
+  </a>
+</h2>
+
+If you find UTMOSv2 useful in your research, please cite the following paper:
+
+```bibtex
+@inproceedings{baba2024utmosv2,
+  title     = {The T05 System for The {V}oice{MOS} {C}hallenge 2024: Transfer Learning from Deep Image Classifier to Naturalness {MOS} Prediction of High-Quality Synthetic Speech},
+  author    = {Kaito, Baba and Wataru, Nakata and Yuki, Saito and Hiroshi, Saruwatari},
+  booktitle = {IEEE Spoken Language Technology Workshop (SLT)},
+  year      = {2024},
+}
+```
