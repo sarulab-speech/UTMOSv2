@@ -107,7 +107,7 @@ If you want to make predictions using the inference script, follow these steps:
 
    ```bash
    pip install --upgrade pip  # enable PEP 660 support
-   pip install -e .
+   pip install -e .[optional] # install with optional dependencies
    ```
 
 3. Make predictions
@@ -122,6 +122,13 @@ If you want to make predictions using the inference script, follow these steps:
       ```bash
       python inference.py --input_dir /path/to/wav/dir/ --out_path /path/to/output/file.csv
       ```
+
+> [!NOTE]
+> If you are using zsh, make sure to escape the square brackets like this:
+>
+> ```zsh
+> pip install -e '.[optional]'
+> ```
 
 > [!TIP]
 > If `--out_path` is not specified, the prediction results will be output to the standard output. This is particularly useful when the number of files to be predicted is small.

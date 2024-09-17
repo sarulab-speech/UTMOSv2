@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 
-from utmosv2.utils._pure import _LazyImport
+from utmosv2._import import _LazyImport
 
 if TYPE_CHECKING:
     import pandas as pd
