@@ -21,13 +21,14 @@ To install the dependencies required for training, run the following command:
 
 ```bash
 pip install --upgrade pip  # enable PEP 660 support
-pip install -e .[train]
+pip install -e .[train,optional]
 ```
 
 > [!NOTE]
 > If you are using zsh, make sure to escape the square brackets like this:
+>
 > ```zsh
-> pip install -e '.[train]'
+> pip install -e '.[train,optional]'
 > ```
 
 <h2 align="center">
@@ -68,7 +69,7 @@ sys7ab3c-utt1417b69,4.0
 
 The file extension `.wav` is optional and can be included or omitted. The common files between those in the dir and those specified in the mos_list will be used.
 
-Specify the name, dir, and mos_list set for each dataset-domain ID you want to train. 
+Specify the name, dir, and mos_list set for each dataset-domain ID you want to train.
 
 Save this JSON file with an appropriate name, for example, `data_config.json` and run the following command:
 

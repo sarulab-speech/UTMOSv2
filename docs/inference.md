@@ -10,6 +10,20 @@
 
 Please refer to [this section](https://github.com/sarulab-speech/UTMOSv2?tab=readme-ov-file#---quick-prediction--------) for basic inference methods.
 
+If you want to use the `inference.py` scripts, rather than using the `utmosv2` library, please install some additional dependencies:
+
+```bash
+pip install --upgrade pip  # enable PEP 660 support
+pip install -e .[optional]
+```
+
+> [!NOTE]
+> If you are using zsh, make sure to escape the square brackets like this:
+>
+> ```zsh
+> pip install -e '.[optional]'
+> ```
+
 <h2 align="center">
   <div>📌 Data-domain ID for the MOS Prediction 📌</div>
   <a href="https://github.com/sarulab-speech/UTMOSv2/blob/main/docs/inference.md#---data-domain-id-for-the-mos-prediction---------">

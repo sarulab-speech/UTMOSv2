@@ -24,13 +24,14 @@ To install the dependencies required for training, run the following command:
 
 ```bash
 pip install --upgrade pip  # enable PEP 660 support
-pip install -e .[train]
+pip install -e .[train,optional]
 ```
 
 > [!NOTE]
 > If you are using zsh, make sure to escape the square brackets like this:
+>
 > ```zsh
-> pip install -e '.[train]'
+> pip install -e '.[train,optional]'
 > ```
 
 <h2 align="left">
