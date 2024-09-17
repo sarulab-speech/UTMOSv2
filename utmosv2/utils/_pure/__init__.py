@@ -1,4 +1,3 @@
-from utmosv2.utils._pure._import import _LazyImport
 from utmosv2.utils._pure.initializers import (
     get_dataloader,
     get_loss,
@@ -17,5 +16,4 @@ __all__ = [
     "print_metrics",
     "save_oof_preds",
     "split_data",
-    "_LazyImport",
 ]

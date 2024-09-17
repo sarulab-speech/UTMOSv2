@@ -10,11 +10,12 @@ import torch
 from torch.cuda.amp import GradScaler, autocast
 from tqdm import tqdm
 
+from utmosv2._import import _LazyImport
 from utmosv2.utils import calc_metrics, print_metrics
-from utmosv2.utils._pure import _LazyImport
 
 if TYPE_CHECKING:
     import pandas as pd
+
     import wandb
 else:
     wandb = _LazyImport("wandb")

@@ -1,15 +1,21 @@
 from __future__ import annotations
 
 import json
+from typing import TYPE_CHECKING
 
 import numpy as np
-import pandas as pd
 
+from utmosv2._import import _LazyImport
 from utmosv2.utils._task_dependents.initializers import _get_test_save_name
+
+if TYPE_CHECKING:
+    import pandas as pd
+else:
+    pd = _LazyImport("pandas")
 
 
 def save_test_preds(
-    cfg, data: pd.DataFrame, test_preds: np.ndarray, test_metrics: dict[str, float]
+    cfg, data: "pd.DataFrame", test_preds: np.ndarray, test_metrics: dict[str, float]
 ):
     test_df = pd.DataFrame({cfg.id_name: data[cfg.id_name], "test_preds": test_preds})
     cfg.inference.save_path.mkdir(parents=True, exist_ok=True)
@@ -27,7 +33,7 @@ def save_test_preds(
     print(f"Test predictions are saved to {save_path}")
 
 
-def make_submission_file(cfg, data: pd.DataFrame, test_preds: np.ndarray):
+def make_submission_file(cfg, data: "pd.DataFrame", test_preds: np.ndarray):
     submit = pd.DataFrame({cfg.id_name: data[cfg.id_name], "prediction": test_preds})
     (
         cfg.inference.submit_save_path
@@ -46,7 +52,7 @@ def make_submission_file(cfg, data: pd.DataFrame, test_preds: np.ndarray):
     print(f"Submission file is saved to {sub_file}")
 
 
-def save_preds(cfg, data: pd.DataFrame, test_preds: np.ndarray):
+def save_preds(cfg, data: "pd.DataFrame", test_preds: np.ndarray):
     pred = pd.DataFrame({cfg.id_name: data[cfg.id_name], "mos": test_preds})
     if cfg.out_path is None:
         print("Predictions:")

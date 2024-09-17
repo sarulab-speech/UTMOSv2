@@ -7,11 +7,11 @@ from pathlib import Path
 from typing import TYPE_CHECKING
 
 import numpy as np
-import pandas as pd
 import scipy.stats
 import torch
 import torch.nn as nn
 
+from utmosv2._import import _LazyImport
 from utmosv2.dataset import (
     MultiSpecDataset,
     MultiSpecExtDataset,
@@ -29,10 +29,15 @@ from utmosv2.model import (
 from utmosv2.preprocess import add_sys_mean, preprocess, preprocess_test
 
 if TYPE_CHECKING:
+    import pandas as pd
+
     from utmosv2.dataset._schema import DatasetSchema
 
+else:
+    pd = _LazyImport("pandas")
 
-def get_data(cfg) -> pd.DataFrame:
+
+def get_data(cfg) -> "pd.DataFrame":
     train_mos_list = pd.read_csv(cfg.input_dir / "sets/train_mos_list.txt", header=None)
     val_mos_list = pd.read_csv(cfg.input_dir / "sets/val_mos_list.txt", header=None)
     test_mos_list = pd.read_csv(cfg.input_dir / "sets/test_mos_list.txt", header=None)
@@ -43,7 +48,7 @@ def get_data(cfg) -> pd.DataFrame:
 
 
 def get_dataset(
-    cfg, data: pd.DataFrame | list[DatasetSchema], phase: str
+    cfg, data: "pd.DataFrame" | list[DatasetSchema], phase: str
 ) -> torch.utils.data.Dataset:
     if cfg.print_config:
         print(f"Using dataset: {cfg.dataset.name}")
@@ -103,14 +108,14 @@ def get_metrics() -> dict[str, Callable[[np.ndarray, np.ndarray], float]]:
     }
 
 
-def _get_testdata(cfg, data: pd.DataFrame) -> pd.DataFrame:
+def _get_testdata(cfg, data: "pd.DataFrame") -> "pd.DataFrame":
     with open(cfg.inference.val_list_path, "r") as f:
         val_lists = [s.replace("\n", "") + ".wav" for s in f.readlines()]
     test_data = data[data["utt_id"].isin(set(val_lists))]
     return test_data
 
 
-def get_inference_data(cfg) -> pd.DataFrame:
+def get_inference_data(cfg) -> "pd.DataFrame":
     if cfg.reproduce:
         data = get_data(cfg)
         data = preprocess_test(cfg, data)
@@ -136,7 +141,7 @@ def get_inference_data(cfg) -> pd.DataFrame:
     return data
 
 
-def get_train_data(cfg) -> pd.DataFrame:
+def get_train_data(cfg) -> "pd.DataFrame":
     if cfg.reproduce:
         data = get_data(cfg)
         data = preprocess(cfg, data)
@@ -171,7 +176,7 @@ def _get_test_save_name(cfg) -> str:
 
 
 def save_test_preds(
-    cfg, data: pd.DataFrame, test_preds: np.ndarray, test_metrics: dict[str, float]
+    cfg, data: "pd.DataFrame", test_preds: np.ndarray, test_metrics: dict[str, float]
 ):
     test_df = pd.DataFrame({cfg.id_name: data[cfg.id_name], "test_preds": test_preds})
     cfg.inference.save_path.mkdir(parents=True, exist_ok=True)
