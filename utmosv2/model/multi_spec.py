@@ -7,6 +7,16 @@ from utmosv2.dataset._utils import get_dataset_num
 
 
 class MultiSpecModelV2(nn.Module):
+    """
+    A multi-spectrogram model (version 2) that processes multiple spectrograms
+    and combines their outputs using learnable weights. This model supports
+    attention-based pooling and a flexible number of spectrogram frames.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing model and dataset settings.
+    """
+
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg
@@ -57,6 +67,17 @@ class MultiSpecModelV2(nn.Module):
         #     print(f"| Number of fc output features: {self.fc.out_features}")
 
     def forward(self, x):
+        """
+        Forward pass of the MultiSpecModelV2.
+
+        Args:
+            x (torch.Tensor):
+                Input tensor of shape (batch_size, num_frames, channels, width, height).
+
+        Returns:
+            torch.Tensor:
+                Output tensor after applying backbones, pooling, and fully connected layers.
+        """
         x = [
             x[:, i, :, :, :].squeeze(1)
             for i in range(
@@ -86,6 +107,21 @@ class MultiSpecModelV2(nn.Module):
 
 
 class MultiSpecExtModel(nn.Module):
+    """
+    An extended version of the MultiSpecModel that incorporates data-domain id
+    in addition to the spectrograms. This model allows the fusion of
+    data-domain embeddings with multi-spectrogram features.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing model and dataset settings.
+
+    Returns:
+        torch.Tensor:
+            The model's output after processing the input and data-domain id
+            through backbones, pooling, and fully connected layers.
+    """
+
     def __init__(self, cfg):
         super().__init__()
         self.cfg = cfg

@@ -10,6 +10,23 @@ from utmosv2.loss import CombinedLoss, PairwizeDiffLoss
 def get_dataloader(
     cfg, dataset: torch.utils.data.Dataset, phase: str
 ) -> torch.utils.data.DataLoader:
+    """
+    Return a DataLoader for the specified dataset and phase.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing settings for batch size, number of workers, and pin memory.
+        dataset (torch.utils.data.Dataset):
+            The dataset to load data from.
+        phase (str):
+            The phase of the training process. Must be one of ["train", "valid", "test"].
+
+    Returns:
+        torch.utils.data.DataLoader: A DataLoader for the given dataset and phase.
+
+    Raises:
+        ValueError: If the phase is not one of ["train", "valid", "test"].
+    """
     if phase == "train":
         return torch.utils.data.DataLoader(
             dataset,
@@ -58,6 +75,18 @@ def _get_combined_loss(cfg) -> nn.Module:
 
 
 def get_loss(cfg) -> nn.Module:
+    """
+    Return the appropriate loss function based on the configuration.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing the loss settings.
+            If `cfg.loss` is a list, a combined loss is returned.
+            Otherwise, a single loss function is returned.
+
+    Returns:
+        nn.Module: The configured loss function, either a single loss or a combined loss module.
+    """
     if isinstance(cfg.loss, list):
         return _get_combined_loss(cfg)
     else:
@@ -65,6 +94,22 @@ def get_loss(cfg) -> nn.Module:
 
 
 def get_optimizer(cfg, model: nn.Module) -> optim.Optimizer:
+    """
+    Return the optimizer based on the configuration settings.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing optimizer settings.
+            The optimizer name and learning rate are specified in `cfg.optimizer`.
+        model (nn.Module):
+            The model whose parameters will be optimized.
+
+    Returns:
+        optim.Optimizer: The configured optimizer (Adam, AdamW, or SGD).
+
+    Raises:
+        NotImplementedError: If the specified optimizer is not implemented.
+    """
     if cfg.print_config:
         print(f"Using optimizer: {cfg.optimizer.name}")
     if cfg.optimizer.name == "adam":
@@ -88,6 +133,24 @@ def get_optimizer(cfg, model: nn.Module) -> optim.Optimizer:
 def get_scheduler(
     cfg, optimizer: optim.Optimizer, n_iterations: int
 ) -> optim.lr_scheduler.LRScheduler:
+    """
+    Return the learning rate scheduler based on the configuration settings.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing scheduler settings.
+            The scheduler name, T_max, and eta_min are specified in `cfg.scheduler`.
+        optimizer (optim.Optimizer):
+            The optimizer for which the learning rate will be scheduled.
+        n_iterations (int):
+            The number of iterations for the scheduler (used in CosineAnnealingLR).
+
+    Returns:
+        optim.lr_scheduler.LRScheduler: The configured learning rate scheduler.
+
+    Raises:
+        NotImplementedError: If the specified scheduler is not implemented.
+    """
     if cfg.print_config:
         print(f"Using scheduler: {cfg.scheduler}")
     if cfg.scheduler is None:

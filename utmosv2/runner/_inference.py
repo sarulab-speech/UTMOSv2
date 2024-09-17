@@ -21,6 +21,29 @@ def run_inference(
     test_data: "pd.DataFrame",
     device: torch.device,
 ) -> tuple[np.ndarray, dict[str, float] | None]:
+    """
+    Run inference on the test dataset using the provided model.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing inference settings.
+            It includes settings for test-time augmentation (TTA) and reproducibility.
+        model (torch.nn.Module):
+            The trained model to be used for inference.
+        test_dataloader (torch.utils.data.DataLoader):
+            Dataloader for the test dataset.
+        cycle (int):
+            Current cycle of test-time augmentation (TTA) if used.
+        test_data (pd.DataFrame):
+            DataFrame containing test data, used for metric calculation if reproducibility is enabled.
+        device (torch.device):
+            Device to run inference on (e.g., 'cuda' or 'cpu').
+
+    Returns:
+        tuple[np.ndarray, dict[str, float] | None]:
+            - test_preds: Array containing the model's predictions for the test dataset.
+            - test_metrics: Dictionary containing the calculated metrics if reproducibility is enabled; otherwise, None.
+    """
     model.eval()
     test_preds_ls = []
     pbar = tqdm(

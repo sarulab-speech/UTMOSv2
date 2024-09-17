@@ -30,6 +30,30 @@ def train_1epoch(
     scheduler: torch.optim.lr_scheduler.LRScheduler,
     device: torch.device,
 ) -> dict[str, float]:
+    """
+    Train the model for one epoch.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing training parameters.
+        model (torch.nn.Module):
+            The model to be trained.
+        train_dataloader (torch.utils.data.DataLoader):
+            Dataloader for the training dataset.
+        criterion (torch.nn.Module):
+            Loss function or a list of weighted loss functions.
+        optimizer (torch.optim.Optimizer):
+            Optimizer for updating model weights.
+        scheduler (torch.optim.lr_scheduler.LRScheduler):
+            Learning rate scheduler.
+        device (torch.device):
+            Device to run the training on (e.g., 'cuda' or 'cpu').
+
+    Returns:
+        dict[str, float]:
+            Dictionary containing average loss values for the epoch.
+            Keys represent different loss components if multiple losses are used.
+    """
     model.train()
     train_loss: defaultdict[str, float] = defaultdict(float)
     scaler = GradScaler()
@@ -101,6 +125,29 @@ def validate_1epoch(
     metrics: dict[str, Callable[[np.ndarray, np.ndarray], float]],
     device: torch.device,
 ) -> tuple[dict[str, float], dict[str, float], np.ndarray]:
+    """
+    Validate the model for one epoch.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing validation parameters.
+        model (torch.nn.Module):
+            The model to be validated.
+        valid_dataloader (torch.utils.data.DataLoader):
+            Dataloader for the validation dataset.
+        criterion (torch.nn.Module):
+            Loss function or a list of weighted loss functions.
+        metrics (dict[str, Callable[[np.ndarray, np.ndarray], float]]):
+            A dictionary of metric functions to evaluate predictions.
+        device (torch.device):
+            Device to run the validation on (e.g., 'cuda' or 'cpu').
+
+    Returns:
+        tuple[dict[str, float], dict[str, float], np.ndarray]:
+            - Dictionary containing the average loss values for the validation set.
+            - Dictionary containing the computed metrics for the validation set.
+            - Array containing the model's predictions for the validation set.
+    """
     model.eval()
     valid_loss: defaultdict[str, float] = defaultdict(float)
     valid_metrics = {name: 0.0 for name in metrics}
@@ -166,6 +213,40 @@ def run_train(
     scheduler: torch.optim.lr_scheduler.LRScheduler,
     device: torch.device,
 ) -> None:
+    """
+    Train and validate the model over multiple epochs.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing training and validation settings.
+        model (torch.nn.Module):
+            The model to be trained and validated.
+        train_dataloader (torch.utils.data.DataLoader):
+            Dataloader for the training dataset.
+        valid_dataloader (torch.utils.data.DataLoader):
+            Dataloader for the validation dataset.
+        valid_data (pd.DataFrame):
+            DataFrame containing validation data for metric calculation.
+        oof_preds (np.ndarray):
+            Array to store out-of-fold predictions.
+        now_fold (int):
+            Current fold number for cross-validation.
+        criterion (torch.nn.Module):
+            Loss function used for training and validation.
+        metrics (dict[str, Callable[[np.ndarray, np.ndarray], float]]):
+            Dictionary of metrics to compute during validation.
+        optimizer (torch.optim.Optimizer):
+            Optimizer for updating model weights.
+        scheduler (torch.optim.lr_scheduler.LRScheduler):
+            Learning rate scheduler.
+        device (torch.device):
+            Device to run the training and validation on (e.g., 'cuda' or 'cpu').
+
+    Returns:
+        None:
+            This function does not return any value. It saves the best model to the path specified in `cfg.save_path`,
+            and logs the training and validation metrics if logging is enabled in `cfg.wandb`.
+    """
     best_metric = 0.0
     os.makedirs(cfg.save_path, exist_ok=True)
 

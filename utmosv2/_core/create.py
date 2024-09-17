@@ -17,6 +17,31 @@ def create_model(
     checkpoint_path: Path | str | None = None,
     seed: int = 42,
 ):
+    """
+    Create a UTMOSv2 model with the specified configuration and optional pretrained weights.
+
+    Args:
+        pretrained (bool):
+            If True, loads pretrained weights. Defaults to True.
+        config (str):
+            The configuration name to load for the model. Defaults to "fusion_stage3".
+        fold (int):
+            The fold number for the pretrained weights (used for model selection). Defaults to 0.
+        checkpoint_path (Path | str | None):
+            Path to a specific model checkpoint. If None, the checkpoint downloaded from GitHub is used. Defaults to None.
+        seed (int):
+            The seed used for model training to select the correct checkpoint. Defaults to 42.
+
+    Returns:
+        UTMOSv2Model: The initialized UTMOSv2 model.
+
+    Raises:
+        FileNotFoundError: If the specified checkpoint file is not found.
+
+    Notes:
+        - The configuration is dynamically loaded from `utmosv2.config`.
+        - If `pretrained` is True and `checkpoint_path` is not provided, the function attempts to download pretrained weights from GitHub.
+    """
     _cfg = importlib.import_module(f"utmosv2.config.{config}")
     # Avoid issues with pickling `types.ModuleType`,
     # making it easier to use with multiprocessing, DDP, etc.

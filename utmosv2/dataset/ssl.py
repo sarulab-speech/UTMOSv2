@@ -20,7 +20,28 @@ if TYPE_CHECKING:
 
 
 class SSLDataset(BaseDataset):
+    """
+    Dataset class for SSL (Self-Supervised Learning) feature extractor.
+    This class handles audio loading, extending, and random selection of a segment from the audio.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            The configuration object containing dataset and model settings.
+        data (pd.DataFrame | list[DatasetSchema]):
+            The dataset containing file paths and MOS labels.
+        phase (str):
+            The phase of the dataset, either "train" or any other phase (e.g., "valid").
+    """
+
     def __getitem__(self, idx):
+        """
+        Get the processed audio, and target MOS for a given index.
+
+        Args:
+            idx (int): Index of the sample.
+        Returns:
+            tuple: A tuple containing the processed audio (torch.Tensor), and target MOS (torch.Tensor).
+        """
         row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
         file = row.file_path
         y = load_audio(self.cfg, file)
@@ -35,11 +56,32 @@ class SSLDataset(BaseDataset):
 
 
 class SSLExtDataset(SSLDataset):
+    """
+    Dataset class for SSL (Self-Supervised Learning) feature extractor with data-domein embedding.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            The configuration object containing dataset and model settings.
+        data (pd.DataFrame | list[DatasetSchema]):
+            The dataset containing file paths and MOS labels.
+        phase (str):
+            The phase of the dataset, either "train" or any other phase (e.g., "valid").
+    """
+
     def __init__(self, cfg, data: "pd.DataFrame" | list[DatasetSchema], phase: str):
         super().__init__(cfg, data, phase)
         self.dataset_map = get_dataset_map(cfg)
 
     def __getitem__(self, idx):
+        """
+        Get the processed audio, data-domain embedding, and target MOS for a given index.
+
+        Args:
+            idx (int): Index of the sample.
+        Returns:
+            tuple: A tuple containing the processed audio (torch.Tensor), data-domain embedding (torch.Tensor),
+            and target MOS (torch.Tensor).
+        """
         y, target = super().__getitem__(idx)
         row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
 
