@@ -17,6 +17,10 @@ if TYPE_CHECKING:
 
 
 class UTMOSv2ModelMixin(abc.ABC):
+    """
+    Abstract mixin for UTMOSv2 models, providing a template for prediction.
+    """
+
     @property
     @abc.abstractmethod
     def _cfg(self) -> SimpleNamespace:
@@ -44,6 +48,40 @@ class UTMOSv2ModelMixin(abc.ABC):
         num_repetitions: int = 1,
         verbose: bool = True,
     ) -> float | list[dict[str, str | float]]:
+        """
+        Predict the MOS (Mean Opinion Score) of audio files.
+
+        Args:
+            input_path (Path | str | None):
+                Path to a single audio file (`.wav`) to predict MOS.
+                Either `input_path` or `input_dir` must be provided, but not both.
+            input_dir (Path | str | None):
+                Path to a directory of `.wav` files to predict MOS.
+                Either `input_path` or `input_dir` must be provided, but not both.
+            val_list (list[str] | None):
+                List of filenames to include for prediction. Defaults to None.
+            val_list_path (Path | str | None):
+                Path to a text file containing a list of filenames to include for prediction. Defaults to None.
+            predict_dataset (str):
+                Name of the dataset to associate with the prediction. Defaults to "sarulab".
+            device (str | torch.device):
+                Device to use for prediction (e.g., "cuda:0" or "cpu"). Defaults to "cuda:0".
+            num_workers (int):
+                Number of workers for data loading. Defaults to 4.
+            batch_size (int):
+                Batch size for the data loader. Defaults to 16.
+            num_repetitions (int):
+                Number of prediction repetitions to average results. Defaults to 1.
+            verbose (bool):
+                Whether to display progress during prediction. Defaults to True.
+
+        Returns:
+            float: If the `input_path` is specified, returns the predicted MOS.
+            list[dict[str, str | float]]: If the `input_dir` is specified, returns a list of dicts containing file paths and predicted MOS scores.
+
+        Raises:
+            ValueError: If both `input_path` and `input_dir` are provided, or if neither is provided.
+        """
         if not ((input_path is None) ^ (input_dir is None)):
             raise ValueError(
                 "Either `input_path` or `input_dir` must be provided, but not both."

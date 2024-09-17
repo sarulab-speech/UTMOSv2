@@ -11,7 +11,21 @@ from utmosv2.model import (
 
 
 class UTMOSv2Model(UTMOSv2ModelMixin):
+    """
+    UTMOSv2Model class that wraps different models specified by the configuration.
+    This class allows for flexible model selection and provides a unified interface for evaluation, calling, and prediction.
+    """
+
     def __init__(self, cfg: SimpleNamespace | ModuleType):
+        """
+        Initialize the UTMOSv2Model with a specified configuration.
+
+        Args:
+            cfg (SimpleNamespace | ModuleType): Configuration object that contains the model configuration.
+
+        Raises:
+            ValueError: If the model name specified in the configuration is not recognized.
+        """
         models = {
             "multi_spec_ext": MultiSpecExtModel,
             "multi_specv2": MultiSpecModelV2,

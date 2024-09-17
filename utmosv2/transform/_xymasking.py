@@ -9,6 +9,29 @@ if TYPE_CHECKING:
 
 
 class XYMasking:
+    """
+    Apply random rectangular masks to an image along the x and y axes. This augmentation
+    is useful for randomly masking parts of an image during training to improve robustness.
+
+    Args:
+        num_masks_x (int | tuple[int, int]):
+            The number of masks to apply along the x-axis.
+            If a tuple is provided, a random number in the range will be used.
+        num_masks_y (int | tuple[int, int]):
+            The number of masks to apply along the y-axis.
+            If a tuple is provided, a random number in the range will be used.
+        mask_x_length (int | tuple[int, int]):
+            The length of each mask along the x-axis.
+            If a tuple is provided, a random length in the range will be used.
+        mask_y_length (int | tuple[int, int]):
+            The length of each mask along the y-axis.
+            If a tuple is provided, a random length in the range will be used.
+        fill_value (int):
+            The value to fill the masked areas with.
+        p (float):
+            The probability of applying the masking. Defaults to 1.0 (always apply masking).
+    """
+
     def __init__(
         self,
         num_masks_x: int | tuple[int, int],
@@ -26,6 +49,15 @@ class XYMasking:
         self.p = p
 
     def __call__(self, img: "torch.Tensor") -> "torch.Tensor":
+        """
+        Apply the XY masking to the given image.
+
+        Args:
+            img (torch.Tensor): The input image tensor of shape (channels, width, height).
+
+        Returns:
+            torch.Tensor: The image tensor with masks applied along the x and y axes.
+        """
         if np.random.rand() < self.p:
             return img
         _, width, height = img.shape

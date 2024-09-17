@@ -22,7 +22,28 @@ if TYPE_CHECKING:
 
 
 class MultiSpecDataset(BaseDataset):
+    """
+    Dataset class for mel-spectrogram feature extractor. This class is responsible for
+    loading audio data, generating multiple spectrograms for each sample, and
+    applying the necessary transformations.
+
+    Args:
+        cfg (SimpleNamespace): The configuration object containing dataset and model settings.
+        data (list[DatasetSchema] | pd.DataFrame): The dataset containing file paths and labels.
+        phase (str): The phase of the dataset, either "train" or any other phase (e.g., "valid").
+        transform (Callable[[torch.Tensor], torch.Tensor] | None): Transformation function to apply to spectrograms.
+    """
+
     def __getitem__(self, idx):
+        """
+        Get the spectrogram and target MOS for a given index.
+
+        Args:
+            idx (int): Index of the sample.
+
+        Returns:
+            tuple: The spectrogram (torch.Tensor) and target MOS (torch.Tensor) for the sample.
+        """
         row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
         file = row.file_path
         y = load_audio(self.cfg, file)
@@ -56,6 +77,20 @@ class MultiSpecDataset(BaseDataset):
 
 
 class MultiSpecExtDataset(MultiSpecDataset):
+    """
+    Dataset class for mel-spectrogram feature extractor with data-domain embedding.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            The configuration object containing dataset and model settings.
+        data (pd.DataFrame | list[DatasetSchema]):
+            The dataset containing file paths and labels.
+        phase (str):
+            The phase of the dataset, either "train" or any other phase (e.g., "valid").
+        transform (Callable[[torch.Tensor], torch.Tensor] | None):
+            Transformation function to apply to spectrograms.
+    """
+
     def __init__(
         self,
         cfg,
@@ -67,6 +102,16 @@ class MultiSpecExtDataset(MultiSpecDataset):
         self.dataset_map = get_dataset_map(cfg)
 
     def __getitem__(self, idx):
+        """
+        Get the spectrogram, data-domain embedding, and target MOS for a given index.
+
+        Args:
+            idx (int): Index of the sample.
+
+        Returns:
+            tuple: A tuple containing the generated spectrogram (torch.Tensor), data-domain embedding (torch.Tensor),
+            and target MOS (torch.Tensor).
+        """
         spec, target = super().__getitem__(idx)
         row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
 

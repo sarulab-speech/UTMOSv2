@@ -29,6 +29,18 @@ class _SSLEncoder(nn.Module):
 
 
 class SSLExtModel(nn.Module):
+    """
+    A self-supervised learning (SSL) model extended with data-domain id.
+    This model uses an encoder to process input data, applies attention layers if configured,
+    and combines the features with data-domain embeddings before classification.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            Configuration object containing model and dataset settings.
+        name (str | None):
+            Optional name for the SSL encoder. Defaults to the name specified in `cfg.model.ssl.name`.
+    """
+
     def __init__(self, cfg, name: str | None = None):
         super().__init__()
         self.cfg = cfg
@@ -55,6 +67,19 @@ class SSLExtModel(nn.Module):
         )
 
     def forward(self, x, d):
+        """
+        Forward pass of the SSLExtModel.
+
+        Args:
+            x (torch.Tensor):
+                Input tensor representing the features to be processed by the SSL encoder.
+            d (torch.Tensor):
+                Dataset-specific information tensor.
+
+        Returns:
+            torch.Tensor:
+                Output tensor after applying the SSL encoder, attention (if configured), and fully connected layers.
+        """
         x = self.encoder(x)
         x = sum([t * w for t, w in zip(x, self.weights)])
         if self.cfg.model.ssl.attn:

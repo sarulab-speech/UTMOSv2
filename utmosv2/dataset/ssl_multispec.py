@@ -15,6 +15,22 @@ if TYPE_CHECKING:
 
 
 class SSLLMultiSpecExtDataset(BaseDataset):
+    """
+    Dataset class that combines both SSL (Self-Supervised Learning) and Multi-Spectrogram datasets.
+    This dataset uses both SSLExtDataset and MultiSpecDataset to provide different representations
+    of the same audio sample.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType):
+            The configuration object containing dataset and model settings.
+        data (pd.DataFrame | list[DatasetSchema]):
+            The dataset containing file paths and MOS labels.
+        phase (str):
+            The phase of the dataset, either "train" or any other phase (e.g., "valid").
+        transform (Callable[[torch.Tensor], torch.Tensor] | None):
+            Transformation function to apply to spectrograms.
+    """
+
     def __init__(
         self,
         cfg,
@@ -30,6 +46,16 @@ class SSLLMultiSpecExtDataset(BaseDataset):
         return len(self.data)
 
     def __getitem__(self, idx):
+        """
+        Get data for SSL feature extractor, mel-spectrogram feature extractor, data-domain embedding, and target MOS for a given index.
+
+        Args:
+            idx (int): Index of the sample.
+
+        Returns:
+            tuple: data for SSL feature extractor (torch.Tensor), data for mel-spectrogram feature extractor (torch.Tensor),
+            data-domain id (torch.Tensor), and target MOS (torch.Tensor).
+        """
         x1, d, target = self.ssl[idx]
         x2, _ = self.multi_spec[idx]
 

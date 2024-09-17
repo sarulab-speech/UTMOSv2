@@ -26,6 +26,25 @@ else:
 def split_data(
     cfg, data: "pd.DataFrame"
 ) -> Generator[tuple[np.ndarray, np.ndarray], None, None]:
+    """
+    Split the data into training and validation sets based on the specified splitting method in the configuration.
+
+    Args:
+        cfg (SimpleNamespace | ModuleType): Configuration object containing the splitting settings. It includes:
+            - split.type: Type of split to use ('simple', 'stratified', 'group', 'stratified_group', etc.).
+            - num_folds: Number of folds for K-Fold cross-validation.
+            - split.seed: Random seed for shuffling.
+            - split.target: Target column used for stratification in 'stratified' and 'stratified_group'.
+            - split.group: Group column used for grouping in 'group' and 'stratified_group'.
+            - split.kind: Kind of data for splitting in the 'sgkf_kind' case.
+        data (pd.DataFrame): The dataset to be split.
+
+    Yields:
+        tuple[np.ndarray, np.ndarray]: Indices of training and validation sets for each fold.
+
+    Raises:
+        NotImplementedError: If the split type specified in the configuration is not implemented.
+    """
     if cfg.print_config:
         print(f"Using split: {cfg.split.type}")
     if cfg.split.type == "simple":
