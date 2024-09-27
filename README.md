@@ -11,9 +11,9 @@
 
 <p align="center">
   🎤✨ Official implementation of ✨🎤<br>
-  ⋆⭒˚.⋆𝜗𝜚 “<a href="http://arxiv.org/abs/2409.09305">The T05 System for The VoiceMOS Challenge 2024:</a>⋆౨ৎﾟ.*✧︎*。<br>
+  “<a href="http://arxiv.org/abs/2409.09305">The T05 System for The VoiceMOS Challenge 2024:</a><br>
   <a href="http://arxiv.org/abs/2409.09305">Transfer Learning from Deep Image Classifier to Naturalness MOS Prediction of High-Quality Synthetic Speech</a>”<br>
-  *̣̥·𖤐🏅🎉&ensp;accepted by IEEE Spoken Language Technology Workshop (SLT) 2024.&ensp;🎉🏅𖤐*̣̥·
+  🏅🎉&ensp;accepted by IEEE Spoken Language Technology Workshop (SLT) 2024.&ensp;🎉🏅
 </p>
 
 <p align="center">
@@ -25,10 +25,6 @@
   ✨🏆&emsp;&emsp;&emsp;&emsp;and 2nd place in the remaining 9 metrics&emsp;&emsp;&emsp;&emsp;🏆✨<br>
   ✨&emsp;&emsp;&emsp;&emsp;in the <a href="https://sites.google.com/view/voicemos-challenge/past-challenges/voicemos-challenge-2024">VoiceMOS Challenge 2024</a> Track1!&emsp;&emsp;&emsp;&emsp;✨
 </p>
-
-<!-- <p align="center">
-   ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧ ⑅ ୨୧
-</p> -->
 
 <div align="center">
   <a target="_blank" href="https://www.python.org">
@@ -47,12 +43,6 @@
     <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
   </a>
 </div>
-
-<!-- <div align="center">
-  <a target="_blank" href="http://arxiv.org/abs/2409.09305">
-    <img src="https://img.shields.io/badge/arXiv-2409.09305-b31b1b.svg" alt="arXiv"/>
-  </a>
-</div> -->
 
 <br>
 
@@ -92,7 +82,7 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
    ```
 
 2. Make predictions
-   - To predict the MOS of a single wav file:
+   - To predict the MOS of a single `.wav` file:
 
       ```python
       import utmosv2
@@ -135,7 +125,7 @@ If you want to make predictions using the inference script, follow these steps:
    ```
 
 3. Make predictions
-   - To predict the MOS of a single wav file:
+   - To predict the MOS of a single `.wav` file:
 
       ```bash
       python inference.py --input_path /path/to/wav/file.wav --out_path /path/to/output/file.csv
