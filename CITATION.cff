@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: "If you find UTMOSv2 useful in your research, please cite the following paper."
+authors:
+  - name: Kaito Baba
+title: "UTMOSv2: UTokyo-SaruLab MOS Prediction System"
+url: "https://github.com/sarulab-speech/UTMOSv2"
+preferred-citation:
+  type: conference-paper
+  authors:
+    - family-names: "Kaito"
+      given-names: "Baba"
+    - family-names: "Wataru"
+      given-names: "Nakata"
+    - family-names: "Yuki"
+      given-names: "Saito"
+    - family-names: "Hiroshi"
+      given-names: "Saruwatari"
+  collection-title: "IEEE Spoken Language Technology Workshop (SLT)"
+  title: "The t05 system for the VoiceMOS Challenge 2024: Transfer learning from deep image classifier to naturalness MOS prediction of high-quality synthetic speech"
+  year: 2024
