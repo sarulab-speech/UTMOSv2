@@ -36,11 +36,17 @@
   <a target="_blank" href="https://huggingface.co/spaces/sarulab-speech/UTMOSv2">
     <img src="https://img.shields.io/badge/%F0%9F%A4%97%20Hugging%20Face-Spaces-blue" alt="Hugging Face Spaces"/>
   </a>
+  <a target="_blank" href="https://colab.research.google.com/github/sarulab-speech/UTMOSv2/blob/main/quickstart.ipynb">
+    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+  </a>
+</div>
+
+<div  align="center">
   <a target="_blank" href="http://arxiv.org/abs/2409.09305">
     <img src="https://img.shields.io/badge/arXiv-2409.09305-b31b1b.svg" alt="arXiv"/>
   </a>
-  <a target="_blank" href="https://colab.research.google.com/github/sarulab-speech/UTMOSv2/blob/main/quickstart.ipynb">
-    <img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open In Colab"/>
+  <a target="_blank" href="https://github.com/sarulab-speech/UTMOSv2/blob/main/poster.pdf">
+    <img src="https://img.shields.io/badge/IEEE%20SLT%202024-Poster-blue.svg" alt="poster"/>
   </a>
 </div>
 
@@ -91,7 +97,7 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
       ```
 
    - To predict the MOS of all `.wav` files in a folder:
-  
+
       ```python
       import utmosv2
       model = utmosv2.create_model(pretrained=True)
