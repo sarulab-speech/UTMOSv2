@@ -7,14 +7,14 @@ url: "https://github.com/sarulab-speech/UTMOSv2"
 preferred-citation:
   type: conference-paper
   authors:
-    - family-names: "Kaito"
-      given-names: "Baba"
-    - family-names: "Wataru"
-      given-names: "Nakata"
-    - family-names: "Yuki"
-      given-names: "Saito"
-    - family-names: "Hiroshi"
-      given-names: "Saruwatari"
+    - family-names: "Baba"
+      given-names: "Kaito"
+    - family-names: "Nakata"
+      given-names: "Wataru"
+    - family-names: "Saito"
+      given-names: "Yuki"
+    - family-names: "Saruwatari"
+      given-names: "Hiroshi"
   collection-title: "IEEE Spoken Language Technology Workshop (SLT)"
   title: "The t05 system for the VoiceMOS Challenge 2024: Transfer learning from deep image classifier to naturalness MOS prediction of high-quality synthetic speech"
   year: 2024

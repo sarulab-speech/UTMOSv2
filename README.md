@@ -196,7 +196,7 @@ If you find UTMOSv2 useful in your research, please cite the following paper:
 ```bibtex
 @inproceedings{baba2024utmosv2,
   title     = {The T05 System for The {V}oice{MOS} {C}hallenge 2024: Transfer Learning from Deep Image Classifier to Naturalness {MOS} Prediction of High-Quality Synthetic Speech},
-  author    = {Kaito, Baba and Wataru, Nakata and Yuki, Saito and Hiroshi, Saruwatari},
+  author    = {Baba, Kaito and Nakata, Wataru and Saito, Yuki and Saruwatari, Hiroshi},
   booktitle = {IEEE Spoken Language Technology Workshop (SLT)},
   year      = {2024},
 }
