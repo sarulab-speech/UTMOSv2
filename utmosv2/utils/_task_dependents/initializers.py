@@ -6,6 +6,8 @@ from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
+from utmosv2._core._download import download_pretrained_weights_from_hf
+from utmosv2._core._constants import _UTMOSV2_CHACHE
 import numpy as np
 import scipy.stats
 import torch
@@ -90,6 +92,7 @@ def get_model(cfg, device: torch.device) -> nn.Module:
             weight_path = cfg.weight
         else:
             weight_path = (
+                _UTMOSV2_CHACHE/
                 Path("models")
                 / cfg.weight
                 / f"fold{cfg.now_fold}_s{cfg.split.seed}_best_model.pth"
