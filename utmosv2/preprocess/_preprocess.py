@@ -28,7 +28,7 @@ def _clip_audio(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc") -> N
         )
 
 
-def _select_audio(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc") -> None:
+def _select_audio(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc") -> "pd.DataFrame":
     if cfg.preprocess.min_seconds is None:
         return data
     select_file_name = f"min_seconds={cfg.preprocess.min_seconds}.txt"

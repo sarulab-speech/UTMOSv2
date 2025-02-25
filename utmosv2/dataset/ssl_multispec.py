@@ -28,7 +28,7 @@ class SSLLMultiSpecExtDataset(BaseDataset):
             The dataset containing file paths and MOS labels.
         phase (str):
             The phase of the dataset, either "train" or any other phase (e.g., "valid").
-        transform (Callable[[torch.Tensor], torch.Tensor] | None):
+        transform (dict[str, Callable[[torch.Tensor], torch.Tensor]] | None):
             Transformation function to apply to spectrograms.
     """
 
@@ -37,16 +37,16 @@ class SSLLMultiSpecExtDataset(BaseDataset):
         cfg: Config,
         data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
-        transform: Callable[[torch.Tensor], torch.Tensor] | None = None,
+        transform: dict[str, Callable[[torch.Tensor], torch.Tensor]] | None = None,
     ):
         super().__init__(cfg, data, phase, transform)
         self.ssl = SSLExtDataset(cfg, data, phase)
         self.multi_spec = MultiSpecDataset(cfg, data, phase, transform)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.data)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         """
         Get data for SSL feature extractor, mel-spectrogram feature extractor, data-domain embedding, and target MOS for a given index.
 

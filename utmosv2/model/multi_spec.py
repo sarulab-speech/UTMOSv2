@@ -70,7 +70,7 @@ class MultiSpecModelV2(nn.Module):
         #     print(f"| Number of fc input features: {self.fc.in_features}")
         #     print(f"| Number of fc output features: {self.fc.out_features}")
 
-    def forward(self, x) -> torch.Tensor:
+    def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
         Forward pass of the MultiSpecModelV2.
 
@@ -82,25 +82,25 @@ class MultiSpecModelV2(nn.Module):
             torch.Tensor:
                 Output tensor after applying backbones, pooling, and fully connected layers.
         """
-        x = [
+        xl = [
             x[:, i, :, :, :].squeeze(1)
             for i in range(
                 self.cfg.dataset.spec_frames.num_frames * len(self.cfg.dataset.specs)
             )
         ]
-        x = [
-            self.backbones[i % len(self.cfg.dataset.specs)](t) for i, t in enumerate(x)
+        xl = [
+            self.backbones[i % len(self.cfg.dataset.specs)](t) for i, t in enumerate(xl)
         ]
-        x = [
+        xl = [
             sum(
                 [
-                    x[i * len(self.cfg.dataset.specs) + j] * w
+                    xl[i * len(self.cfg.dataset.specs) + j] * w
                     for j, w in enumerate(self.weights)
                 ]
             )
             for i in range(self.cfg.dataset.spec_frames.num_frames)
         ]
-        x = torch.cat(x, dim=3)
+        x = torch.cat(xl, dim=3)
         x = self.pooling(x).squeeze(3)
         if self.cfg.model.multi_spec.atten:
             xt = torch.permute(x, (0, 2, 1))
@@ -169,7 +169,7 @@ class MultiSpecExtModel(nn.Module):
 
         self.num_dataset = get_dataset_num(cfg)
 
-        self.fc = nn.Linear(
+        self.fc: nn.Linear | nn.Identity = nn.Linear(
             fc_in_features + self.num_dataset, cfg.model.multi_spec.num_classes
         )
 
@@ -179,26 +179,26 @@ class MultiSpecExtModel(nn.Module):
         #     print(f"| Number of fc input features: {self.fc.in_features}")
         #     print(f"| Number of fc output features: {self.fc.out_features}")
 
-    def forward(self, x, d) -> torch.Tensor:
-        x = [
+    def forward(self, x: torch.Tensor, d: torch.Tensor) -> torch.Tensor:
+        xl = [
             x[:, i, :, :, :].squeeze(1)
             for i in range(
                 self.cfg.dataset.spec_frames.num_frames * len(self.cfg.dataset.specs)
             )
         ]
-        x = [
-            self.backbones[i % len(self.cfg.dataset.specs)](t) for i, t in enumerate(x)
+        xl = [
+            self.backbones[i % len(self.cfg.dataset.specs)](t) for i, t in enumerate(xl)
         ]
-        x = [
+        xl = [
             sum(
                 [
-                    x[i * len(self.cfg.dataset.specs) + j] * w
+                    xl[i * len(self.cfg.dataset.specs) + j] * w
                     for j, w in enumerate(self.weights)
                 ]
             )
             for i in range(self.cfg.dataset.spec_frames.num_frames)
         ]
-        x = torch.cat(x, dim=3)
+        x = torch.cat(xl, dim=3)
         x = self.pooling(x).squeeze(3)
         if self.cfg.model.multi_spec.atten:
             xt = torch.permute(x, (0, 2, 1))

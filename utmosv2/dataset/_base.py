@@ -20,7 +20,7 @@ class BaseDataset(torch.utils.data.Dataset, abc.ABC):
         cfg: Config,
         data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
-        transform: Callable[[torch.Tensor], torch.Tensor] | None = None,
+        transform: dict[str, Callable[[torch.Tensor], torch.Tensor]] | None = None,
     ):
         self.cfg = cfg
         self.data = data

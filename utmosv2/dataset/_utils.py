@@ -52,5 +52,5 @@ def get_dataset_map(cfg: Config) -> dict[str, int]:
         }
 
 
-def get_dataset_num(cfg) -> int:
+def get_dataset_num(cfg: Config) -> int:
     return len(get_dataset_map(cfg))

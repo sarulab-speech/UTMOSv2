@@ -4,13 +4,14 @@ import abc
 import warnings
 from pathlib import Path
 from types import SimpleNamespace
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 import numpy as np
 import torch
 from torch.cuda.amp import autocast
 from tqdm import tqdm
 
+from utmosv2._settings._config import Config
 from utmosv2.dataset._schema import DatasetSchema
 from utmosv2.utils import get_dataset
 
@@ -25,7 +26,7 @@ class UTMOSv2ModelMixin(abc.ABC):
 
     @property
     @abc.abstractmethod
-    def _cfg(self) -> SimpleNamespace:
+    def _cfg(self) -> Config:
         pass
 
     @abc.abstractmethod
@@ -33,7 +34,7 @@ class UTMOSv2ModelMixin(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def __call__(self, *args, **kwargs) -> torch.Tensor:
+    def __call__(self, *args: Any, **kwargs: Any) -> torch.Tensor:
         pass
 
     def predict(

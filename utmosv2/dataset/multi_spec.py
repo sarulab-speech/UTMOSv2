@@ -32,7 +32,7 @@ class MultiSpecDataset(BaseDataset):
         cfg (SimpleNamespace): The configuration object containing dataset and model settings.
         data (list[DatasetSchema] | pd.DataFrame): The dataset containing file paths and labels.
         phase (str): The phase of the dataset, either "train" or any other phase (e.g., "valid").
-        transform (Callable[[torch.Tensor], torch.Tensor] | None): Transformation function to apply to spectrograms.
+        transform (str, dict[Callable[[torch.Tensor], torch.Tensor]] | None): Transformation function to apply to spectrograms.
     """
 
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
@@ -65,16 +65,17 @@ class MultiSpecDataset(BaseDataset):
                     spec = lmd * spec + (1 - lmd) * spec2
                 spec = np.stack([spec, spec, spec], axis=0)
                 # spec = np.transpose(spec, (1, 2, 0))
-                spec = torch.tensor(spec, dtype=torch.float32)
+                spec_tensor = torch.tensor(spec, dtype=torch.float32)
                 phase = "train" if self.phase == "train" else "valid"
-                spec = self.transform[phase](spec)
-                specs.append(spec)
-        spec = torch.stack(specs).float()
+                assert self.transform is not None, "Transform must be provided."
+                spec_tensor = self.transform[phase](spec_tensor)
+                specs.append(spec_tensor)
+        spec_tensor = torch.stack(specs).float()
 
         target = row.mos or 0.0
         target = torch.tensor(target, dtype=torch.float32)
 
-        return spec, target
+        return spec_tensor, target
 
 
 class MultiSpecExtDataset(MultiSpecDataset):
@@ -88,7 +89,7 @@ class MultiSpecExtDataset(MultiSpecDataset):
             The dataset containing file paths and labels.
         phase (str):
             The phase of the dataset, either "train" or any other phase (e.g., "valid").
-        transform (Callable[[torch.Tensor], torch.Tensor] | None):
+        transform (dict[str, Callable[[torch.Tensor], torch.Tensor]] | None):
             Transformation function to apply to spectrograms.
     """
 
@@ -97,7 +98,7 @@ class MultiSpecExtDataset(MultiSpecDataset):
         cfg: Config,
         data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
-        transform: Callable[[torch.Tensor], torch.Tensor] | None = None,
+        transform: dict[str, Callable[[torch.Tensor], torch.Tensor]] | None = None,
     ):
         super().__init__(cfg, data, phase, transform)
         self.dataset_map = get_dataset_map(cfg)
@@ -118,9 +119,9 @@ class MultiSpecExtDataset(MultiSpecDataset):
 
         d = np.zeros(len(self.dataset_map))
         d[self.dataset_map[row.dataset]] = 1
-        d = torch.tensor(d, dtype=torch.float32)
+        dt = torch.tensor(d, dtype=torch.float32)
 
-        return spec, d, target
+        return spec, dt, target
 
 
 def _make_spctrogram(cfg: Config, spec_cfg: Config, y: np.ndarray) -> np.ndarray:

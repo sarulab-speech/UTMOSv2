@@ -3,6 +3,7 @@ from __future__ import annotations
 from types import ModuleType, SimpleNamespace
 
 from utmosv2._core.model._common import UTMOSv2ModelMixin
+from utmosv2._settings._config import Config
 from utmosv2.model import (
     MultiSpecExtModel,
     MultiSpecModelV2,
@@ -10,6 +11,13 @@ from utmosv2.model import (
     SSLMultiSpecExtModelV1,
     SSLMultiSpecExtModelV2,
 )
+from typing import TYPE_CHECKING, Any
+
+if TYPE_CHECKING:
+    import torch
+    import torch.nn as nn
+
+
 
 
 class UTMOSv2Model(UTMOSv2ModelMixin):
@@ -18,7 +26,7 @@ class UTMOSv2Model(UTMOSv2ModelMixin):
     This class allows for flexible model selection and provides a unified interface for evaluation, calling, and prediction.
     """
 
-    def __init__(self, cfg: SimpleNamespace | ModuleType):
+    def __init__(self, cfg: Config):
         """
         Initialize the UTMOSv2Model with a specified configuration.
 
@@ -41,32 +49,32 @@ class UTMOSv2Model(UTMOSv2ModelMixin):
         self._cfg_value = cfg
 
     @property
-    def _cfg(self):
+    def _cfg(self) -> Config:
         return self._cfg_value
 
-    def eval(self):
+    def eval(self) -> "nn.Module":
         return self._model.eval()
 
-    def __call__(self, *args, **kwargs):
+    def __call__(self, *args: Any, **kwargs: Any) -> "torch.Tensor":
         return self._model(*args, **kwargs)
 
-    def __getattr__(self, name):
+    def __getattr__(self, name: str) -> Any:
         return getattr(self._model, name)
 
-    def __setattr__(self, name, value):
+    def __setattr__(self, name: str, value: Any) -> None:
         if name == "_model":
             super().__setattr__(name, value)
         else:
             setattr(self._model, name, value)
 
-    def __delattr__(self, name):
+    def __delattr__(self, name: str) -> None:
         delattr(self._model, name)
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"UTMOSv2Model({'('.join(self._model.__repr__().split('(')[1:])}"
 
-    def __str__(self):
+    def __str__(self) -> str:
         return self.__repr__()
 
-    def __dir__(self):
-        return super().__dir__() + dir(self._model)
+    def __dir__(self) -> list[str]:
+        return super().__dir__() + self._model.__dir__()

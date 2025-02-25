@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 import torch
 
+from utmosv2._settings._config import Config
 from utmosv2.dataset._base import BaseDataset
 from utmosv2.dataset._utils import (
     extend_audio,
@@ -31,9 +32,11 @@ class SSLDataset(BaseDataset):
             The dataset containing file paths and MOS labels.
         phase (str):
             The phase of the dataset, either "train" or any other phase (e.g., "valid").
+        transform (dict[str, Callable[[torch.Tensor], torch.Tensor]] | None):
+            Transformation function to apply to spectrograms.
     """
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         """
         Get the processed audio, and target MOS for a given index.
 
@@ -52,7 +55,7 @@ class SSLDataset(BaseDataset):
         target = row.mos or 0.0
         target = torch.tensor(target, dtype=torch.float32)
 
-        return y, target
+        return torch.from_numpy(y), target
 
 
 class SSLExtDataset(SSLDataset):
@@ -68,11 +71,11 @@ class SSLExtDataset(SSLDataset):
             The phase of the dataset, either "train" or any other phase (e.g., "valid").
     """
 
-    def __init__(self, cfg, data: "pd.DataFrame" | list[DatasetSchema], phase: str):
+    def __init__(self, cfg: Config, data: "pd.DataFrame" | list[DatasetSchema], phase: str):
         super().__init__(cfg, data, phase)
         self.dataset_map = get_dataset_map(cfg)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         """
         Get the processed audio, data-domain embedding, and target MOS for a given index.
 
@@ -87,6 +90,6 @@ class SSLExtDataset(SSLDataset):
 
         d = np.zeros(len(self.dataset_map))
         d[self.dataset_map[row.dataset]] = 1
-        d = torch.tensor(d, dtype=torch.float32)
+        dt = torch.tensor(d, dtype=torch.float32)
 
-        return y, d, target
+        return y, dt, target

@@ -67,7 +67,7 @@ class SSLExtModel(nn.Module):
             in_features * 2 + self.num_dataset, cfg.model.ssl.num_classes
         )
 
-    def forward(self, x: tuple[torch.Tenfsor], d: torch.Tensor) -> torch.Tensor:
+    def forward(self, xt: tuple[torch.Tensor], d: torch.Tensor) -> torch.Tensor:
         """
         Forward pass of the SSLExtModel.
 
@@ -81,8 +81,8 @@ class SSLExtModel(nn.Module):
             torch.Tensor:
                 Output tensor after applying the SSL encoder, attention (if configured), and fully connected layers.
         """
-        x = self.encoder(x)
-        x = sum([t * w for t, w in zip(x, self.weights)])
+        xt = self.encoder(xt)
+        x: torch.Tensor = sum([t * w for t, w in zip(x, self.weights)])
         if self.cfg.model.ssl.attn:
             y = x
             for attn in self.attn:
