@@ -63,7 +63,7 @@ class SSLExtModel(nn.Module):
                 ]
             )
         self.num_dataset = get_dataset_num(cfg)
-        self.fc = nn.Linear(
+        self.fc: nn.Linear | nn.Identity = nn.Linear(
             in_features * 2 + self.num_dataset, cfg.model.ssl.num_classes
         )
 

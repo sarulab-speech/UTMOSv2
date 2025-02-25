@@ -2,6 +2,7 @@ import timm
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
+from typing import cast
 
 from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num
@@ -39,14 +40,14 @@ class MultiSpecModelV2(nn.Module):
         )
 
         self.pooling = timm.layers.SelectAdaptivePool2d(
-            output_size=(None, 1) if self.cfg.model.multi_spec.atten else 1,
+            output_size=(None, 1) if self.cfg.model.multi_spec.atten else 1, # type: ignore
             pool_type=self.cfg.model.multi_spec.pool_type,
             flatten=False,
         )
 
         if self.cfg.model.multi_spec.atten:
             self.attn = nn.MultiheadAttention(
-                embed_dim=self.backbones[0].num_features
+                embed_dim=cast(int, self.backbones[0].num_features)
                 * (2 if self.cfg.model.multi_spec.pool_type == "catavgmax" else 1),
                 num_heads=8,
                 dropout=0.2,
@@ -54,12 +55,12 @@ class MultiSpecModelV2(nn.Module):
             )
 
         fc_in_features = (
-            self.backbones[0].num_features
+            cast(int, self.backbones[0].num_features)
             * (2 if self.cfg.model.multi_spec.pool_type == "catavgmax" else 1)
             * (2 if self.cfg.model.multi_spec.atten else 1)
         )
 
-        self.fc = nn.Linear(fc_in_features, cfg.model.multi_spec.num_classes)
+        self.fc : nn.Linear | nn.Identity = nn.Linear(fc_in_features, cfg.model.multi_spec.num_classes)
 
         # if cfg.print_config:
         #     print(f"| backbone model: {cfg.model.multi_spec.backbone}")
@@ -144,14 +145,14 @@ class MultiSpecExtModel(nn.Module):
         )
 
         self.pooling = timm.layers.SelectAdaptivePool2d(
-            output_size=(None, 1) if self.cfg.model.multi_spec.atten else 1,
+            output_size=(None, 1) if self.cfg.model.multi_spec.atten else 1, # type: ignore
             pool_type=self.cfg.model.multi_spec.pool_type,
             flatten=False,
         )
 
         if self.cfg.model.multi_spec.atten:
             self.attn = nn.MultiheadAttention(
-                embed_dim=self.backbones[0].num_features
+                embed_dim=cast(int, self.backbones[0].num_features)
                 * (2 if self.cfg.model.multi_spec.pool_type == "catavgmax" else 1),
                 num_heads=8,
                 dropout=0.2,
@@ -159,7 +160,7 @@ class MultiSpecExtModel(nn.Module):
             )
 
         fc_in_features = (
-            self.backbones[0].num_features
+            cast(int, self.backbones[0].num_features)
             * (2 if self.cfg.model.multi_spec.pool_type == "catavgmax" else 1)
             * (2 if self.cfg.model.multi_spec.atten else 1)
         )

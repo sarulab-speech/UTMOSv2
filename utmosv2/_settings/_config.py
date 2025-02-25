@@ -8,46 +8,46 @@ Config: TypeAlias = SimpleNamespace | ModuleType
 
 
 def configure_args(cfg: Config, args):
-    cfg.fold = args.fold
-    cfg.split.seed = args.seed
-    cfg.config_name = args.config
-    cfg.input_dir = args.input_dir and Path(args.input_dir)
-    cfg.num_workers = args.num_workers
-    cfg.weight = args.weight
-    cfg.save_path = Path("models") / cfg.config_name
-    cfg.wandb = args.wandb
-    cfg.reproduce = args.reproduce
-    cfg.data_config = args.data_config
-    cfg.phase = "train"
+    cfg.fold = args.fold  # type: ignore
+    cfg.split.seed = args.seed  # type: ignore
+    cfg.config_name = args.config  # type: ignore
+    cfg.input_dir = args.input_dir and Path(args.input_dir)  # type: ignore
+    cfg.num_workers = args.num_workers  # type: ignore
+    cfg.weight = args.weight  # type: ignore
+    cfg.save_path = Path("models") / cfg.config_name  # type: ignore
+    cfg.wandb = args.wandb  # type: ignore
+    cfg.reproduce = args.reproduce  # type: ignore
+    cfg.data_config = args.data_config  # type: ignore
+    cfg.phase = "train"  # type: ignore
 
 
 def configure_inference_args(cfg: Config, args):
-    cfg.inference.fold = args.fold
-    cfg.split.seed = args.seed
-    cfg.config_name = args.config
-    cfg.input_dir = args.input_dir and Path(args.input_dir)
-    cfg.input_path = args.input_path and Path(args.input_path)
-    cfg.num_workers = args.num_workers
-    cfg.weight = args.weight
+    cfg.inference.fold = args.fold  # type: ignore
+    cfg.split.seed = args.seed  # type: ignore
+    cfg.config_name = args.config  # type: ignore
+    cfg.input_dir = args.input_dir and Path(args.input_dir)  # type: ignore
+    cfg.input_path = args.input_path and Path(args.input_path)  # type: ignore
+    cfg.num_workers = args.num_workers  # type: ignore
+    cfg.weight = args.weight  # type: ignore
     if not cfg.weight:
-        cfg.weight = cfg.config_name
-    cfg.inference.val_list_path = args.val_list_path and Path(args.val_list_path)
-    cfg.save_path = Path("models") / cfg.config_name
-    cfg.predict_dataset = args.predict_dataset
-    cfg.final = args.final
-    cfg.inference.num_tta = args.num_repetitions
-    cfg.reproduce = args.reproduce
-    cfg.out_path = args.out_path and Path(args.out_path)
-    cfg.data_config = None
-    cfg.phase = "inference"
+        cfg.weight = cfg.config_name  # type: ignore
+    cfg.inference.val_list_path = args.val_list_path and Path(args.val_list_path)  # type: ignore
+    cfg.save_path = Path("models") / cfg.config_name  # type: ignore
+    cfg.predict_dataset = args.predict_dataset  # type: ignore
+    cfg.final = args.final  # type: ignore
+    cfg.inference.num_tta = args.num_repetitions  # type: ignore
+    cfg.reproduce = args.reproduce  # type: ignore
+    cfg.out_path = args.out_path and Path(args.out_path)  # type: ignore
+    cfg.data_config = None  # type: ignore
+    cfg.phase = "inference"  # type: ignore
 
 
 def configure_defaults(cfg: Config):
     if cfg.id_name is None:
-        cfg.id_name = "utt_id"
+        cfg.id_name = "utt_id"  # type: ignore
 
 
 def configure_execution(cfg: Config):
-    cfg.data_config = None
-    cfg.phase = "prediction"
-    cfg.print_config = False
+    cfg.data_config = None  # type: ignore
+    cfg.phase = "prediction"  # type: ignore
+    cfg.print_config = False  # type: ignore
