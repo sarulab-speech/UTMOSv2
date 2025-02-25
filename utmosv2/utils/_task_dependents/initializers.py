@@ -181,25 +181,3 @@ def get_train_data(cfg: Config) -> "pd.DataFrame":
 
 def _get_test_save_name(cfg: Config) -> str:
     return f"{cfg.config_name}_[fold{cfg.inference.fold}_tta{cfg.inference.num_tta}_s{cfg.split.seed}]"
-
-
-def save_test_preds(
-    cfg: Config,
-    data: "pd.DataFrame",
-    test_preds: np.ndarray,
-    test_metrics: dict[str, float],
-) -> None:
-    test_df = pd.DataFrame({cfg.id_name: data[cfg.id_name], "test_preds": test_preds})
-    cfg.inference.save_path.mkdir(parents=True, exist_ok=True)
-    save_path = (
-        cfg.inference.save_path
-        / f"{_get_test_save_name(cfg)}_({cfg.predict_dataset})_test_preds{'_final' if cfg.final else ''}.csv"
-    )
-    test_df.to_csv(save_path, index=False)
-    save_path = (
-        cfg.inference.save_path
-        / f"{_get_test_save_name(cfg)}_({cfg.predict_dataset})_val_score{'_final' if cfg.final else ''}.json"
-    )
-    with open(save_path, "w") as f:
-        json.dump(test_metrics, f)
-    print(f"Test predictions are saved to {save_path}")
