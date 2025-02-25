@@ -40,7 +40,7 @@ class MultiSpecModelV2(nn.Module):
         )
 
         self.pooling = timm.layers.SelectAdaptivePool2d(
-            output_size=(None, 1) if self.cfg.model.multi_spec.atten else 1, # type: ignore
+            output_size=(None, 1) if self.cfg.model.multi_spec.atten else 1,  # type: ignore
             pool_type=self.cfg.model.multi_spec.pool_type,
             flatten=False,
         )
@@ -60,7 +60,9 @@ class MultiSpecModelV2(nn.Module):
             * (2 if self.cfg.model.multi_spec.atten else 1)
         )
 
-        self.fc : nn.Linear | nn.Identity = nn.Linear(fc_in_features, cfg.model.multi_spec.num_classes)
+        self.fc: nn.Linear | nn.Identity = nn.Linear(
+            fc_in_features, cfg.model.multi_spec.num_classes
+        )
 
         # if cfg.print_config:
         #     print(f"| backbone model: {cfg.model.multi_spec.backbone}")
@@ -145,7 +147,7 @@ class MultiSpecExtModel(nn.Module):
         )
 
         self.pooling = timm.layers.SelectAdaptivePool2d(
-            output_size=(None, 1) if self.cfg.model.multi_spec.atten else 1, # type: ignore
+            output_size=(None, 1) if self.cfg.model.multi_spec.atten else 1,  # type: ignore
             pool_type=self.cfg.model.multi_spec.pool_type,
             flatten=False,
         )
