@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 import glob
-import io
 import json
 from collections.abc import Callable
 from pathlib import Path
@@ -9,7 +8,6 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import scipy.stats
-import smart_open
 import torch
 import torch.nn as nn
 
@@ -29,6 +27,8 @@ from utmosv2.model import (
     SSLMultiSpecExtModelV2,
 )
 from utmosv2.preprocess import add_sys_mean, preprocess, preprocess_test
+from utmosv2.utils._constants import _UTMOSV2_CHACHE
+from utmosv2.utils._download import download_pretrained_weights_from_hf
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -96,13 +96,12 @@ def get_model(cfg, device: torch.device) -> nn.Module:
                 / cfg.weight
                 / f"fold{cfg.now_fold}_s{cfg.split.seed}_best_model.pth"
             )
-            if weight_path.exists():
-                model.load_state_dict(torch.load(weight_path.as_posix()))
-            else:
-                weight_path = f"https://huggingface.co/spaces/sarulab-speech/UTMOSv2/resolve/main/models/{cfg.weight}/fold{cfg.now_fold}_s{cfg.split.seed}_best_model.pth"
-                with smart_open.open(weight_path, "rb") as f:
-                    buf = io.BytesIO(f.read())
-                    model.load_state_dict(torch.load(buf))
+            if not weight_path.exists():
+                weight_path_cache = _UTMOSV2_CHACHE / weight_path
+                if not weight_path_cache.exists():
+                    download_pretrained_weights_from_hf(cfg.weight, cfg.now_fold)
+                weight_path = weight_path_cache
+        model.load_state_dict(torch.load(weight_path))
         print(f"Loaded weight from {weight_path}")
     return model
 

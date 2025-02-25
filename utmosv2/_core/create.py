@@ -6,10 +6,10 @@ from types import SimpleNamespace
 
 import torch
 
-from utmosv2._core._constants import _UTMOSV2_CHACHE
-from utmosv2._core._download import download_pretrained_weights_from_hf
 from utmosv2._core.model import UTMOSv2Model
 from utmosv2._settings import configure_execution
+from utmosv2.utils._constants import _UTMOSV2_CHACHE
+from utmosv2.utils._download import download_pretrained_weights_from_hf
 
 
 def create_model(
