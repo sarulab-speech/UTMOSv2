@@ -14,7 +14,7 @@ if TYPE_CHECKING:
     from utmosv2.dataset._schema import DatasetSchema
 
 
-class BaseDataset(torch.utils.data.Dataset, abc.ABC):
+class _BaseDataset(torch.utils.data.Dataset, abc.ABC):
     def __init__(
         self,
         cfg: Config,

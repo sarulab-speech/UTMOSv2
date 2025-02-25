@@ -7,7 +7,7 @@ import torch
 
 from utmosv2._settings._config import Config
 from utmosv2.dataset import MultiSpecDataset, SSLExtDataset
-from utmosv2.dataset._base import BaseDataset
+from utmosv2.dataset._base import _BaseDataset
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -15,7 +15,7 @@ if TYPE_CHECKING:
     from utmosv2.dataset._schema import DatasetSchema
 
 
-class SSLLMultiSpecExtDataset(BaseDataset):
+class SSLLMultiSpecExtDataset(_BaseDataset):
     """
     Dataset class that combines both SSL (Self-Supervised Learning) and Multi-Spectrogram datasets.
     This dataset uses both SSLExtDataset and MultiSpecDataset to provide different representations

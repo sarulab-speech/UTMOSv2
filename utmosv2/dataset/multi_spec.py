@@ -8,7 +8,7 @@ import numpy as np
 import torch
 
 from utmosv2._settings._config import Config
-from utmosv2.dataset._base import BaseDataset
+from utmosv2.dataset._base import _BaseDataset
 from utmosv2.dataset._utils import (
     extend_audio,
     get_dataset_map,
@@ -22,7 +22,7 @@ if TYPE_CHECKING:
     from utmosv2.dataset._schema import DatasetSchema
 
 
-class MultiSpecDataset(BaseDataset):
+class MultiSpecDataset(_BaseDataset):
     """
     Dataset class for mel-spectrogram feature extractor. This class is responsible for
     loading audio data, generating multiple spectrograms for each sample, and

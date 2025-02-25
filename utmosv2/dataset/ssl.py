@@ -6,7 +6,7 @@ import numpy as np
 import torch
 
 from utmosv2._settings._config import Config
-from utmosv2.dataset._base import BaseDataset
+from utmosv2.dataset._base import _BaseDataset
 from utmosv2.dataset._utils import (
     extend_audio,
     get_dataset_map,
@@ -20,7 +20,7 @@ if TYPE_CHECKING:
     from utmosv2.dataset._schema import DatasetSchema
 
 
-class SSLDataset(BaseDataset):
+class SSLDataset(_BaseDataset):
     """
     Dataset class for SSL (Self-Supervised Learning) feature extractor.
     This class handles audio loading, extending, and random selection of a segment from the audio.
