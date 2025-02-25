@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from transformers import AutoFeatureExtractor, AutoModel
 
+from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num
 
 
