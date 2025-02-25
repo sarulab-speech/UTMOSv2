@@ -106,9 +106,9 @@ def train_1epoch(
                 train_loss[cl.name] += ls.detach().float().cpu().item()
 
         pbar.set_description(
-            f'  loss: {train_loss["loss"] / (i + 1):.4f}'
+            f"  loss: {train_loss['loss'] / (i + 1):.4f}"
             + (
-                f' ({", ".join([f"{cl.name}: {train_loss[cl.name] / (i + 1):.4f}" for cl, _ in cfg.loss])})'
+                f" ({', '.join([f'{cl.name}: {train_loss[cl.name] / (i + 1):.4f}' for cl, _ in cfg.loss])})"
                 if isinstance(loss, list)
                 else ""
             )
@@ -175,9 +175,9 @@ def validate_1epoch(
             for name, metric in metrics.items():
                 valid_metrics[name] += metric(output, y_cpu.numpy())
             pbar.set_description(
-                f'  val_loss: {valid_loss["loss"] / (i + 1):.4f} '
+                f"  val_loss: {valid_loss['loss'] / (i + 1):.4f} "
                 + (
-                    f'({", ".join([f"{cl.name}: {valid_loss[cl.name] / (i + 1):.4f}" for cl, _ in cfg.loss])}) '
+                    f"({', '.join([f'{cl.name}: {valid_loss[cl.name] / (i + 1):.4f}' for cl, _ in cfg.loss])}) "
                     if isinstance(loss, list)
                     else ""
                 )
