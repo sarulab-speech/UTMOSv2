@@ -41,7 +41,7 @@ class SSLExtModel(nn.Module):
             Optional name for the SSL encoder. Defaults to the name specified in `cfg.model.ssl.name`.
     """
 
-    def __init__(self, cfg, name: str | None = None):
+    def __init__(self, cfg: Config, name: str | None = None):
         super().__init__()
         self.cfg = cfg
         self.encoder = _SSLEncoder(

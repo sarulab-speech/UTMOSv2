@@ -4,11 +4,12 @@ import torch
 import torch.nn as nn
 import torch.optim as optim
 
+from utmosv2._settings._config import Config
 from utmosv2.loss import CombinedLoss, PairwizeDiffLoss
 
 
 def get_dataloader(
-    cfg, dataset: torch.utils.data.Dataset, phase: str
+    cfg: Config, dataset: torch.utils.data.Dataset, phase: str
 ) -> torch.utils.data.DataLoader:
     """
     Return a DataLoader for the specified dataset and phase.
@@ -55,7 +56,7 @@ def get_dataloader(
         raise ValueError(f"Phase must be one of [train, valid, test], but got {phase}")
 
 
-def _get_unit_loss(loss_cfg) -> nn.Module:
+def _get_unit_loss(loss_cfg: Config) -> nn.Module:
     if loss_cfg.name == "pairwize_diff":
         return PairwizeDiffLoss(loss_cfg.margin, loss_cfg.norm)
     elif loss_cfg.name == "mse":
@@ -64,7 +65,7 @@ def _get_unit_loss(loss_cfg) -> nn.Module:
         raise NotImplementedError
 
 
-def _get_combined_loss(cfg) -> nn.Module:
+def _get_combined_loss(cfg: Config) -> nn.Module:
     if cfg.print_config:
         print(
             "Using losses: "
@@ -74,7 +75,7 @@ def _get_combined_loss(cfg) -> nn.Module:
     return CombinedLoss(weighted_losses)
 
 
-def get_loss(cfg) -> nn.Module:
+def get_loss(cfg: Config) -> nn.Module:
     """
     Return the appropriate loss function based on the configuration.
 
@@ -93,7 +94,7 @@ def get_loss(cfg) -> nn.Module:
         return _get_unit_loss(cfg.loss)
 
 
-def get_optimizer(cfg, model: nn.Module) -> optim.Optimizer:
+def get_optimizer(cfg: Config, model: nn.Module) -> optim.Optimizer:
     """
     Return the optimizer based on the configuration settings.
 
@@ -131,7 +132,7 @@ def get_optimizer(cfg, model: nn.Module) -> optim.Optimizer:
 
 
 def get_scheduler(
-    cfg, optimizer: optim.Optimizer, n_iterations: int
+    cfg: Config, optimizer: optim.Optimizer, n_iterations: int
 ) -> optim.lr_scheduler.LRScheduler:
     """
     Return the learning rate scheduler based on the configuration settings.

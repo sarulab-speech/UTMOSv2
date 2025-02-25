@@ -1,7 +1,13 @@
 from pathlib import Path
+from types import ModuleType, SimpleNamespace
+from typing import TypeAlias
+
+# NOTE: Python 3.12 introduces the type statement, so once Python 3.11 is dropped,
+# it should be updated to use that instead.
+Config: TypeAlias = SimpleNamespace | ModuleType
 
 
-def configure_args(cfg, args):
+def configure_args(cfg: Config, args):
     cfg.fold = args.fold
     cfg.split.seed = args.seed
     cfg.config_name = args.config
@@ -15,7 +21,7 @@ def configure_args(cfg, args):
     cfg.phase = "train"
 
 
-def configure_inference_args(cfg, args):
+def configure_inference_args(cfg: Config, args):
     cfg.inference.fold = args.fold
     cfg.split.seed = args.seed
     cfg.config_name = args.config
@@ -36,12 +42,12 @@ def configure_inference_args(cfg, args):
     cfg.phase = "inference"
 
 
-def configure_defaults(cfg):
+def configure_defaults(cfg: Config):
     if cfg.id_name is None:
         cfg.id_name = "utt_id"
 
 
-def configure_execution(cfg):
+def configure_execution(cfg: Config):
     cfg.data_config = None
     cfg.phase = "prediction"
     cfg.print_config = False

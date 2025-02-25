@@ -7,6 +7,7 @@ import torch
 from torch.cuda.amp import autocast
 from tqdm import tqdm
 
+from utmosv2._settings._config import Config
 from utmosv2.utils import calc_metrics, print_metrics
 
 if TYPE_CHECKING:
@@ -14,7 +15,7 @@ if TYPE_CHECKING:
 
 
 def run_inference(
-    cfg,
+    cfg : Config,
     model: torch.nn.Module,
     test_dataloader: torch.utils.data.DataLoader,
     cycle: int,

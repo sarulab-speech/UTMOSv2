@@ -5,6 +5,7 @@ from typing import TYPE_CHECKING
 
 import torch
 
+from utmosv2._settings._config import Config
 from utmosv2.dataset import MultiSpecDataset, SSLExtDataset
 from utmosv2.dataset._base import BaseDataset
 
@@ -33,7 +34,7 @@ class SSLLMultiSpecExtDataset(BaseDataset):
 
     def __init__(
         self,
-        cfg,
+        cfg: Config,
         data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
         transform: Callable[[torch.Tensor], torch.Tensor] | None = None,

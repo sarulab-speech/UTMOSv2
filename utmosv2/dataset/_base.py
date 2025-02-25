@@ -6,6 +6,8 @@ from typing import TYPE_CHECKING
 
 import torch
 
+from utmosv2._settings._config import Config
+
 if TYPE_CHECKING:
     import pandas as pd
 
@@ -15,7 +17,7 @@ if TYPE_CHECKING:
 class BaseDataset(torch.utils.data.Dataset, abc.ABC):
     def __init__(
         self,
-        cfg,
+        cfg : Config,
         data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
         transform: Callable[[torch.Tensor], torch.Tensor] | None = None,

@@ -1,12 +1,13 @@
 import torch
 import torch.nn as nn
 
+from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num
 from utmosv2.model import MultiSpecExtModel, MultiSpecModelV2, SSLExtModel
 
 
 class SSLMultiSpecExtModelV1(nn.Module):
-    def __init__(self, cfg):
+    def __init__(self, cfg: Config):
         super().__init__()
         self.cfg = cfg
         self.ssl = SSLExtModel(cfg)

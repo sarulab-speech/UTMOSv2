@@ -3,6 +3,7 @@ import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
+from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num
 
 
@@ -17,7 +18,7 @@ class MultiSpecModelV2(nn.Module):
             Configuration object containing model and dataset settings.
     """
 
-    def __init__(self, cfg):
+    def __init__(self, cfg: Config):
         super().__init__()
         self.cfg = cfg
         self.backbones = nn.ModuleList(
@@ -122,7 +123,7 @@ class MultiSpecExtModel(nn.Module):
             through backbones, pooling, and fully connected layers.
     """
 
-    def __init__(self, cfg):
+    def __init__(self, cfg: Config):
         super().__init__()
         self.cfg = cfg
         self.backbones = nn.ModuleList(
