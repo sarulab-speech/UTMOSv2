@@ -4,6 +4,7 @@ import os
 
 import numpy as np
 import torch
+from utmosv2._settings._config import Config
 import wandb
 from dotenv import load_dotenv
 
@@ -23,7 +24,7 @@ from utmosv2.utils import (
 )
 
 
-def main(cfg):
+def main(cfg: Config) -> None:
     data = get_train_data(cfg)
     print(data.head())
     oof_preds = np.zeros(data.shape[0])
@@ -31,13 +32,13 @@ def main(cfg):
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Device: {device}")
 
-    cfg.print_config = True
+    cfg.print_config = True  # type: ignore
 
     for fold, (train_idx, val_idx) in enumerate(split_data(cfg, data)):
         if 0 <= cfg.fold < cfg.num_folds and fold != cfg.fold:
             continue
 
-        cfg.now_fold = fold
+        cfg.now_fold = fold  # type: ignore
 
         train_data = data.iloc[train_idx]
         val_data = data.iloc[val_idx]
@@ -56,7 +57,7 @@ def main(cfg):
             cfg, optimizer, len(train_dataloader) * cfg.run.num_epochs
         )
 
-        cfg.print_config = False
+        cfg.print_config = False  # type: ignore
         print(f"+*+*[[Fold {fold + 1}/{cfg.num_folds}]]" + "+*" * 30)
         if cfg.wandb:
             wandb.init(

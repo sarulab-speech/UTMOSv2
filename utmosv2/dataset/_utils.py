@@ -32,7 +32,7 @@ def select_random_start(y: np.ndarray, length: int) -> np.ndarray:
     return y[start : start + length]
 
 
-def get_dataset_map(cfg: Config):
+def get_dataset_map(cfg: Config) -> dict[str, int]:
     if cfg.data_config:
         with open(cfg.data_config, "r") as f:
             datasets = json.load(f)
@@ -52,5 +52,5 @@ def get_dataset_map(cfg: Config):
         }
 
 
-def get_dataset_num(cfg):
+def get_dataset_num(cfg: Config) -> int:
     return len(get_dataset_map(cfg))

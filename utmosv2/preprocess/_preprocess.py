@@ -15,7 +15,7 @@ else:
     pd = _LazyImport("pandas")
 
 
-def _clip_audio(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"):
+def _clip_audio(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc") -> None:
     (cfg.preprocess.save_path / data_name).mkdir(parents=True, exist_ok=True)
     for file in tqdm(data["file_path"].values, desc="Clipping audio files"):
         y, _ = librosa.load(file, sr=None)
@@ -28,7 +28,9 @@ def _clip_audio(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"):
         )
 
 
-def _select_audio(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"):
+def _select_audio(
+    cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"
+) -> "pd.DataFrame":
     if cfg.preprocess.min_seconds is None:
         return data
     select_file_name = f"min_seconds={cfg.preprocess.min_seconds}.txt"
@@ -65,7 +67,9 @@ def _clip_and_select_audio(
     return data
 
 
-def _change_file_path(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"):
+def _change_file_path(
+    cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"
+) -> None:
     data.loc[:, "file_path"] = data.loc[:, "file_path"].apply(
         lambda x: cfg.preprocess.save_path
         / data_name
@@ -73,7 +77,7 @@ def _change_file_path(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"
     )
 
 
-def _add_metadata(cfg: Config, data: "pd.DataFrame"):
+def _add_metadata(cfg: Config, data: "pd.DataFrame") -> None:
     metadata = []
     for t in ["TRAINSET", "DEVSET", "TESTSET"]:
         meta = pd.read_csv(cfg.input_dir / f"sets/{t}")
@@ -85,7 +89,7 @@ def _add_metadata(cfg: Config, data: "pd.DataFrame"):
     data["sys_id"] = dt["sys_id"]
 
 
-def add_sys_mean(data: "pd.DataFrame"):
+def add_sys_mean(data: "pd.DataFrame") -> None:
     sys_mean = (
         data.groupby("sys_id", as_index=False)["mos"].mean().reset_index(drop=True)
     )

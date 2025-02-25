@@ -18,7 +18,7 @@ def create_model(
     fold: int = 0,
     checkpoint_path: Path | str | None = None,
     seed: int = 42,
-):
+) -> UTMOSv2Model:
     """
     Create a UTMOSv2 model with the specified configuration and optional pretrained weights.
 

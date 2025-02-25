@@ -5,6 +5,7 @@ import numpy as np
 import torch
 
 from utmosv2._settings import configure_defaults, configure_inference_args
+from utmosv2._settings._config import Config
 from utmosv2.runner import run_inference
 from utmosv2.utils import (
     get_dataloader,
@@ -19,25 +20,26 @@ from utmosv2.utils import (
 )
 
 
-def main(cfg):
+def main(cfg: Config) -> None:
     data = get_inference_data(cfg)
     show_inference_data(data)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    cfg.print_config = True
+    cfg.print_config = True  # type: ignore
 
     test_preds = np.zeros(data.shape[0])
-    test_metrics = {}
+    if cfg.reproduce:
+        test_metrics: dict[str, float] = {}
 
     for fold in range(cfg.num_folds):
         if 0 <= cfg.inference.fold < cfg.num_folds and fold != cfg.inference.fold:
             continue
 
-        cfg.now_fold = fold
+        cfg.now_fold = fold  # type: ignore
 
         model = get_model(cfg, device)
 
-        cfg.print_config = False
+        cfg.print_config = False  # type: ignore
         print(f"+*+*[[Fold {fold + 1}/{cfg.num_folds}]]" + "+*" * 30)
 
         for cycle in range(cfg.inference.num_tta):
@@ -48,6 +50,7 @@ def main(cfg):
             )
             test_preds += test_preds_tta
             if cfg.reproduce:
+                assert test_metrics_tta is not None
                 for k, v in test_metrics_tta.items():
                     test_metrics[k] = test_metrics.get(k, 0) + v
 

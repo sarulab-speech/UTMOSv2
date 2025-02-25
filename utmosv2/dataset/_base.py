@@ -20,16 +20,16 @@ class BaseDataset(torch.utils.data.Dataset, abc.ABC):
         cfg: Config,
         data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
-        transform: Callable[[torch.Tensor], torch.Tensor] | None = None,
+        transform: dict[str, Callable[[torch.Tensor], torch.Tensor]] | None = None,
     ):
         self.cfg = cfg
         self.data = data
         self.phase = phase
         self.transform = transform
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.data)
 
     @abc.abstractmethod
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         pass

@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
 from typing import TypeAlias
@@ -7,7 +8,7 @@ from typing import TypeAlias
 Config: TypeAlias = SimpleNamespace | ModuleType
 
 
-def configure_args(cfg: Config, args):
+def configure_args(cfg: Config, args: argparse.Namespace) -> None:
     cfg.fold = args.fold  # type: ignore
     cfg.split.seed = args.seed  # type: ignore
     cfg.config_name = args.config  # type: ignore
@@ -21,7 +22,7 @@ def configure_args(cfg: Config, args):
     cfg.phase = "train"  # type: ignore
 
 
-def configure_inference_args(cfg: Config, args):
+def configure_inference_args(cfg: Config, args: argparse.Namespace) -> None:
     cfg.inference.fold = args.fold  # type: ignore
     cfg.split.seed = args.seed  # type: ignore
     cfg.config_name = args.config  # type: ignore
@@ -42,12 +43,12 @@ def configure_inference_args(cfg: Config, args):
     cfg.phase = "inference"  # type: ignore
 
 
-def configure_defaults(cfg: Config):
+def configure_defaults(cfg: Config) -> None:
     if cfg.id_name is None:
         cfg.id_name = "utt_id"  # type: ignore
 
 
-def configure_execution(cfg: Config):
+def configure_execution(cfg: Config) -> None:
     cfg.data_config = None  # type: ignore
     cfg.phase = "prediction"  # type: ignore
     cfg.print_config = False  # type: ignore

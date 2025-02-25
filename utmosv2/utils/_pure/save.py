@@ -12,7 +12,7 @@ else:
 
 def save_oof_preds(
     cfg: Config, data: "pd.DataFrame", oof_preds: "np.ndarray", fold: int
-):
+) -> None:
     """
     Save out-of-fold (OOF) predictions to a CSV file.
 
