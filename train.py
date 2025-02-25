@@ -32,13 +32,13 @@ def main(cfg: Config) -> None:
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print(f"Device: {device}")
 
-    cfg.print_config = True # type: ignore
+    cfg.print_config = True  # type: ignore
 
     for fold, (train_idx, val_idx) in enumerate(split_data(cfg, data)):
         if 0 <= cfg.fold < cfg.num_folds and fold != cfg.fold:
             continue
 
-        cfg.now_fold = fold # type: ignore
+        cfg.now_fold = fold  # type: ignore
 
         train_data = data.iloc[train_idx]
         val_data = data.iloc[val_idx]
@@ -57,7 +57,7 @@ def main(cfg: Config) -> None:
             cfg, optimizer, len(train_dataloader) * cfg.run.num_epochs
         )
 
-        cfg.print_config = False # type: ignore
+        cfg.print_config = False  # type: ignore
         print(f"+*+*[[Fold {fold + 1}/{cfg.num_folds}]]" + "+*" * 30)
         if cfg.wandb:
             wandb.init(

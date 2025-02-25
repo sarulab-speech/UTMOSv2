@@ -25,7 +25,7 @@ def main(cfg: Config) -> None:
     show_inference_data(data)
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    cfg.print_config = True # type: ignore
+    cfg.print_config = True  # type: ignore
 
     test_preds = np.zeros(data.shape[0])
     if cfg.reproduce:
@@ -35,11 +35,11 @@ def main(cfg: Config) -> None:
         if 0 <= cfg.inference.fold < cfg.num_folds and fold != cfg.inference.fold:
             continue
 
-        cfg.now_fold = fold # type: ignore
+        cfg.now_fold = fold  # type: ignore
 
         model = get_model(cfg, device)
 
-        cfg.print_config = False # type: ignore
+        cfg.print_config = False  # type: ignore
         print(f"+*+*[[Fold {fold + 1}/{cfg.num_folds}]]" + "+*" * 30)
 
         for cycle in range(cfg.inference.num_tta):
