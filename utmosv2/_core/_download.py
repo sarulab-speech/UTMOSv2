@@ -30,7 +30,9 @@ def download_pretrained_weights_from_github(cfg_name: str) -> None:
     except subprocess.CalledProcessError as e:
         print(f"Failed to download pretrained weights: {e}")
     print("Done.")
-def download_pretrained_weights_from_hf(cfg_name:str) -> None:
+
+
+def download_pretrained_weights_from_hf(cfg_name: str) -> None:
     print(f"Downloading pretrained weights for `{cfg_name}`...")
     try:
         for fold_idx in range(5):
@@ -42,9 +44,7 @@ def download_pretrained_weights_from_hf(cfg_name:str) -> None:
                     _UTMOSV2_CHACHE.as_posix(),
                     url,
                 ]
-
             )
     except subprocess.CalledProcessError as e:
         print(f"Failed to download pretrained weights: {e}")
     print("Done.")
-    
