@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from transformers import AutoFeatureExtractor, AutoModel
 
+from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num
 
 
@@ -41,7 +42,7 @@ class SSLExtModel(nn.Module):
             Optional name for the SSL encoder. Defaults to the name specified in `cfg.model.ssl.name`.
     """
 
-    def __init__(self, cfg, name: str | None = None):
+    def __init__(self, cfg: Config, name: str | None = None):
         super().__init__()
         self.cfg = cfg
         self.encoder = _SSLEncoder(
@@ -62,7 +63,7 @@ class SSLExtModel(nn.Module):
                 ]
             )
         self.num_dataset = get_dataset_num(cfg)
-        self.fc = nn.Linear(
+        self.fc: nn.Linear | nn.Identity = nn.Linear(
             in_features * 2 + self.num_dataset, cfg.model.ssl.num_classes
         )
 

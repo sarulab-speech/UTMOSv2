@@ -1,12 +1,14 @@
 import torch
 import torch.nn as nn
+from typing import cast
 
+from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num
 from utmosv2.model import MultiSpecExtModel, MultiSpecModelV2, SSLExtModel
 
 
 class SSLMultiSpecExtModelV1(nn.Module):
-    def __init__(self, cfg):
+    def __init__(self, cfg: Config):
         super().__init__()
         self.cfg = cfg
         self.ssl = SSLExtModel(cfg)
@@ -26,15 +28,15 @@ class SSLMultiSpecExtModelV1(nn.Module):
                 param.requires_grad = False
             for param in self.spec_long.parameters():
                 param.requires_grad = False
-        ssl_input = self.ssl.fc.in_features
-        spec_long_input = self.spec_long.fc.in_features
         self.ssl.fc = nn.Identity()
         self.spec_long.fc = nn.Identity()
 
         self.num_dataset = get_dataset_num(cfg)
 
         self.fc = nn.Linear(
-            ssl_input + spec_long_input + self.num_dataset,
+            cast(int, self.ssl.fc.in_features)
+            + cast(int, self.spec_long.fc.in_features)
+            + self.num_dataset,
             cfg.model.ssl_spec.num_classes,
         )
 
@@ -69,15 +71,15 @@ class SSLMultiSpecExtModelV2(nn.Module):
                 param.requires_grad = False
             for param in self.spec_long.parameters():
                 param.requires_grad = False
-        ssl_input = self.ssl.fc.in_features
-        spec_long_input = self.spec_long.fc.in_features
         self.ssl.fc = nn.Identity()
         self.spec_long.fc = nn.Identity()
 
         self.num_dataset = get_dataset_num(cfg)
 
         self.fc = nn.Linear(
-            ssl_input + spec_long_input + self.num_dataset,
+            cast(int, self.ssl.fc.in_features)
+            + cast(int, self.spec_long.fc.in_features)
+            + self.num_dataset,
             cfg.model.ssl_spec.num_classes,
         )
 

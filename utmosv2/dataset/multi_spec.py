@@ -7,6 +7,7 @@ import librosa
 import numpy as np
 import torch
 
+from utmosv2._settings._config import Config
 from utmosv2.dataset._base import BaseDataset
 from utmosv2.dataset._utils import (
     extend_audio,
@@ -93,7 +94,7 @@ class MultiSpecExtDataset(MultiSpecDataset):
 
     def __init__(
         self,
-        cfg,
+        cfg: Config,
         data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
         transform: Callable[[torch.Tensor], torch.Tensor] | None = None,
@@ -122,7 +123,7 @@ class MultiSpecExtDataset(MultiSpecDataset):
         return spec, d, target
 
 
-def _make_spctrogram(cfg, spec_cfg, y: np.ndarray) -> np.ndarray:
+def _make_spctrogram(cfg: Config, spec_cfg, y: np.ndarray) -> np.ndarray:
     if spec_cfg.mode == "melspec":
         return _make_melspec(cfg, spec_cfg, y)
     elif spec_cfg.mode == "stft":
@@ -131,7 +132,7 @@ def _make_spctrogram(cfg, spec_cfg, y: np.ndarray) -> np.ndarray:
         raise NotImplementedError
 
 
-def _make_melspec(cfg, spec_cfg, y: np.ndarray) -> np.ndarray:
+def _make_melspec(cfg: Config, spec_cfg, y: np.ndarray) -> np.ndarray:
     spec = librosa.feature.melspectrogram(
         y=y,
         sr=cfg.sr,
@@ -146,7 +147,7 @@ def _make_melspec(cfg, spec_cfg, y: np.ndarray) -> np.ndarray:
     return spec
 
 
-def _make_stft(cfg, spec_cfg, y: np.ndarray) -> np.ndarray:
+def _make_stft(cfg: Config, spec_cfg, y: np.ndarray) -> np.ndarray:
     spec = librosa.stft(y=y, n_fft=spec_cfg.n_fft, hop_length=spec_cfg.hop_length)
     spec = np.abs(spec)
     spec = librosa.amplitude_to_db(spec)

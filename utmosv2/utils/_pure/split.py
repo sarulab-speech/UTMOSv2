@@ -6,6 +6,7 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from utmosv2._import import _LazyImport
+from utmosv2._settings._config import Config
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -24,7 +25,7 @@ else:
 
 
 def split_data(
-    cfg, data: "pd.DataFrame"
+    cfg: Config, data: "pd.DataFrame"
 ) -> Generator[tuple[np.ndarray, np.ndarray], None, None]:
     """
     Split the data into training and validation sets based on the specified splitting method in the configuration.

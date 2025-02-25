@@ -11,18 +11,18 @@ from torch.cuda.amp import GradScaler, autocast
 from tqdm import tqdm
 
 from utmosv2._import import _LazyImport
+from utmosv2._settings._config import Config
 from utmosv2.utils import calc_metrics, print_metrics
 
 if TYPE_CHECKING:
     import pandas as pd
-
     import wandb
 else:
     wandb = _LazyImport("wandb")
 
 
 def train_1epoch(
-    cfg,
+    cfg: Config,
     model: torch.nn.Module,
     train_dataloader: torch.utils.data.DataLoader,
     criterion: torch.nn.Module,
@@ -118,7 +118,7 @@ def train_1epoch(
 
 
 def validate_1epoch(
-    cfg,
+    cfg: Config,
     model: torch.nn.Module,
     valid_dataloader: torch.utils.data.DataLoader,
     criterion: torch.nn.Module,
@@ -200,7 +200,7 @@ def validate_1epoch(
 
 
 def run_train(
-    cfg,
+    cfg: Config,
     model: torch.nn.Module,
     train_dataloader: torch.utils.data.DataLoader,
     valid_dataloader: torch.utils.data.DataLoader,
