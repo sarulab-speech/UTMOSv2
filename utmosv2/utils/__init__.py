@@ -20,6 +20,7 @@ from utmosv2.utils._task_dependents import (
     save_test_preds,
     show_inference_data,
 )
+from utmosv2.utils._download import download_pretrained_weights_from_hf
 
 __all__ = [
     "get_dataloader",
@@ -40,4 +41,5 @@ __all__ = [
     "save_preds",
     "save_test_preds",
     "show_inference_data",
+    "download_pretrained_weights_from_hf",
 ]
