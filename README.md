@@ -61,9 +61,6 @@
 
 ✨ You can easily use the pretrained UTMOSv2 model!
 
-> [!NOTE]
-> To clone the repository and use the pretrained UTMOSv2 model, make sure you have `git lfs` installed. If it is not installed, you can follow the instructions at [https://git-lfs.github.com/](https://git-lfs.github.com/) to install it.
-
 <h3 align="center">
   <div>🛠️ Using in your Python code 🛠️</div>
   <a href="https://github.com/sarulab-speech/UTMOSv2/tree/doc-user-friendly-api?tab=readme-ov-file#--%EF%B8%8F-using-in-your-python-code-%EF%B8%8F--------">
@@ -83,8 +80,7 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
 1. Install the UTMOSv2 library from GitHub
 
    ```bash
-   # Prevents LFS files from being temporarily downloaded during the installation process
-   GIT_LFS_SKIP_SMUDGE=1 pip install git+https://github.com/sarulab-speech/UTMOSv2.git
+   pip install git+https://github.com/sarulab-speech/UTMOSv2.git
    ```
 
 2. Make predictions
