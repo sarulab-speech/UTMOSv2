@@ -20,7 +20,7 @@ def save_test_preds(
     data: "pd.DataFrame",
     test_preds: np.ndarray,
     test_metrics: dict[str, float],
-):
+) -> None:
     test_df = pd.DataFrame({cfg.id_name: data[cfg.id_name], "test_preds": test_preds})
     cfg.inference.save_path.mkdir(parents=True, exist_ok=True)
     save_path = (
@@ -37,7 +37,7 @@ def save_test_preds(
     print(f"Test predictions are saved to {save_path}")
 
 
-def make_submission_file(cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray):
+def make_submission_file(cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray) -> None:
     submit = pd.DataFrame({cfg.id_name: data[cfg.id_name], "prediction": test_preds})
     (
         cfg.inference.submit_save_path
@@ -56,7 +56,7 @@ def make_submission_file(cfg: Config, data: "pd.DataFrame", test_preds: np.ndarr
     print(f"Submission file is saved to {sub_file}")
 
 
-def save_preds(cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray):
+def save_preds(cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray) -> None:
     pred = pd.DataFrame({cfg.id_name: data[cfg.id_name], "mos": test_preds})
     if cfg.out_path is None:
         print("Predictions:")

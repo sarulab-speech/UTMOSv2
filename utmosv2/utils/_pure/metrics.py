@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 
-def print_metrics(metrics: dict[str, float]):
+def print_metrics(metrics: dict[str, float]) -> None:
     """
     Print the given metrics in a formatted string.
 

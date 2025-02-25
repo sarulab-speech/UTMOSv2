@@ -70,7 +70,7 @@ class MultiSpecModelV2(nn.Module):
         #     print(f"| Number of fc input features: {self.fc.in_features}")
         #     print(f"| Number of fc output features: {self.fc.out_features}")
 
-    def forward(self, x):
+    def forward(self, x) -> torch.Tensor:
         """
         Forward pass of the MultiSpecModelV2.
 
@@ -179,7 +179,7 @@ class MultiSpecExtModel(nn.Module):
         #     print(f"| Number of fc input features: {self.fc.in_features}")
         #     print(f"| Number of fc output features: {self.fc.out_features}")
 
-    def forward(self, x, d):
+    def forward(self, x, d) -> torch.Tensor:
         x = [
             x[:, i, :, :, :].squeeze(1)
             for i in range(

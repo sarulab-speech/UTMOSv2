@@ -184,11 +184,16 @@ def _get_test_save_name(cfg: Config) -> str:
 
 
 def save_test_preds(
+<<<<<<< HEAD
     cfg: Config,
     data: "pd.DataFrame",
     test_preds: np.ndarray,
     test_metrics: dict[str, float],
 ):
+=======
+    cfg, data: "pd.DataFrame", test_preds: np.ndarray, test_metrics: dict[str, float]
+) -> None:
+>>>>>>> 649bc59 (Add missing type annotations)
     test_df = pd.DataFrame({cfg.id_name: data[cfg.id_name], "test_preds": test_preds})
     cfg.inference.save_path.mkdir(parents=True, exist_ok=True)
     save_path = (
