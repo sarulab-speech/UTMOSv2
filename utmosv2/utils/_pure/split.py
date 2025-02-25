@@ -10,8 +10,12 @@ from utmosv2._settings._config import Config
 
 if TYPE_CHECKING:
     import pandas as pd
-    from sklearn.model_selection import (GroupKFold, KFold,
-                                         StratifiedGroupKFold, StratifiedKFold)
+    from sklearn.model_selection import (
+        GroupKFold,
+        KFold,
+        StratifiedGroupKFold,
+        StratifiedKFold,
+    )
 else:
     _model_selection = _LazyImport("sklearn.model_selection")
     GroupKFold = _model_selection.GroupKFold

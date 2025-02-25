@@ -10,7 +10,9 @@ else:
     pd = _LazyImport("pandas")
 
 
-def save_oof_preds(cfg: Config, data: "pd.DataFrame", oof_preds: "np.ndarray", fold: int):
+def save_oof_preds(
+    cfg: Config, data: "pd.DataFrame", oof_preds: "np.ndarray", fold: int
+):
     """
     Save out-of-fold (OOF) predictions to a CSV file.
 

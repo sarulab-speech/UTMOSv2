@@ -13,10 +13,20 @@ import torch.nn as nn
 
 from utmosv2._import import _LazyImport
 from utmosv2._settings._config import Config
-from utmosv2.dataset import (MultiSpecDataset, MultiSpecExtDataset, SSLDataset,
-                             SSLExtDataset, SSLLMultiSpecExtDataset)
-from utmosv2.model import (MultiSpecExtModel, MultiSpecModelV2, SSLExtModel,
-                           SSLMultiSpecExtModelV1, SSLMultiSpecExtModelV2)
+from utmosv2.dataset import (
+    MultiSpecDataset,
+    MultiSpecExtDataset,
+    SSLDataset,
+    SSLExtDataset,
+    SSLLMultiSpecExtDataset,
+)
+from utmosv2.model import (
+    MultiSpecExtModel,
+    MultiSpecModelV2,
+    SSLExtModel,
+    SSLMultiSpecExtModelV1,
+    SSLMultiSpecExtModelV2,
+)
 from utmosv2.preprocess import add_sys_mean, preprocess, preprocess_test
 from utmosv2.utils._constants import _UTMOSV2_CHACHE
 from utmosv2.utils._download import download_pretrained_weights_from_hf
@@ -174,7 +184,10 @@ def _get_test_save_name(cfg: Config) -> str:
 
 
 def save_test_preds(
-    cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray, test_metrics: dict[str, float]
+    cfg: Config,
+    data: "pd.DataFrame",
+    test_preds: np.ndarray,
+    test_metrics: dict[str, float],
 ):
     test_df = pd.DataFrame({cfg.id_name: data[cfg.id_name], "test_preds": test_preds})
     cfg.inference.save_path.mkdir(parents=True, exist_ok=True)

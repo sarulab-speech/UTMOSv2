@@ -9,8 +9,12 @@ import torch
 
 from utmosv2._settings._config import Config
 from utmosv2.dataset._base import BaseDataset
-from utmosv2.dataset._utils import (extend_audio, get_dataset_map, load_audio,
-                                    select_random_start)
+from utmosv2.dataset._utils import (
+    extend_audio,
+    get_dataset_map,
+    load_audio,
+    select_random_start,
+)
 
 if TYPE_CHECKING:
     import pandas as pd

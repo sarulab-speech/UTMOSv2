@@ -17,7 +17,7 @@ if TYPE_CHECKING:
 class BaseDataset(torch.utils.data.Dataset, abc.ABC):
     def __init__(
         self,
-        cfg : Config,
+        cfg: Config,
         data: "pd.DataFrame" | list[DatasetSchema],
         phase: str,
         transform: Callable[[torch.Tensor], torch.Tensor] | None = None,

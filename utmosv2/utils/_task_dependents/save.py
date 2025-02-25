@@ -16,7 +16,10 @@ else:
 
 
 def save_test_preds(
-    cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray, test_metrics: dict[str, float]
+    cfg: Config,
+    data: "pd.DataFrame",
+    test_preds: np.ndarray,
+    test_metrics: dict[str, float],
 ):
     test_df = pd.DataFrame({cfg.id_name: data[cfg.id_name], "test_preds": test_preds})
     cfg.inference.save_path.mkdir(parents=True, exist_ok=True)

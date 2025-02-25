@@ -15,7 +15,7 @@ if TYPE_CHECKING:
 
 
 def run_inference(
-    cfg : Config,
+    cfg: Config,
     model: torch.nn.Module,
     test_dataloader: torch.utils.data.DataLoader,
     cycle: int,
