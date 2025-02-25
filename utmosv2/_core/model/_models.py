@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-from types import ModuleType, SimpleNamespace
 
 from utmosv2._core.model._common import UTMOSv2ModelMixin
 from utmosv2._settings._config import Config
@@ -16,8 +15,6 @@ from typing import TYPE_CHECKING, Any
 if TYPE_CHECKING:
     import torch
     import torch.nn as nn
-
-
 
 
 class UTMOSv2Model(UTMOSv2ModelMixin):

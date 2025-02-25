@@ -1,3 +1,4 @@
+import argparse
 from pathlib import Path
 from types import ModuleType, SimpleNamespace
 from typing import TypeAlias
@@ -5,7 +6,6 @@ from typing import TypeAlias
 # NOTE: Python 3.12 introduces the type statement, so once Python 3.11 is dropped,
 # it should be updated to use that instead.
 Config: TypeAlias = SimpleNamespace | ModuleType
-import argparse
 
 
 def configure_args(cfg: Config, args: argparse.Namespace) -> None:

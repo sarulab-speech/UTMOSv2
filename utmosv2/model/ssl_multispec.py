@@ -40,7 +40,9 @@ class SSLMultiSpecExtModelV1(nn.Module):
             cfg.model.ssl_spec.num_classes,
         )
 
-    def forward(self, x1: torch.Tensor, x2: torch.Tensor, d: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self, x1: torch.Tensor, x2: torch.Tensor, d: torch.Tensor
+    ) -> torch.Tensor:
         x1 = self.ssl(x1, torch.zeros(x1.shape[0], self.num_dataset).to(x1.device))
         x2 = self.spec_long(x2)
         x = torch.cat([x1, x2, d], dim=1)
@@ -83,7 +85,9 @@ class SSLMultiSpecExtModelV2(nn.Module):
             cfg.model.ssl_spec.num_classes,
         )
 
-    def forward(self, x1: torch.Tensor, x2: torch.Tensor, d: torch.Tensor) -> torch.Tensor:
+    def forward(
+        self, x1: torch.Tensor, x2: torch.Tensor, d: torch.Tensor
+    ) -> torch.Tensor:
         x1 = self.ssl(x1, torch.zeros(x1.shape[0], self.num_dataset).to(x1.device))
         x2 = self.spec_long(
             x2, torch.zeros(x1.shape[0], self.num_dataset).to(x1.device)

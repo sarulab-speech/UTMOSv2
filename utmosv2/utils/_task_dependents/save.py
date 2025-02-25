@@ -37,7 +37,9 @@ def save_test_preds(
     print(f"Test predictions are saved to {save_path}")
 
 
-def make_submission_file(cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray) -> None:
+def make_submission_file(
+    cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray
+) -> None:
     submit = pd.DataFrame({cfg.id_name: data[cfg.id_name], "prediction": test_preds})
     (
         cfg.inference.submit_save_path

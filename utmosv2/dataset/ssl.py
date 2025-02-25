@@ -71,7 +71,9 @@ class SSLExtDataset(SSLDataset):
             The phase of the dataset, either "train" or any other phase (e.g., "valid").
     """
 
-    def __init__(self, cfg: Config, data: "pd.DataFrame" | list[DatasetSchema], phase: str):
+    def __init__(
+        self, cfg: Config, data: "pd.DataFrame" | list[DatasetSchema], phase: str
+    ):
         super().__init__(cfg, data, phase)
         self.dataset_map = get_dataset_map(cfg)
 

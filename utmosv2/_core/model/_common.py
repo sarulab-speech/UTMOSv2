@@ -3,7 +3,6 @@ from __future__ import annotations
 import abc
 import warnings
 from pathlib import Path
-from types import SimpleNamespace
 from typing import TYPE_CHECKING, Any
 
 import numpy as np

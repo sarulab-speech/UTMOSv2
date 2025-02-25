@@ -82,7 +82,7 @@ class SSLExtModel(nn.Module):
                 Output tensor after applying the SSL encoder, attention (if configured), and fully connected layers.
         """
         xt = self.encoder(xt)
-        x: torch.Tensor = sum([t * w for t, w in zip(x, self.weights)])
+        x: torch.Tensor = sum([t * w for t, w in zip(xt, self.weights)])
         if self.cfg.model.ssl.attn:
             y = x
             for attn in self.attn:

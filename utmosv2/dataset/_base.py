@@ -31,5 +31,5 @@ class BaseDataset(torch.utils.data.Dataset, abc.ABC):
         return len(self.data)
 
     @abc.abstractmethod
-    def __getitem__(self, idx: int) -> tuple[torch.Tensor,...]:
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         pass
