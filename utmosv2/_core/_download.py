@@ -41,7 +41,7 @@ def download_pretrained_weights_from_hf(cfg_name: str) -> None:
                 [
                     "wget",
                     "-P",
-                    (_UTMOSV2_CHACHE/"models").as_posix(),
+                    (_UTMOSV2_CHACHE / "models").as_posix(),
                     url,
                 ]
             )
