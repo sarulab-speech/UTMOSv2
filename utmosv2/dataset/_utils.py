@@ -6,7 +6,7 @@ import numpy as np
 
 
 def load_audio(cfg, file: Path) -> np.ndarray:
-    if file.suffix == ".wav":
+    if file.suffix in [".wav", ".flac"]:
         y, sr = librosa.load(file, sr=None)
         y = librosa.resample(y, orig_sr=sr, target_sr=cfg.sr)
     else:

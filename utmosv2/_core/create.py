@@ -6,10 +6,10 @@ from types import SimpleNamespace
 
 import torch
 
-from utmosv2._core._constants import _UTMOSV2_CHACHE
-from utmosv2._core._download import download_pretrained_weights_from_github
 from utmosv2._core.model import UTMOSv2Model
 from utmosv2._settings import configure_execution
+from utmosv2.utils._constants import _UTMOSV2_CHACHE
+from utmosv2.utils._download import download_pretrained_weights_from_hf
 
 
 def create_model(
@@ -63,7 +63,7 @@ def create_model(
                 / f"fold{fold}_s{seed}_best_model.pth"
             )
             if not checkpoint_path.exists():
-                download_pretrained_weights_from_github(config)
+                download_pretrained_weights_from_hf(config, fold)
         if isinstance(checkpoint_path, str):
             checkpoint_path = Path(checkpoint_path)
         if not checkpoint_path.exists():

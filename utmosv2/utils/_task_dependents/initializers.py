@@ -27,6 +27,8 @@ from utmosv2.model import (
     SSLMultiSpecExtModelV2,
 )
 from utmosv2.preprocess import add_sys_mean, preprocess, preprocess_test
+from utmosv2.utils._constants import _UTMOSV2_CHACHE
+from utmosv2.utils._download import download_pretrained_weights_from_hf
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -93,7 +95,12 @@ def get_model(cfg, device: torch.device) -> nn.Module:
                 Path("models")
                 / cfg.weight
                 / f"fold{cfg.now_fold}_s{cfg.split.seed}_best_model.pth"
-            ).as_posix()
+            )
+            if not weight_path.exists():
+                weight_path_cache = _UTMOSV2_CHACHE / weight_path
+                if not weight_path_cache.exists():
+                    download_pretrained_weights_from_hf(cfg.weight, cfg.now_fold)
+                weight_path = weight_path_cache
         model.load_state_dict(torch.load(weight_path))
         print(f"Loaded weight from {weight_path}")
     return model
