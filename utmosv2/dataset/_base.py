@@ -27,9 +27,9 @@ class BaseDataset(torch.utils.data.Dataset, abc.ABC):
         self.phase = phase
         self.transform = transform
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.data)
 
     @abc.abstractmethod
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor,...]:
         pass

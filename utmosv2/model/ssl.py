@@ -19,7 +19,7 @@ class _SSLEncoder(nn.Module):
             for param in self.model.parameters():
                 param.requires_grad = False
 
-    def forward(self, x) -> tuple[torch.Tensor]:
+    def forward(self, x: tuple[torch.Tensor]) -> tuple[torch.Tensor]:
         x = self.processor(
             [t.cpu().numpy() for t in x],
             sampling_rate=self.sr,
@@ -67,7 +67,7 @@ class SSLExtModel(nn.Module):
             in_features * 2 + self.num_dataset, cfg.model.ssl.num_classes
         )
 
-    def forward(self, x, d) -> torch.Tensor:
+    def forward(self, x: tuple[torch.Tenfsor], d: torch.Tensor) -> torch.Tensor:
         """
         Forward pass of the SSLExtModel.
 

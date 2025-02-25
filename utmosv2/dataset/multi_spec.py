@@ -35,7 +35,7 @@ class MultiSpecDataset(BaseDataset):
         transform (Callable[[torch.Tensor], torch.Tensor] | None): Transformation function to apply to spectrograms.
     """
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         """
         Get the spectrogram and target MOS for a given index.
 
@@ -102,7 +102,7 @@ class MultiSpecExtDataset(MultiSpecDataset):
         super().__init__(cfg, data, phase, transform)
         self.dataset_map = get_dataset_map(cfg)
 
-    def __getitem__(self, idx):
+    def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         """
         Get the spectrogram, data-domain embedding, and target MOS for a given index.
 
@@ -123,7 +123,7 @@ class MultiSpecExtDataset(MultiSpecDataset):
         return spec, d, target
 
 
-def _make_spctrogram(cfg: Config, spec_cfg, y: np.ndarray) -> np.ndarray:
+def _make_spctrogram(cfg: Config, spec_cfg: Config, y: np.ndarray) -> np.ndarray:
     if spec_cfg.mode == "melspec":
         return _make_melspec(cfg, spec_cfg, y)
     elif spec_cfg.mode == "stft":
@@ -132,7 +132,7 @@ def _make_spctrogram(cfg: Config, spec_cfg, y: np.ndarray) -> np.ndarray:
         raise NotImplementedError
 
 
-def _make_melspec(cfg: Config, spec_cfg, y: np.ndarray) -> np.ndarray:
+def _make_melspec(cfg: Config, spec_cfg: Config, y: np.ndarray) -> np.ndarray:
     spec = librosa.feature.melspectrogram(
         y=y,
         sr=cfg.sr,
@@ -147,7 +147,7 @@ def _make_melspec(cfg: Config, spec_cfg, y: np.ndarray) -> np.ndarray:
     return spec
 
 
-def _make_stft(cfg: Config, spec_cfg, y: np.ndarray) -> np.ndarray:
+def _make_stft(cfg: Config, spec_cfg: Config, y: np.ndarray) -> np.ndarray:
     spec = librosa.stft(y=y, n_fft=spec_cfg.n_fft, hop_length=spec_cfg.hop_length)
     spec = np.abs(spec)
     spec = librosa.amplitude_to_db(spec)

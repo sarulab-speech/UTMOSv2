@@ -5,9 +5,10 @@ from typing import TypeAlias
 # NOTE: Python 3.12 introduces the type statement, so once Python 3.11 is dropped,
 # it should be updated to use that instead.
 Config: TypeAlias = SimpleNamespace | ModuleType
+import argparse
 
 
-def configure_args(cfg: Config, args) -> None:
+def configure_args(cfg: Config, args: argparse.Namespace) -> None:
     cfg.fold = args.fold  # type: ignore
     cfg.split.seed = args.seed  # type: ignore
     cfg.config_name = args.config  # type: ignore
@@ -21,7 +22,7 @@ def configure_args(cfg: Config, args) -> None:
     cfg.phase = "train"  # type: ignore
 
 
-def configure_inference_args(cfg: Config, args) -> None:
+def configure_inference_args(cfg: Config, args: argparse.Namespace) -> None:
     cfg.inference.fold = args.fold  # type: ignore
     cfg.split.seed = args.seed  # type: ignore
     cfg.config_name = args.config  # type: ignore
