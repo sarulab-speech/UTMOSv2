@@ -63,7 +63,7 @@ def create_model(
                 / f"fold{fold}_s{seed}_best_model.pth"
             )
             if not checkpoint_path.exists():
-                download_pretrained_weights_from_hf(config)
+                download_pretrained_weights_from_hf(config, fold)
         if isinstance(checkpoint_path, str):
             checkpoint_path = Path(checkpoint_path)
         if not checkpoint_path.exists():
