@@ -2,8 +2,13 @@ from __future__ import annotations
 
 import argparse
 from pathlib import Path
+import sys
 from types import ModuleType, SimpleNamespace
-from typing import TypeAlias
+
+if sys.version_info >= (3, 10):
+    from typing import TypeAlias
+else:
+    from typing_extensions import TypeAlias
 
 # NOTE: Python 3.12 introduces the type statement, so once Python 3.11 is dropped,
 # it should be updated to use that instead.
