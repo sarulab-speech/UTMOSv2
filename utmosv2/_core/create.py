@@ -71,7 +71,11 @@ def create_model(
         if not checkpoint_path.exists():
             raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
 
-        device = torch.device(("cuda" if torch.cuda.is_available() else "cpu") if device == "auto" else device)
+        device = torch.device(
+            ("cuda" if torch.cuda.is_available() else "cpu")
+            if device == "auto"
+            else device
+        )
         model.load_state_dict(torch.load(checkpoint_path, map_location=device))
         print(f"Loaded checkpoint from {checkpoint_path}")
 
