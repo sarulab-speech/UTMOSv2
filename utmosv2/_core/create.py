@@ -3,6 +3,7 @@ from __future__ import annotations
 import importlib
 from pathlib import Path
 from types import SimpleNamespace
+from typing import Literal
 
 import torch
 
@@ -18,6 +19,7 @@ def create_model(
     fold: int = 0,
     checkpoint_path: Path | str | None = None,
     seed: int = 42,
+    device: torch.device | str | Literal["auto"] = "auto",
 ) -> UTMOSv2Model:
     """
     Create a UTMOSv2 model with the specified configuration and optional pretrained weights.
@@ -69,7 +71,12 @@ def create_model(
         if not checkpoint_path.exists():
             raise FileNotFoundError(f"Checkpoint not found: {checkpoint_path}")
 
-        model.load_state_dict(torch.load(checkpoint_path))
+        device = torch.device(
+            ("cuda" if torch.cuda.is_available() else "cpu")
+            if device == "auto"
+            else device
+        )
+        model.load_state_dict(torch.load(checkpoint_path, map_location=device))
         print(f"Loaded checkpoint from {checkpoint_path}")
 
     return model

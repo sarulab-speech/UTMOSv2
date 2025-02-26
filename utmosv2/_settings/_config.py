@@ -1,11 +1,21 @@
+from __future__ import annotations
+
 import argparse
 from pathlib import Path
+import sys
 from types import ModuleType, SimpleNamespace
-from typing import TypeAlias
 
-# NOTE: Python 3.12 introduces the type statement, so once Python 3.11 is dropped,
-# it should be updated to use that instead.
-Config: TypeAlias = SimpleNamespace | ModuleType
+if sys.version_info >= (3, 10):
+    from typing import TypeAlias
+
+    # NOTE: Python 3.12 introduces the type statement, so once Python 3.11 is dropped,
+    # it should be updated to use that instead.
+    Config: TypeAlias = SimpleNamespace | ModuleType
+else:
+    from typing import Union
+    from typing_extensions import TypeAlias
+
+    Config: TypeAlias = Union[SimpleNamespace, ModuleType]
 
 
 def configure_args(cfg: Config, args: argparse.Namespace) -> None:
