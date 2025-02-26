@@ -81,9 +81,7 @@ class SSLMultiSpecExtModelV2(nn.Module):
         self.num_dataset = get_dataset_num(cfg)
 
         self.fc = nn.Linear(
-            cast(int, ssl_input)
-            + cast(int, spec_long_input)
-            + self.num_dataset,
+            cast(int, ssl_input) + cast(int, spec_long_input) + self.num_dataset,
             cfg.model.ssl_spec.num_classes,
         )
 

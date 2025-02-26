@@ -18,7 +18,6 @@ else:
     Config: TypeAlias = Union[SimpleNamespace, ModuleType]
 
 
-
 def configure_args(cfg: Config, args: argparse.Namespace) -> None:
     cfg.fold = args.fold  # type: ignore
     cfg.split.seed = args.seed  # type: ignore
