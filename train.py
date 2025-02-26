@@ -4,11 +4,11 @@ import os
 
 import numpy as np
 import torch
-from utmosv2._settings._config import Config
 import wandb
 from dotenv import load_dotenv
 
 from utmosv2._settings import configure_args, configure_defaults
+from utmosv2._settings._config import Config
 from utmosv2.runner import run_train
 from utmosv2.utils import (
     get_dataloader,
