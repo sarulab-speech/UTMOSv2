@@ -38,7 +38,7 @@ def download_pretrained_weights_from_hf(cfg_name: str, now_fold: int) -> None:
     if cfg_name != "fusion_stage3":
         raise ValueError(f"{cfg_name} is not stored.")
     print(f"Downloading pretrained weights for `{cfg_name}`...")
-    url = f"https://huggingface.co/spaces/sarulab-speech/UTMOSv2/resolve/main/models/{cfg_name}/fold{now_fold}_s42_best_model.pth"
+    url = f"https://huggingface.co/sarulab-speech/UTMOSv2/resolve/main/fold{now_fold}_s42_best_model.pth"
     try:
         subprocess.run(
             [
