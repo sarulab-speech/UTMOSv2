@@ -1,6 +1,7 @@
+from typing import cast
+
 import torch
 import torch.nn as nn
-from typing import cast
 
 from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING, Any
 
 from utmosv2._core.model._common import UTMOSv2ModelMixin
 from utmosv2._settings._config import Config
@@ -10,7 +11,6 @@ from utmosv2.model import (
     SSLMultiSpecExtModelV1,
     SSLMultiSpecExtModelV2,
 )
-from typing import TYPE_CHECKING, Any
 
 if TYPE_CHECKING:
     import torch

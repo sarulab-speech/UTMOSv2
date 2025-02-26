@@ -1,9 +1,10 @@
 from __future__ import annotations
 
-import pytest
-from utmosv2._core.create import create_model
-
 import sys
+
+import pytest
+
+from utmosv2._core.create import create_model
 
 
 @pytest.mark.parametrize(
