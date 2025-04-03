@@ -16,15 +16,15 @@ else:
 
 
 def remove_silent_section(audio: np.ndarray, min_length: int = 4800) -> np.ndarray:
-    mask = audio > 0.1
+    mask = audio < 0.1
     mask = np.pad(mask, (1, 0)) ^ np.pad(mask, (0, 1))
-    indices = np.where(mask)[0][1:]
-    length = (indices[1:] - indices[:-1])[::2]
-    indices_mask = np.pad(np.repeat(length > min_length, 2), (0, 1))
+    indices = np.where(mask)[0]
+    length = indices[1::2] - indices[::2]
+    indices_mask = np.repeat(length > min_length, 2)
     indices = indices[indices_mask]
-    mask2 = np.zeros_like(audio, dtype=int)
+    mask2 = np.zeros(audio.shape[0] + 1, dtype=int)
     mask2[indices] = np.where(np.arange(indices.shape[0]) % 2, -1, 1)
-    mask2 = np.cumsum(mask2).astype(bool)
+    mask2 = np.cumsum(mask2).astype(bool)[:-1]
     return audio[~mask2]
 
 
