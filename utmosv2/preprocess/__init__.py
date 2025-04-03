@@ -1,3 +1,8 @@
-from utmosv2.preprocess._preprocess import add_sys_mean, preprocess, preprocess_test
+from utmosv2.preprocess._preprocess import (
+    add_sys_mean,
+    preprocess,
+    preprocess_test,
+    remove_silent_section,
+)
 
-__all__ = ["preprocess", "preprocess_test", "add_sys_mean"]
+__all__ = ["add_sys_mean", "preprocess", "preprocess_test", "remove_silent_section"]

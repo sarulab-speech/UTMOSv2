@@ -15,6 +15,7 @@ from utmosv2.dataset._utils import (
     load_audio,
     select_random_start,
 )
+from utmosv2.preprocess._preprocess import remove_silent_section
 
 if TYPE_CHECKING:
     import pandas as pd
@@ -48,6 +49,11 @@ class MultiSpecDataset(_BaseDataset):
         row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
         file = row.file_path
         y = load_audio(self.cfg, file)
+        if (
+            hasattr(self.cfg.dataset, "remove_silent_section")
+            and self.cfg.dataset.remove_silent_section
+        ):
+            y = remove_silent_section(y)
         specs = []
         length = int(self.cfg.dataset.spec_frames.frame_sec * self.cfg.sr)
         y = extend_audio(self.cfg, y, length, type=self.cfg.dataset.spec_frames.extend)
