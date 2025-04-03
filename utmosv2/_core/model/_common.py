@@ -48,6 +48,7 @@ class UTMOSv2ModelMixin(abc.ABC):
         num_workers: int = 4,
         batch_size: int = 16,
         num_repetitions: int = 1,
+        remove_silent_section: bool = True,
         verbose: bool = True,
     ) -> float | list[dict[str, str | float]]:
         """
@@ -74,6 +75,8 @@ class UTMOSv2ModelMixin(abc.ABC):
                 Batch size for the data loader. Defaults to 16.
             num_repetitions (int):
                 Number of prediction repetitions to average results. Defaults to 1.
+            remove_silent_section (bool):
+                Whether to remove silent sections from the audio before prediction. Defaults to True.
             verbose (bool):
                 Whether to display progress during prediction. Defaults to True.
 
@@ -95,7 +98,16 @@ class UTMOSv2ModelMixin(abc.ABC):
             val_list_path,
             predict_dataset,
         )
+        if remove_silent_section:
+            initial_state = (
+                hasattr(self._cfg.dataset, "remove_silent_section")
+                and self._cfg.dataset.remove_silent_section
+            )
+            self._cfg.dataset.remove_silent_section = True
         dataset = get_dataset(self._cfg, data, self._cfg.phase)
+        if remove_silent_section and not initial_state:
+            self._cfg.dataset.remove_silent_section = False
+
         dataloader = torch.utils.data.DataLoader(
             dataset,
             batch_size=batch_size,
