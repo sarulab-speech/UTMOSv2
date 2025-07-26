@@ -57,13 +57,13 @@ class SSLMultiSpecExtModelV2(nn.Module):
         self.cfg = cfg
         self.ssl = SSLExtModel(cfg)
         self.spec_long = MultiSpecExtModel(cfg)
-        if cfg.model.ssl_spec.ssl_weight is not None and cfg.phase == "train":
+        if cfg.model.ssl_spec.ssl_weight and cfg.phase == "train" and not cfg.weight:
             self.ssl.load_state_dict(
                 torch.load(
                     f"outputs/{cfg.model.ssl_spec.ssl_weight}/fold{cfg.now_fold}_s{cfg.split.seed}_best_model.pth"
                 )
             )
-        if cfg.model.ssl_spec.spec_weight is not None and cfg.phase == "train":
+        if cfg.model.ssl_spec.spec_weight and cfg.phase == "train" and not cfg.weight:
             self.spec_long.load_state_dict(
                 torch.load(
                     f"outputs/{cfg.model.ssl_spec.spec_weight}/fold{cfg.now_fold}_s{cfg.split.seed}_best_model.pth"
