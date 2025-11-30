@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  checks:
+  mypy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
