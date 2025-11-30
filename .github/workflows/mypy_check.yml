@@ -1,9 +1,15 @@
 name: Type Check
 
-on: push
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
-  checks:
+  mypy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
