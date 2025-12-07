@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import glob
 import json
-from collections.abc import Callable
 from pathlib import Path
 from typing import TYPE_CHECKING
 
@@ -12,7 +11,6 @@ import torch
 import torch.nn as nn
 
 from utmosv2._import import _LazyImport
-from utmosv2._settings._config import Config
 from utmosv2.dataset import (
     MultiSpecDataset,
     MultiSpecExtDataset,
@@ -32,15 +30,18 @@ from utmosv2.utils._constants import _UTMOSV2_CHACHE
 from utmosv2.utils._download import download_pretrained_weights_from_hf
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import pandas as pd
 
+    from utmosv2._settings._config import Config
     from utmosv2.dataset._schema import DatasetSchema
 
 else:
     pd = _LazyImport("pandas")
 
 
-def get_data(cfg: Config) -> "pd.DataFrame":
+def get_data(cfg: Config) -> pd.DataFrame:
     train_mos_list = pd.read_csv(cfg.input_dir / "sets/train_mos_list.txt", header=None)
     val_mos_list = pd.read_csv(cfg.input_dir / "sets/val_mos_list.txt", header=None)
     test_mos_list = pd.read_csv(cfg.input_dir / "sets/test_mos_list.txt", header=None)
@@ -51,7 +52,7 @@ def get_data(cfg: Config) -> "pd.DataFrame":
 
 
 def get_dataset(
-    cfg: Config, data: "pd.DataFrame" | list[DatasetSchema], phase: str
+    cfg: Config, data: pd.DataFrame | list[DatasetSchema], phase: str
 ) -> torch.utils.data.Dataset:
     if cfg.print_config:
         print(f"Using dataset: {cfg.dataset.name}")
@@ -116,14 +117,14 @@ def get_metrics() -> dict[str, Callable[[np.ndarray, np.ndarray], float]]:
     }
 
 
-def _get_testdata(cfg: Config, data: "pd.DataFrame") -> "pd.DataFrame":
+def _get_testdata(cfg: Config, data: pd.DataFrame) -> pd.DataFrame:
     with open(cfg.inference.val_list_path, "r") as f:
         val_lists = [s.replace("\n", "") + ".wav" for s in f.readlines()]
     test_data = data[data["utt_id"].isin(set(val_lists))]
     return test_data
 
 
-def get_inference_data(cfg: Config) -> "pd.DataFrame":
+def get_inference_data(cfg: Config) -> pd.DataFrame:
     if cfg.reproduce:
         data = get_data(cfg)
         data = preprocess_test(cfg, data)
@@ -149,7 +150,7 @@ def get_inference_data(cfg: Config) -> "pd.DataFrame":
     return data
 
 
-def get_train_data(cfg: Config) -> "pd.DataFrame":
+def get_train_data(cfg: Config) -> pd.DataFrame:
     if cfg.reproduce:
         data = get_data(cfg)
         data = preprocess(cfg, data)

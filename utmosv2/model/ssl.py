@@ -1,12 +1,16 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 from transformers import AutoFeatureExtractor, AutoModel
 
-from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num
+
+if TYPE_CHECKING:
+    from utmosv2._settings._config import Config
 
 
 class _SSLEncoder(nn.Module):

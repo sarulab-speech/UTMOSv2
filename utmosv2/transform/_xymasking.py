@@ -40,7 +40,7 @@ class XYMasking:
         mask_y_length: int | tuple[int, int],
         fill_value: int,
         p: float = 1.0,
-    ):
+    ) -> None:
         self.num_masks_x = num_masks_x
         self.num_masks_y = num_masks_y
         self.mask_x_length = mask_x_length

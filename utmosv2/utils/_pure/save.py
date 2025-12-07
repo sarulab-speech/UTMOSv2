@@ -1,17 +1,20 @@
+from __future__ import annotations
+
 from typing import TYPE_CHECKING
 
 from utmosv2._import import _LazyImport
-from utmosv2._settings._config import Config
 
 if TYPE_CHECKING:
     import numpy as np
     import pandas as pd
+
+    from utmosv2._settings._config import Config
 else:
     pd = _LazyImport("pandas")
 
 
 def save_oof_preds(
-    cfg: Config, data: "pd.DataFrame", oof_preds: "np.ndarray", fold: int
+    cfg: Config, data: pd.DataFrame, oof_preds: "np.ndarray", fold: int
 ) -> None:
     """
     Save out-of-fold (OOF) predictions to a CSV file.

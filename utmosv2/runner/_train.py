@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import os
 from collections import defaultdict
-from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import numpy as np
@@ -11,12 +10,15 @@ from torch.cuda.amp import GradScaler, autocast
 from tqdm import tqdm
 
 from utmosv2._import import _LazyImport
-from utmosv2._settings._config import Config
 from utmosv2.utils import calc_metrics, print_metrics
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import pandas as pd
     import wandb
+
+    from utmosv2._settings._config import Config
 else:
     wandb = _LazyImport("wandb")
 
@@ -204,7 +206,7 @@ def run_train(
     model: torch.nn.Module,
     train_dataloader: torch.utils.data.DataLoader,
     valid_dataloader: torch.utils.data.DataLoader,
-    valid_data: "pd.DataFrame",
+    valid_data: pd.DataFrame,
     oof_preds: np.ndarray,
     now_fold: int,
     criterion: torch.nn.Module,

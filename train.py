@@ -1,6 +1,9 @@
+from __future__ import annotations
+
 import argparse
 import importlib
 import os
+from typing import TYPE_CHECKING
 
 import numpy as np
 import torch
@@ -8,7 +11,6 @@ import wandb
 from dotenv import load_dotenv
 
 from utmosv2._settings import configure_args, configure_defaults
-from utmosv2._settings._config import Config
 from utmosv2.runner import run_train
 from utmosv2.utils import (
     get_dataloader,
@@ -22,6 +24,9 @@ from utmosv2.utils import (
     save_oof_preds,
     split_data,
 )
+
+if TYPE_CHECKING:
+    from utmosv2._settings._config import Config
 
 
 def main(cfg: Config) -> None:

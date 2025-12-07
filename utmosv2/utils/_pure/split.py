@@ -1,14 +1,14 @@
 from __future__ import annotations
 
-from collections.abc import Generator
 from typing import TYPE_CHECKING
 
 import numpy as np
 
 from utmosv2._import import _LazyImport
-from utmosv2._settings._config import Config
 
 if TYPE_CHECKING:
+    from collections.abc import Generator
+
     import pandas as pd
     from sklearn.model_selection import (
         GroupKFold,
@@ -16,6 +16,8 @@ if TYPE_CHECKING:
         StratifiedGroupKFold,
         StratifiedKFold,
     )
+
+    from utmosv2._settings._config import Config
 else:
     _model_selection = _LazyImport("sklearn.model_selection")
     GroupKFold = _model_selection.GroupKFold
@@ -25,7 +27,7 @@ else:
 
 
 def split_data(
-    cfg: Config, data: "pd.DataFrame"
+    cfg: Config, data: pd.DataFrame
 ) -> Generator[tuple[np.ndarray, np.ndarray], None, None]:
     """
     Split the data into training and validation sets based on the specified splitting method in the configuration.

@@ -12,7 +12,7 @@ class PairwizeDiffLoss(nn.Module):
     with a specified margin and norm ("l1" or "l2_squared").
     """
 
-    def __init__(self, margin: float = 0.2, norm: str = "l1"):
+    def __init__(self, margin: float = 0.2, norm: str = "l1") -> None:
         """
         Initialize the PairwizeDiffLoss with the specified margin and norm.
 

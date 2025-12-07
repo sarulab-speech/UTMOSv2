@@ -4,22 +4,24 @@ from typing import TYPE_CHECKING
 
 import numpy as np
 import torch
+import torch.nn as nn
 from torch.cuda.amp import autocast
 from tqdm import tqdm
 
-from utmosv2._settings._config import Config
 from utmosv2.utils import calc_metrics, print_metrics
 
 if TYPE_CHECKING:
     import pandas as pd
 
+    from utmosv2._settings._config import Config
+
 
 def run_inference(
     cfg: Config,
-    model: torch.nn.Module,
+    model: nn.Module,
     test_dataloader: torch.utils.data.DataLoader,
     cycle: int,
-    test_data: "pd.DataFrame",
+    test_data: pd.DataFrame,
     device: torch.device,
 ) -> tuple[np.ndarray, dict[str, float] | None]:
     """

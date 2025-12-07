@@ -3,7 +3,7 @@ from __future__ import annotations
 import importlib
 from pathlib import Path
 from types import SimpleNamespace
-from typing import Literal
+from typing import TYPE_CHECKING
 
 import torch
 
@@ -11,6 +11,9 @@ from utmosv2._core.model import UTMOSv2Model
 from utmosv2._settings import configure_execution
 from utmosv2.utils._constants import _UTMOSV2_CHACHE
 from utmosv2.utils._download import download_pretrained_weights_from_hf
+
+if TYPE_CHECKING:
+    from typing import Literal
 
 
 def create_model(
