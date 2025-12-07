@@ -52,10 +52,10 @@ class UTMOSv2Model(UTMOSv2ModelMixin):
     def _cfg(self) -> Config:
         return self._cfg_value
 
-    def eval(self) -> "nn.Module":
+    def eval(self) -> nn.Module:
         return self._model.eval()
 
-    def __call__(self, *args: Any, **kwargs: Any) -> "torch.Tensor":
+    def __call__(self, *args: Any, **kwargs: Any) -> torch.Tensor:
         return self._model(*args, **kwargs)
 
     def __getattr__(self, name: str) -> Any:
