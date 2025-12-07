@@ -7,10 +7,11 @@ import numpy as np
 from tqdm import tqdm
 
 from utmosv2._import import _LazyImport
-from utmosv2._settings._config import Config
 
 if TYPE_CHECKING:
     import pandas as pd
+
+    from utmosv2._settings._config import Config
 else:
     pd = _LazyImport("pandas")
 
@@ -28,7 +29,7 @@ def remove_silent_section(audio: np.ndarray, min_length: int = 4800) -> np.ndarr
     return audio[~mask2]
 
 
-def _clip_audio(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc") -> None:
+def _clip_audio(cfg: Config, data: pd.DataFrame, data_name: str = "bvcc") -> None:
     (cfg.preprocess.save_path / data_name).mkdir(parents=True, exist_ok=True)
     for file in tqdm(data["file_path"].values, desc="Clipping audio files"):
         y, _ = librosa.load(file, sr=None)
@@ -42,8 +43,8 @@ def _clip_audio(cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc") -> N
 
 
 def _select_audio(
-    cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"
-) -> "pd.DataFrame":
+    cfg: Config, data: pd.DataFrame, data_name: str = "bvcc"
+) -> pd.DataFrame:
     if cfg.preprocess.min_seconds is None:
         return data
     select_file_name = f"min_seconds={cfg.preprocess.min_seconds}.txt"
@@ -70,8 +71,8 @@ def _select_audio(
 
 
 def _clip_and_select_audio(
-    cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"
-) -> "pd.DataFrame":
+    cfg: Config, data: pd.DataFrame, data_name: str = "bvcc"
+) -> pd.DataFrame:
     if not (cfg.preprocess.save_path / data_name).exists():
         _clip_audio(cfg, data)
     _change_file_path(cfg, data)
@@ -80,9 +81,7 @@ def _clip_and_select_audio(
     return data
 
 
-def _change_file_path(
-    cfg: Config, data: "pd.DataFrame", data_name: str = "bvcc"
-) -> None:
+def _change_file_path(cfg: Config, data: pd.DataFrame, data_name: str = "bvcc") -> None:
     data.loc[:, "file_path"] = data.loc[:, "file_path"].apply(
         lambda x: cfg.preprocess.save_path
         / data_name
@@ -90,7 +89,7 @@ def _change_file_path(
     )
 
 
-def _add_metadata(cfg: Config, data: "pd.DataFrame") -> None:
+def _add_metadata(cfg: Config, data: pd.DataFrame) -> None:
     metadata = []
     for t in ["TRAINSET", "DEVSET", "TESTSET"]:
         meta = pd.read_csv(cfg.input_dir / f"sets/{t}")
@@ -102,7 +101,7 @@ def _add_metadata(cfg: Config, data: "pd.DataFrame") -> None:
     data["sys_id"] = dt["sys_id"]
 
 
-def add_sys_mean(data: "pd.DataFrame") -> None:
+def add_sys_mean(data: pd.DataFrame) -> None:
     sys_mean = (
         data.groupby("sys_id", as_index=False)["mos"].mean().reset_index(drop=True)
     )
@@ -111,7 +110,7 @@ def add_sys_mean(data: "pd.DataFrame") -> None:
     data["sys_mos"] = dt["sys_mos"]
 
 
-def preprocess(cfg: Config, data: "pd.DataFrame") -> "pd.DataFrame":
+def preprocess(cfg: Config, data: pd.DataFrame) -> pd.DataFrame:
     data = _clip_and_select_audio(cfg, data)
     _add_metadata(cfg, data)
     add_sys_mean(data)
@@ -129,7 +128,7 @@ def preprocess(cfg: Config, data: "pd.DataFrame") -> "pd.DataFrame":
     return data
 
 
-def preprocess_test(cfg: Config, data: "pd.DataFrame") -> "pd.DataFrame":
+def preprocess_test(cfg: Config, data: pd.DataFrame) -> pd.DataFrame:
     _change_file_path(cfg, data)
     _add_metadata(cfg, data)
     add_sys_mean(data)
@@ -137,7 +136,7 @@ def preprocess_test(cfg: Config, data: "pd.DataFrame") -> "pd.DataFrame":
     return data
 
 
-def _get_external_data(cfg: Config, data: "pd.DataFrame") -> "pd.DataFrame":
+def _get_external_data(cfg: Config, data: pd.DataFrame) -> pd.DataFrame:
     exdata = []
     if cfg.external_data == "all" or "sarulab" in cfg.external_data:
         ysdata = pd.read_csv(

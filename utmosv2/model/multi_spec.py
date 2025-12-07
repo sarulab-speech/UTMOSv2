@@ -1,12 +1,16 @@
-from typing import cast
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, cast
 
 import timm
 import torch
 import torch.nn as nn
 import torch.nn.functional as F
 
-from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num
+
+if TYPE_CHECKING:
+    from utmosv2._settings._config import Config
 
 
 class MultiSpecModelV2(nn.Module):
@@ -64,12 +68,6 @@ class MultiSpecModelV2(nn.Module):
         self.fc: nn.Linear | nn.Identity = nn.Linear(
             fc_in_features, cfg.model.multi_spec.num_classes
         )
-
-        # if cfg.print_config:
-        #     print(f"| backbone model: {cfg.model.multi_spec.backbone}")
-        #     print(f"| Pooling: {cfg.model.multi_spec.pool_type}")
-        #     print(f"| Number of fc input features: {self.fc.in_features}")
-        #     print(f"| Number of fc output features: {self.fc.out_features}")
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
         """
@@ -173,12 +171,6 @@ class MultiSpecExtModel(nn.Module):
         self.fc: nn.Linear | nn.Identity = nn.Linear(
             fc_in_features + self.num_dataset, cfg.model.multi_spec.num_classes
         )
-
-        # if cfg.print_config:
-        #     print(f"| backbone model: {cfg.model.multi_spec.backbone}")
-        #     print(f"| Pooling: {cfg.model.multi_spec.pool_type}")
-        #     print(f"| Number of fc input features: {self.fc.in_features}")
-        #     print(f"| Number of fc output features: {self.fc.out_features}")
 
     def forward(self, x: torch.Tensor, d: torch.Tensor) -> torch.Tensor:
         xl = [

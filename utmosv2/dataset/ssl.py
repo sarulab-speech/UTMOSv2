@@ -5,7 +5,6 @@ from typing import TYPE_CHECKING
 import numpy as np
 import torch
 
-from utmosv2._settings._config import Config
 from utmosv2.dataset._base import _BaseDataset
 from utmosv2.dataset._utils import (
     extend_audio,
@@ -18,6 +17,7 @@ from utmosv2.preprocess._preprocess import remove_silent_section
 if TYPE_CHECKING:
     import pandas as pd
 
+    from utmosv2._settings._config import Config
     from utmosv2.dataset._schema import DatasetSchema
 
 
@@ -55,7 +55,7 @@ class SSLDataset(_BaseDataset):
         ):
             y = remove_silent_section(y)
         length = int(self.cfg.dataset.ssl.duration * self.cfg.sr)
-        y = extend_audio(self.cfg, y, length, type="tile")
+        y = extend_audio(y, length, method="tile")
         y = select_random_start(y, length)
 
         target = row.mos or 0.0
@@ -78,8 +78,8 @@ class SSLExtDataset(SSLDataset):
     """
 
     def __init__(
-        self, cfg: Config, data: "pd.DataFrame" | list[DatasetSchema], phase: str
-    ):
+        self, cfg: Config, data: pd.DataFrame | list[DatasetSchema], phase: str
+    ) -> None:
         super().__init__(cfg, data, phase)
         self.dataset_map = get_dataset_map(cfg)
 

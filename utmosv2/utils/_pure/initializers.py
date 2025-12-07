@@ -1,11 +1,15 @@
 from __future__ import annotations
 
+from typing import TYPE_CHECKING
+
 import torch
 import torch.nn as nn
 import torch.optim as optim
 
-from utmosv2._settings._config import Config
 from utmosv2.loss import CombinedLoss, PairwizeDiffLoss
+
+if TYPE_CHECKING:
+    from utmosv2._settings._config import Config
 
 
 def get_dataloader(

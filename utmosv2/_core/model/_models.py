@@ -1,9 +1,8 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 from utmosv2._core.model._common import UTMOSv2ModelMixin
-from utmosv2._settings._config import Config
 from utmosv2.model import (
     MultiSpecExtModel,
     MultiSpecModelV2,
@@ -13,8 +12,12 @@ from utmosv2.model import (
 )
 
 if TYPE_CHECKING:
+    from typing import Any
+
     import torch
     import torch.nn as nn
+
+    from utmosv2._settings._config import Config
 
 
 class UTMOSv2Model(UTMOSv2ModelMixin):
@@ -23,7 +26,7 @@ class UTMOSv2Model(UTMOSv2ModelMixin):
     This class allows for flexible model selection and provides a unified interface for evaluation, calling, and prediction.
     """
 
-    def __init__(self, cfg: Config):
+    def __init__(self, cfg: Config) -> None:
         """
         Initialize the UTMOSv2Model with a specified configuration.
 

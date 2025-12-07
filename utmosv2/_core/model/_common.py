@@ -3,19 +3,22 @@ from __future__ import annotations
 import abc
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, Any
+from typing import TYPE_CHECKING
 
 import numpy as np
 import torch
 from torch.cuda.amp import autocast
 from tqdm import tqdm
 
-from utmosv2._settings._config import Config
 from utmosv2.dataset._schema import DatasetSchema
 from utmosv2.utils import get_dataset
 
 if TYPE_CHECKING:
+    from typing import Any
+
     import torch.nn as nn
+
+    from utmosv2._settings._config import Config
 
 
 class UTMOSv2ModelMixin(abc.ABC):
@@ -29,7 +32,7 @@ class UTMOSv2ModelMixin(abc.ABC):
         pass
 
     @abc.abstractmethod
-    def eval(self) -> "nn.Module":
+    def eval(self) -> nn.Module:
         pass
 
     @abc.abstractmethod

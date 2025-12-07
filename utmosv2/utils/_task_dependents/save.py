@@ -6,18 +6,19 @@ from typing import TYPE_CHECKING
 import numpy as np
 
 from utmosv2._import import _LazyImport
-from utmosv2._settings._config import Config
 from utmosv2.utils._task_dependents.initializers import _get_test_save_name
 
 if TYPE_CHECKING:
     import pandas as pd
+
+    from utmosv2._settings._config import Config
 else:
     pd = _LazyImport("pandas")
 
 
 def save_test_preds(
     cfg: Config,
-    data: "pd.DataFrame",
+    data: pd.DataFrame,
     test_preds: np.ndarray,
     test_metrics: dict[str, float],
 ) -> None:
@@ -38,7 +39,7 @@ def save_test_preds(
 
 
 def make_submission_file(
-    cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray
+    cfg: Config, data: pd.DataFrame, test_preds: np.ndarray
 ) -> None:
     submit = pd.DataFrame({cfg.id_name: data[cfg.id_name], "prediction": test_preds})
     (
@@ -58,7 +59,7 @@ def make_submission_file(
     print(f"Submission file is saved to {sub_file}")
 
 
-def save_preds(cfg: Config, data: "pd.DataFrame", test_preds: np.ndarray) -> None:
+def save_preds(cfg: Config, data: pd.DataFrame, test_preds: np.ndarray) -> None:
     pred = pd.DataFrame({cfg.id_name: data[cfg.id_name], "mos": test_preds})
     if cfg.out_path is None:
         print("Predictions:")

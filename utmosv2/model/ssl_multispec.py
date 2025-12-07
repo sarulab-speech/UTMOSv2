@@ -1,11 +1,15 @@
-from typing import cast
+from __future__ import annotations
+
+from typing import TYPE_CHECKING, cast
 
 import torch
 import torch.nn as nn
 
-from utmosv2._settings._config import Config
 from utmosv2.dataset._utils import get_dataset_num
 from utmosv2.model import MultiSpecExtModel, MultiSpecModelV2, SSLExtModel
+
+if TYPE_CHECKING:
+    from utmosv2._settings._config import Config
 
 
 class SSLMultiSpecExtModelV1(nn.Module):

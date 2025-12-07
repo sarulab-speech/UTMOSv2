@@ -1,13 +1,11 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import librosa
 import numpy as np
 import torch
 
-from utmosv2._settings._config import Config
 from utmosv2.dataset._base import _BaseDataset
 from utmosv2.dataset._utils import (
     extend_audio,
@@ -18,8 +16,11 @@ from utmosv2.dataset._utils import (
 from utmosv2.preprocess._preprocess import remove_silent_section
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import pandas as pd
 
+    from utmosv2._settings._config import Config
     from utmosv2.dataset._schema import DatasetSchema
 
 
@@ -56,7 +57,7 @@ class MultiSpecDataset(_BaseDataset):
             y = remove_silent_section(y)
         specs = []
         length = int(self.cfg.dataset.spec_frames.frame_sec * self.cfg.sr)
-        y = extend_audio(self.cfg, y, length, type=self.cfg.dataset.spec_frames.extend)
+        y = extend_audio(y, length, method=self.cfg.dataset.spec_frames.extend)
         for _ in range(self.cfg.dataset.spec_frames.num_frames):
             y1 = select_random_start(y, length)
             for spec_cfg in self.cfg.dataset.specs:
@@ -102,10 +103,10 @@ class MultiSpecExtDataset(MultiSpecDataset):
     def __init__(
         self,
         cfg: Config,
-        data: "pd.DataFrame" | list[DatasetSchema],
+        data: pd.DataFrame | list[DatasetSchema],
         phase: str,
         transform: dict[str, Callable[[torch.Tensor], torch.Tensor]] | None = None,
-    ):
+    ) -> None:
         super().__init__(cfg, data, phase, transform)
         self.dataset_map = get_dataset_map(cfg)
 
@@ -131,12 +132,10 @@ class MultiSpecExtDataset(MultiSpecDataset):
 
 
 def _make_spctrogram(cfg: Config, spec_cfg: Config, y: np.ndarray) -> np.ndarray:
-    if spec_cfg.mode == "melspec":
-        return _make_melspec(cfg, spec_cfg, y)
-    elif spec_cfg.mode == "stft":
-        return _make_stft(cfg, spec_cfg, y)
-    else:
-        raise NotImplementedError
+    return {
+        "melspec": _make_melspec,
+        "stft": _make_stft,
+    }[spec_cfg.mode](cfg, spec_cfg, y)
 
 
 def _make_melspec(cfg: Config, spec_cfg: Config, y: np.ndarray) -> np.ndarray:

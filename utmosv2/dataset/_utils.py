@@ -1,10 +1,15 @@
+from __future__ import annotations
+
 import json
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import librosa
 import numpy as np
 
-from utmosv2._settings._config import Config
+if TYPE_CHECKING:
+    from pathlib import Path
+
+    from utmosv2._settings._config import Config
 
 
 def load_audio(cfg: Config, file: Path) -> np.ndarray:
@@ -16,10 +21,10 @@ def load_audio(cfg: Config, file: Path) -> np.ndarray:
     return y
 
 
-def extend_audio(cfg: Config, y: np.ndarray, length: int, type: str) -> np.ndarray:
+def extend_audio(y: np.ndarray, length: int, method: str) -> np.ndarray:
     if y.shape[0] > length:
         return y
-    elif type == "tile":
+    elif method == "tile":
         n = length // y.shape[0] + 1
         y = np.tile(y, n)
         return y

@@ -1,11 +1,13 @@
+from __future__ import annotations
+
 import argparse
 import importlib
+from typing import TYPE_CHECKING
 
 import numpy as np
 import torch
 
 from utmosv2._settings import configure_defaults, configure_inference_args
-from utmosv2._settings._config import Config
 from utmosv2.runner import run_inference
 from utmosv2.utils import (
     get_dataloader,
@@ -18,6 +20,9 @@ from utmosv2.utils import (
     save_test_preds,
     show_inference_data,
 )
+
+if TYPE_CHECKING:
+    from utmosv2._settings._config import Config
 
 
 def main(cfg: Config) -> None:

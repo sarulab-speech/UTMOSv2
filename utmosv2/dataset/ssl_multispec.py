@@ -1,17 +1,18 @@
 from __future__ import annotations
 
-from collections.abc import Callable
 from typing import TYPE_CHECKING
 
 import torch
 
-from utmosv2._settings._config import Config
 from utmosv2.dataset import MultiSpecDataset, SSLExtDataset
 from utmosv2.dataset._base import _BaseDataset
 
 if TYPE_CHECKING:
+    from collections.abc import Callable
+
     import pandas as pd
 
+    from utmosv2._settings._config import Config
     from utmosv2.dataset._schema import DatasetSchema
 
 
@@ -35,10 +36,10 @@ class SSLLMultiSpecExtDataset(_BaseDataset):
     def __init__(
         self,
         cfg: Config,
-        data: "pd.DataFrame" | list[DatasetSchema],
+        data: pd.DataFrame | list[DatasetSchema],
         phase: str,
         transform: dict[str, Callable[[torch.Tensor], torch.Tensor]] | None = None,
-    ):
+    ) -> None:
         super().__init__(cfg, data, phase, transform)
         self.ssl = SSLExtDataset(cfg, data, phase)
         self.multi_spec = MultiSpecDataset(cfg, data, phase, transform)
