@@ -35,7 +35,7 @@ if TYPE_CHECKING:
     import pandas as pd
 
     from utmosv2._settings._config import Config
-    from utmosv2.dataset._schema import DatasetSchema
+    from utmosv2.dataset._schema import DatasetItem, InMemoryData
 
 else:
     pd = _LazyImport("pandas")
@@ -52,7 +52,7 @@ def get_data(cfg: Config) -> pd.DataFrame:
 
 
 def get_dataset(
-    cfg: Config, data: pd.DataFrame | list[DatasetSchema], phase: str
+    cfg: Config, data: pd.DataFrame | list[DatasetItem] | InMemoryData, phase: str
 ) -> torch.utils.data.Dataset:
     if cfg.print_config:
         print(f"Using dataset: {cfg.dataset.name}")
