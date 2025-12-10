@@ -90,7 +90,7 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
       import utmosv2
       model = utmosv2.create_model(pretrained=True)
       # data: np.ndarray or torch.Tensor with shape (batch_size, sequence_length) or (sequence_length,)
-      mos = model.predict(data=data)
+      mos = model.predict(data=data) # returns a tensor or array with shape (batch_size,) or (1,)
       ```
 
    - To predict the MOS of a single `.wav` file:
@@ -98,7 +98,7 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
       ```python
       import utmosv2
       model = utmosv2.create_model(pretrained=True)
-      mos = model.predict(input_path="/path/to/wav/file.wav")
+      mos = model.predict(input_path="/path/to/wav/file.wav") # return a float value
       ```
 
    - To predict the MOS of all `.wav` files in a folder:
@@ -106,7 +106,7 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
       ```python
       import utmosv2
       model = utmosv2.create_model(pretrained=True)
-      mos = model.predict(input_dir="/path/to/wav/dir/")
+      mos = model.predict(input_dir="/path/to/wav/dir/") # returns a list of dicts with 'file_path' and 'predicted_mos' keys
       ```
 
 > [!NOTE]
