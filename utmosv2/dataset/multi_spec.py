@@ -6,14 +6,11 @@ import librosa
 import numpy as np
 import torch
 
-from utmosv2.dataset._base import _BaseDataset
+from utmosv2.dataset._base import BaseDataset, DataDomainMixin
 from utmosv2.dataset._utils import (
     extend_audio,
-    get_dataset_map,
-    load_audio,
     select_random_start,
 )
-from utmosv2.preprocess._preprocess import remove_silent_section
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -21,10 +18,10 @@ if TYPE_CHECKING:
     import pandas as pd
 
     from utmosv2._settings._config import Config
-    from utmosv2.dataset._schema import DatasetSchema
+    from utmosv2.dataset._schema import DatasetItem, InMemoryData
 
 
-class MultiSpecDataset(_BaseDataset):
+class MultiSpecDataset(BaseDataset):
     """
     Dataset class for mel-spectrogram feature extractor. This class is responsible for
     loading audio data, generating multiple spectrograms for each sample, and
@@ -47,14 +44,7 @@ class MultiSpecDataset(_BaseDataset):
         Returns:
             tuple: The spectrogram (torch.Tensor) and target MOS (torch.Tensor) for the sample.
         """
-        row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
-        file = row.file_path
-        y = load_audio(self.cfg, file)
-        if (
-            hasattr(self.cfg.dataset, "remove_silent_section")
-            and self.cfg.dataset.remove_silent_section
-        ):
-            y = remove_silent_section(y)
+        y, target = self._get_audio(idx)
         specs = []
         length = int(self.cfg.dataset.spec_frames.frame_sec * self.cfg.sr)
         y = extend_audio(y, length, method=self.cfg.dataset.spec_frames.extend)
@@ -79,13 +69,10 @@ class MultiSpecDataset(_BaseDataset):
                 specs.append(spec_tensor)
         spec_tensor = torch.stack(specs).float()
 
-        target = row.mos or 0.0
-        target = torch.tensor(target, dtype=torch.float32)
-
         return spec_tensor, target
 
 
-class MultiSpecExtDataset(MultiSpecDataset):
+class MultiSpecExtDataset(MultiSpecDataset, DataDomainMixin):
     """
     Dataset class for mel-spectrogram feature extractor with data-domain embedding.
 
@@ -103,12 +90,12 @@ class MultiSpecExtDataset(MultiSpecDataset):
     def __init__(
         self,
         cfg: Config,
-        data: pd.DataFrame | list[DatasetSchema],
+        data: pd.DataFrame | list[DatasetItem] | InMemoryData,
         phase: str,
         transform: dict[str, Callable[[torch.Tensor], torch.Tensor]] | None = None,
     ) -> None:
-        super().__init__(cfg, data, phase, transform)
-        self.dataset_map = get_dataset_map(cfg)
+        MultiSpecDataset.__init__(self, cfg, data, phase, transform)
+        DataDomainMixin.__init__(self, cfg)
 
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         """
@@ -122,11 +109,7 @@ class MultiSpecExtDataset(MultiSpecDataset):
             and target MOS (torch.Tensor).
         """
         spec, target = super().__getitem__(idx)
-        row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
-
-        d = np.zeros(len(self.dataset_map))
-        d[self.dataset_map[row.dataset]] = 1
-        dt = torch.tensor(d, dtype=torch.float32)
+        dt = self._get_data_domain_embedding(idx)
 
         return spec, dt, target
 

@@ -5,7 +5,7 @@ from typing import TYPE_CHECKING
 import torch
 
 from utmosv2.dataset import MultiSpecDataset, SSLExtDataset
-from utmosv2.dataset._base import _BaseDataset
+from utmosv2.dataset._base import BaseDataset
 
 if TYPE_CHECKING:
     from collections.abc import Callable
@@ -13,10 +13,10 @@ if TYPE_CHECKING:
     import pandas as pd
 
     from utmosv2._settings._config import Config
-    from utmosv2.dataset._schema import DatasetSchema
+    from utmosv2.dataset._schema import DatasetItem, InMemoryData
 
 
-class SSLLMultiSpecExtDataset(_BaseDataset):
+class SSLLMultiSpecExtDataset(BaseDataset):
     """
     Dataset class that combines both SSL (Self-Supervised Learning) and Multi-Spectrogram datasets.
     This dataset uses both SSLExtDataset and MultiSpecDataset to provide different representations
@@ -36,16 +36,13 @@ class SSLLMultiSpecExtDataset(_BaseDataset):
     def __init__(
         self,
         cfg: Config,
-        data: pd.DataFrame | list[DatasetSchema],
+        data: pd.DataFrame | list[DatasetItem] | InMemoryData,
         phase: str,
         transform: dict[str, Callable[[torch.Tensor], torch.Tensor]] | None = None,
     ) -> None:
         super().__init__(cfg, data, phase, transform)
         self.ssl = SSLExtDataset(cfg, data, phase)
         self.multi_spec = MultiSpecDataset(cfg, data, phase, transform)
-
-    def __len__(self) -> int:
-        return len(self.data)
 
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         """
