@@ -26,14 +26,8 @@ class UTMOSv2ModelMixin(abc.ABC):
     Abstract mixin for UTMOSv2 models, providing a template for prediction.
     """
 
-    @property
-    @abc.abstractmethod
-    def _cfg(self) -> Config:
-        pass
-
-    @abc.abstractmethod
-    def eval(self) -> nn.Module:
-        pass
+    _cfg: Config
+    _model: nn.Module
 
     @abc.abstractmethod
     def __call__(self, *args: Any, **kwargs: Any) -> torch.Tensor:
@@ -291,7 +285,7 @@ class UTMOSv2ModelMixin(abc.ABC):
         device: str | torch.device,
         verbose: bool,
     ) -> np.ndarray:
-        self.eval().to(device)
+        self._model.eval().to(device)
         res = 0.0
         for i in range(num_repetitions):
             pred = []
