@@ -304,7 +304,7 @@ class UTMOSv2ModelMixin(abc.ABC):
                     x = t[:-1]
                     x = [t.to(device, non_blocking=True) for t in x]
                     with autocast():
-                        output = self.__call__(*x).squeeze(1)
+                        output = self._model(*x).squeeze(1)
                     pred.append(output.cpu().numpy())
             res += np.concatenate(pred) / num_repetitions
         assert isinstance(res, np.ndarray)
