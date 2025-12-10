@@ -180,8 +180,6 @@ class UTMOSv2ModelMixin(abc.ABC):
         pred = self._predict_impl(dataloader, num_repetitions, device, verbose)
 
         if data is not None:
-            if data.ndim == 1:
-                pred = pred[0]
             return torch.from_numpy(pred) if isinstance(data, torch.Tensor) else pred
         assert not isinstance(data_internal, InMemoryData)
         if input_path is not None:
