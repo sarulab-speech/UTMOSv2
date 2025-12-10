@@ -53,6 +53,14 @@ class UTMOSv2Model(nn.Module, UTMOSv2ModelMixin):
     def forward(self, *args: Any, **kwargs: Any) -> torch.Tensor:
         return self._model(*args, **kwargs)
 
+    def state_dict(self, *args: Any, **kwargs: Any) -> dict[str, torch.Tensor]:
+        return self._model.state_dict(*args, **kwargs)
+
+    def load_state_dict(
+        self, state_dict: dict[str, torch.Tensor], **kwargs: Any
+    ) -> Any:
+        return self._model.load_state_dict(state_dict, **kwargs)
+
     def __getattr__(self, name: str) -> Any:
         try:
             return super().__getattr__(name)  # type: ignore[attr-defined]
