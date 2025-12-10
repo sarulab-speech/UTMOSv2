@@ -18,7 +18,7 @@ class _BaseDataset(torch.utils.data.Dataset, abc.ABC):
     def __init__(
         self,
         cfg: Config,
-        data: pd.DataFrame | list[DatasetSchema],
+        data: pd.DataFrame | list[DatasetItem] | InMemoryData,
         phase: str,
         transform: dict[str, Callable[[torch.Tensor], torch.Tensor]] | None = None,
     ) -> None:
@@ -26,6 +26,22 @@ class _BaseDataset(torch.utils.data.Dataset, abc.ABC):
         self.data = data
         self.phase = phase
         self.transform = transform
+
+    def _get_audio_and_mos(self, idx: int) -> tuple[np.ndarray, torch.Tensor]:
+        if isinstance(self.data, InMemoryData):
+            y = self.data.data[idx]
+            mos = None
+        else:
+            row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
+            file = row.file_path
+            assert file is not None
+            y = load_audio(self.cfg, file)
+            mos = row.mos
+
+        if getattr(self.cfg.dataset, "remove_silent_section", None):
+            y = remove_silent_section(y)
+
+        return y, torch.tensor(mos or 0.0, dtype=torch.float32)
 
     def __len__(self) -> int:
         return len(self.data)
