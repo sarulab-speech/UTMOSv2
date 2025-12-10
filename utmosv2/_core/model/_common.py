@@ -169,9 +169,15 @@ class UTMOSv2ModelMixin(abc.ABC):
             val_list_path,
             predict_dataset,
         )
+        # NOTE: Temporarily modify the config to pass the remove_silent_section option
+        # This feature was implemented later as a user-facing utility, not part of the initial setup used for the VoiceMOS Challenge 2024
+        # or our paper experiments, where this functionally was not so necessary. To maintain backward compatibility and reproducibility,
+        # we intentionally kept it as an optional post-release feature rather than a default config entry.
+        # See these issues for more details:
+        # - https://github.com/sarulab-speech/UTMOSv2/issues/56
+        # - https://github.com/sarulab-speech/UTMOSv2/issues/73
         initial_state = getattr(self._cfg.dataset, "remove_silent_section", None)
-        if remove_silent_section:
-            self._cfg.dataset.remove_silent_section = True
+        self._cfg.dataset.remove_silent_section = remove_silent_section
         dataset = get_dataset(self._cfg, data_internal, self._cfg.phase)
         self._cfg.dataset.remove_silent_section = initial_state
 
