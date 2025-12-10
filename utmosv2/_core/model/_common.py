@@ -14,8 +14,6 @@ from utmosv2.dataset._schema import DatasetItem, InMemoryData
 from utmosv2.utils import get_dataset
 
 if TYPE_CHECKING:
-    from typing import Any
-
     import torch.nn as nn
 
     from utmosv2._settings._config import Config
@@ -28,10 +26,6 @@ class UTMOSv2ModelMixin(abc.ABC):
 
     _cfg: Config
     _model: nn.Module
-
-    @abc.abstractmethod
-    def __call__(self, *args: Any, **kwargs: Any) -> torch.Tensor:
-        pass
 
     @overload
     def predict(
