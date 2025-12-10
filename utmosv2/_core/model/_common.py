@@ -3,14 +3,14 @@ from __future__ import annotations
 import abc
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, overload
 
 import numpy as np
 import torch
 from torch.cuda.amp import autocast
 from tqdm import tqdm
 
-from utmosv2.dataset._schema import DatasetSchema
+from utmosv2.dataset._schema import DatasetItem, InMemoryData
 from utmosv2.utils import get_dataset
 
 if TYPE_CHECKING:
@@ -39,9 +39,78 @@ class UTMOSv2ModelMixin(abc.ABC):
     def __call__(self, *args: Any, **kwargs: Any) -> torch.Tensor:
         pass
 
+    @overload
     def predict(
         self,
         *,
+        data: torch.Tensor = ...,
+        input_path: Path | str | None = ...,
+        input_dir: Path | str | None = ...,
+        val_list: list[str] | None = ...,
+        val_list_path: Path | str | None = ...,
+        predict_dataset: str = ...,
+        device: str | torch.device = ...,
+        num_workers: int = ...,
+        batch_size: int = ...,
+        num_repetitions: int = ...,
+        remove_silent_section: bool = ...,
+        verbose: bool = ...,
+    ) -> torch.Tensor: ...
+    @overload
+    def predict(
+        self,
+        *,
+        data: np.ndarray = ...,
+        input_path: Path | str | None = ...,
+        input_dir: Path | str | None = ...,
+        val_list: list[str] | None = ...,
+        val_list_path: Path | str | None = ...,
+        predict_dataset: str = ...,
+        device: str | torch.device = ...,
+        num_workers: int = ...,
+        batch_size: int = ...,
+        num_repetitions: int = ...,
+        remove_silent_section: bool = ...,
+        verbose: bool = ...,
+    ) -> np.ndarray: ...
+    @overload
+    def predict(
+        self,
+        *,
+        data: None = ...,
+        input_path: Path | str = ...,
+        input_dir: None = ...,
+        val_list: list[str] | None = ...,
+        val_list_path: Path | str | None = ...,
+        predict_dataset: str = ...,
+        device: str | torch.device = ...,
+        num_workers: int = ...,
+        batch_size: int = ...,
+        num_repetitions: int = ...,
+        remove_silent_section: bool = ...,
+        verbose: bool = ...,
+    ) -> float: ...
+    @overload
+    def predict(
+        self,
+        *,
+        data: None = ...,
+        input_path: None = ...,
+        input_dir: Path | str = ...,
+        val_list: list[str] | None = ...,
+        val_list_path: Path | str | None = ...,
+        predict_dataset: str = ...,
+        device: str | torch.device = ...,
+        num_workers: int = ...,
+        batch_size: int = ...,
+        num_repetitions: int = ...,
+        remove_silent_section: bool = ...,
+        verbose: bool = ...,
+    ) -> list[dict[str, str | float]]: ...
+    def predict(
+        self,
+        *,
+        data: torch.Tensor | np.ndarray | None = None,
         input_path: Path | str | None = None,
         input_dir: Path | str | None = None,
         val_list: list[str] | None = None,
@@ -53,17 +122,19 @@ class UTMOSv2ModelMixin(abc.ABC):
         num_repetitions: int = 1,
         remove_silent_section: bool = True,
         verbose: bool = True,
-    ) -> float | list[dict[str, str | float]]:
+    ) -> torch.Tensor | np.ndarray | float | list[dict[str, str | float]]:
         """
         Predict the MOS (Mean Opinion Score) of audio files.
 
         Args:
+            data (torch.Tensor | np.ndarray | None):
+                Preloaded audio data as a tensor or numpy array. If provided, `input_path` and `input_dir` are ignored.
             input_path (Path | str | None):
                 Path to a single audio file (`.wav`) to predict MOS.
-                Either `input_path` or `input_dir` must be provided, but not both.
+                Either `input_path` or `input_dir` must be provided when `data` is `None`, but not both.
             input_dir (Path | str | None):
                 Path to a directory of `.wav` files to predict MOS.
-                Either `input_path` or `input_dir` must be provided, but not both.
+                Either `input_path` or `input_dir` must be provided when `data` is `None`, but not both.
             val_list (list[str] | None):
                 List of filenames to include for prediction. Defaults to None.
             val_list_path (Path | str | None):
@@ -90,26 +161,25 @@ class UTMOSv2ModelMixin(abc.ABC):
         Raises:
             ValueError: If both `input_path` and `input_dir` are provided, or if neither is provided.
         """
-        if not ((input_path is None) ^ (input_dir is None)):
-            raise ValueError(
-                "Either `input_path` or `input_dir` must be provided, but not both."
-            )
-        data = self._prepare_data(
+        data_internal = self._prepare_data(
+            data,
             input_path,
             input_dir,
             val_list,
             val_list_path,
             predict_dataset,
         )
-        if remove_silent_section:
-            initial_state = (
-                hasattr(self._cfg.dataset, "remove_silent_section")
-                and self._cfg.dataset.remove_silent_section
-            )
-            self._cfg.dataset.remove_silent_section = True
-        dataset = get_dataset(self._cfg, data, self._cfg.phase)
-        if remove_silent_section and not initial_state:
-            self._cfg.dataset.remove_silent_section = False
+        # NOTE: Temporarily modify the config to pass the remove_silent_section option
+        # This feature was implemented later as a user-facing utility, not part of the initial setup used for the VoiceMOS Challenge 2024
+        # or our paper experiments, where this functionally was not so necessary. To maintain backward compatibility and reproducibility,
+        # we intentionally kept it as an optional post-release feature rather than a default config entry.
+        # See these issues for more details:
+        # - https://github.com/sarulab-speech/UTMOSv2/issues/56
+        # - https://github.com/sarulab-speech/UTMOSv2/issues/73
+        initial_state = getattr(self._cfg.dataset, "remove_silent_section", None)
+        self._cfg.dataset.remove_silent_section = remove_silent_section
+        dataset = get_dataset(self._cfg, data_internal, self._cfg.phase)
+        self._cfg.dataset.remove_silent_section = initial_state
 
         dataloader = torch.utils.data.DataLoader(
             dataset,
@@ -121,23 +191,45 @@ class UTMOSv2ModelMixin(abc.ABC):
 
         pred = self._predict_impl(dataloader, num_repetitions, device, verbose)
 
+        if data is not None:
+            if data.ndim == 1:
+                pred = pred[0]
+            return torch.from_numpy(pred) if isinstance(data, torch.Tensor) else pred
+        assert not isinstance(data_internal, InMemoryData)
         if input_path is not None:
             return float(pred[0])
         else:
             return [
                 {"file_path": d.file_path.as_posix(), "predicted_mos": float(p)}
-                for d, p in zip(data, pred)
+                for d, p in zip(data_internal, pred)
             ]
 
     def _prepare_data(
         self,
+        data: torch.Tensor | np.ndarray | None,
         input_path: Path | str | None,
         input_dir: Path | str | None,
         val_list: list[str] | None,
         val_list_path: Path | str | None,
         predict_dataset: str,
-    ) -> list[DatasetSchema]:
-        assert (input_path is None) ^ (input_dir is None)
+    ) -> list[DatasetItem] | InMemoryData:
+        if data is not None:
+            if input_path is not None:
+                warnings.warn(
+                    "`input_path` is ignored when `data` is provided directly."
+                )
+            if input_dir is not None:
+                warnings.warn(
+                    "`input_dir` is ignored when `data` is provided directly."
+                )
+            return InMemoryData(
+                data=data if isinstance(data, np.ndarray) else data.cpu().numpy(),
+                dataset_name=predict_dataset,
+            )
+        if (input_path is None) == (input_dir is None):
+            raise ValueError(
+                "Either `input_path` or `input_dir` must be provided when `data` is None, but not both."
+            )
         if isinstance(input_path, str):
             input_path = Path(input_path)
         if isinstance(input_dir, str):
@@ -160,19 +252,19 @@ class UTMOSv2ModelMixin(abc.ABC):
                 raise FileNotFoundError(f"File not found: {val_list_path}")
             with open(val_list_path, "r") as f:
                 val_list.extend(f.read().splitlines())
-        res: list[DatasetSchema]
+        res: list[DatasetItem]
         if input_path is not None:
             res = [
-                DatasetSchema(
+                DatasetItem(
                     file_path=input_path,
-                    dataset=predict_dataset,
+                    dataset_name=predict_dataset,
                 )
             ]
         if input_dir is not None:
             res = [
-                DatasetSchema(
+                DatasetItem(
                     file_path=p,
-                    dataset=predict_dataset,
+                    dataset_name=predict_dataset,
                 )
                 for p in sorted(input_dir.glob("*.wav"))
             ]

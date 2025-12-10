@@ -2,26 +2,22 @@ from __future__ import annotations
 
 from typing import TYPE_CHECKING
 
-import numpy as np
 import torch
 
-from utmosv2.dataset._base import _BaseDataset
+from utmosv2.dataset._base import BaseDataset, DataDomainMixin
 from utmosv2.dataset._utils import (
     extend_audio,
-    get_dataset_map,
-    load_audio,
     select_random_start,
 )
-from utmosv2.preprocess._preprocess import remove_silent_section
 
 if TYPE_CHECKING:
     import pandas as pd
 
     from utmosv2._settings._config import Config
-    from utmosv2.dataset._schema import DatasetSchema
+    from utmosv2.dataset._schema import DatasetItem, InMemoryData
 
 
-class SSLDataset(_BaseDataset):
+class SSLDataset(BaseDataset):
     """
     Dataset class for SSL (Self-Supervised Learning) feature extractor.
     This class handles audio loading, extending, and random selection of a segment from the audio.
@@ -46,25 +42,15 @@ class SSLDataset(_BaseDataset):
         Returns:
             tuple: A tuple containing the processed audio (torch.Tensor), and target MOS (torch.Tensor).
         """
-        row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
-        file = row.file_path
-        y = load_audio(self.cfg, file)
-        if (
-            hasattr(self.cfg.dataset, "remove_silent_section")
-            and self.cfg.dataset.remove_silent_section
-        ):
-            y = remove_silent_section(y)
+        y, target = self._get_audio_and_mos(idx)
         length = int(self.cfg.dataset.ssl.duration * self.cfg.sr)
         y = extend_audio(y, length, method="tile")
         y = select_random_start(y, length)
 
-        target = row.mos or 0.0
-        target = torch.tensor(target, dtype=torch.float32)
-
         return torch.from_numpy(y), target
 
 
-class SSLExtDataset(SSLDataset):
+class SSLExtDataset(SSLDataset, DataDomainMixin):
     """
     Dataset class for SSL (Self-Supervised Learning) feature extractor with data-domein embedding.
 
@@ -78,10 +64,13 @@ class SSLExtDataset(SSLDataset):
     """
 
     def __init__(
-        self, cfg: Config, data: pd.DataFrame | list[DatasetSchema], phase: str
+        self,
+        cfg: Config,
+        data: pd.DataFrame | list[DatasetItem] | InMemoryData,
+        phase: str,
     ) -> None:
-        super().__init__(cfg, data, phase)
-        self.dataset_map = get_dataset_map(cfg)
+        SSLDataset.__init__(self, cfg, data, phase)
+        DataDomainMixin.__init__(self, cfg)
 
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         """
@@ -94,10 +83,6 @@ class SSLExtDataset(SSLDataset):
             and target MOS (torch.Tensor).
         """
         y, target = super().__getitem__(idx)
-        row = self.data[idx] if isinstance(self.data, list) else self.data.iloc[idx]
-
-        d = np.zeros(len(self.dataset_map))
-        d[self.dataset_map[row.dataset]] = 1
-        dt = torch.tensor(d, dtype=torch.float32)
+        dt = self._get_data_domain_embedding(idx)
 
         return y, dt, target

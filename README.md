@@ -84,12 +84,21 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
    ```
 
 2. Make predictions
+   - To predict the MOS of a tensor or array already loaded in memory:
+
+      ```python
+      import utmosv2
+      model = utmosv2.create_model(pretrained=True)
+      # data: np.ndarray or torch.Tensor with shape (batch_size, sequence_length) or (sequence_length,)
+      mos = model.predict(data=data) # returns a tensor or array with shape (batch_size,) or (1,)
+      ```
+
    - To predict the MOS of a single `.wav` file:
 
       ```python
       import utmosv2
       model = utmosv2.create_model(pretrained=True)
-      mos = model.predict(input_path="/path/to/wav/file.wav")
+      mos = model.predict(input_path="/path/to/wav/file.wav") # return a float value
       ```
 
    - To predict the MOS of all `.wav` files in a folder:
@@ -97,11 +106,14 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
       ```python
       import utmosv2
       model = utmosv2.create_model(pretrained=True)
-      mos = model.predict(input_dir="/path/to/wav/dir/")
+      mos = model.predict(input_dir="/path/to/wav/dir/") # returns a list of dicts with 'file_path' and 'predicted_mos' keys
       ```
 
 > [!NOTE]
-> Either `input_path` or `input_dir` must be specified, but not both.
+> When `data` is provided, `input_path` and `input_dir` are ignored.
+
+> [!NOTE]
+> Either `input_path` or `input_dir` must be specified when `data` is `None`, but not both.
 
 <h3 align="center">
   <div>📜 Using the inference script 📜</div>
