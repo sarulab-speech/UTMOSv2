@@ -11,10 +11,10 @@ if TYPE_CHECKING:
     import pandas as pd
 
     from utmosv2._settings._config import Config
-    from utmosv2.dataset._schema import DatasetSchema
+    from utmosv2.dataset._schema import DatasetItem
 
 
-class _BaseDataset(torch.utils.data.Dataset, abc.ABC):
+class BaseDataset(torch.utils.data.Dataset, abc.ABC):
     def __init__(
         self,
         cfg: Config,
