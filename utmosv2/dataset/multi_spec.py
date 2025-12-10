@@ -44,7 +44,7 @@ class MultiSpecDataset(BaseDataset):
         Returns:
             tuple: The spectrogram (torch.Tensor) and target MOS (torch.Tensor) for the sample.
         """
-        y, target = self._get_audio(idx)
+        y, target = self._get_audio_and_mos(idx)
         specs = []
         length = int(self.cfg.dataset.spec_frames.frame_sec * self.cfg.sr)
         y = extend_audio(y, length, method=self.cfg.dataset.spec_frames.extend)

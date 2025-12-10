@@ -42,7 +42,7 @@ class SSLDataset(BaseDataset):
         Returns:
             tuple: A tuple containing the processed audio (torch.Tensor), and target MOS (torch.Tensor).
         """
-        y, target = self._get_audio(idx)
+        y, target = self._get_audio_and_mos(idx)
         length = int(self.cfg.dataset.ssl.duration * self.cfg.sr)
         y = extend_audio(y, length, method="tile")
         y = select_random_start(y, length)

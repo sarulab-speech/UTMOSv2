@@ -65,7 +65,9 @@ class DataDomainMixin:
     def _get_data_domain_embedding(self, idx: int) -> torch.Tensor:
         dataset_name = (
             self.data[idx].dataset_name
-            if isinstance(self.data, (list, np.ndarray))
+            if isinstance(self.data, list)
+            else self.data.dataset_name
+            if isinstance(self.data, InMemoryData)
             else self.data.iloc[idx].dataset
         )
 
