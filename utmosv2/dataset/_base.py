@@ -49,3 +49,21 @@ class _BaseDataset(torch.utils.data.Dataset, abc.ABC):
     @abc.abstractmethod
     def __getitem__(self, idx: int) -> tuple[torch.Tensor, ...]:
         pass
+
+
+class DataDomainMixin:
+    data: pd.DataFrame | list[DatasetItem] | np.ndarray
+
+    def __init__(self, cfg: Config) -> None:
+        self.dataset_map = get_dataset_map(cfg)
+
+    def _get_data_domain_embedding(self, idx: int) -> torch.Tensor:
+        dataset_name = (
+            self.data[idx].dataset_name
+            if isinstance(self.data, (list, np.ndarray))
+            else self.data.iloc[idx].dataset
+        )
+
+        d = torch.zeros(len(self.dataset_map), dtype=torch.float32)
+        d[self.dataset_map[dataset_name]] = 1.0
+        return d
