@@ -14,8 +14,6 @@ from utmosv2.dataset._schema import DatasetItem, InMemoryData
 from utmosv2.utils import get_dataset
 
 if TYPE_CHECKING:
-    from typing import Any
-
     import torch.nn as nn
 
     from utmosv2._settings._config import Config
@@ -26,18 +24,8 @@ class UTMOSv2ModelMixin(abc.ABC):
     Abstract mixin for UTMOSv2 models, providing a template for prediction.
     """
 
-    @property
-    @abc.abstractmethod
-    def _cfg(self) -> Config:
-        pass
-
-    @abc.abstractmethod
-    def eval(self) -> nn.Module:
-        pass
-
-    @abc.abstractmethod
-    def __call__(self, *args: Any, **kwargs: Any) -> torch.Tensor:
-        pass
+    _cfg: Config
+    _model: nn.Module
 
     @overload
     def predict(
@@ -291,7 +279,7 @@ class UTMOSv2ModelMixin(abc.ABC):
         device: str | torch.device,
         verbose: bool,
     ) -> np.ndarray:
-        self.eval().to(device)
+        self._model.eval().to(device)
         res = 0.0
         for i in range(num_repetitions):
             pred = []
@@ -310,7 +298,7 @@ class UTMOSv2ModelMixin(abc.ABC):
                     x = t[:-1]
                     x = [t.to(device, non_blocking=True) for t in x]
                     with autocast():
-                        output = self.__call__(*x).squeeze(1)
+                        output = self._model(*x).squeeze(1)
                     pred.append(output.cpu().numpy())
             res += np.concatenate(pred) / num_repetitions
         assert isinstance(res, np.ndarray)
