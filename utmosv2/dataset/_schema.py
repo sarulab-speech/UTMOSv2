@@ -7,8 +7,10 @@ if TYPE_CHECKING:
     from pathlib import Path
 
 
-@dataclass
-class DatasetSchema:
+@dataclass(frozen=True)
+class DatasetItem:
     file_path: Path
-    dataset: str
+    dataset_name: str
     mos: int | None = None
+
+
