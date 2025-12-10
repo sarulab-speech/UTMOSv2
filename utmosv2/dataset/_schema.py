@@ -25,9 +25,9 @@ class InMemoryData:
     dataset_name: str
 
     def __post_init__(self) -> None:
-        assert (
-            self.data.ndim <= 2
-        ), "InMemoryDataset only supports 1D or 2D data arrays."
+        assert self.data.ndim <= 2, (
+            "InMemoryDataset only supports 1D or 2D data arrays."
+        )
         if self.data.ndim == 1:
             object.__setattr__(self, "data", self.data[np.newaxis, :])
 
