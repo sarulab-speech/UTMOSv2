@@ -3,7 +3,7 @@ from __future__ import annotations
 import abc
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, overload
 
 import numpy as np
 import torch
@@ -39,6 +39,74 @@ class UTMOSv2ModelMixin(abc.ABC):
     def __call__(self, *args: Any, **kwargs: Any) -> torch.Tensor:
         pass
 
+    @overload
+    def predict(
+        self,
+        *,
+        data: torch.Tensor = ...,
+        input_path: Path | str | None = ...,
+        input_dir: Path | str | None = ...,
+        val_list: list[str] | None = ...,
+        val_list_path: Path | str | None = ...,
+        predict_dataset: str = ...,
+        device: str | torch.device = ...,
+        num_workers: int = ...,
+        batch_size: int = ...,
+        num_repetitions: int = ...,
+        remove_silent_section: bool = ...,
+        verbose: bool = ...,
+    ) -> torch.Tensor: ...
+    @overload
+    def predict(
+        self,
+        *,
+        data: np.ndarray = ...,
+        input_path: Path | str | None = ...,
+        input_dir: Path | str | None = ...,
+        val_list: list[str] | None = ...,
+        val_list_path: Path | str | None = ...,
+        predict_dataset: str = ...,
+        device: str | torch.device = ...,
+        num_workers: int = ...,
+        batch_size: int = ...,
+        num_repetitions: int = ...,
+        remove_silent_section: bool = ...,
+        verbose: bool = ...,
+    ) -> np.ndarray: ...
+    @overload
+    def predict(
+        self,
+        *,
+        data: None = ...,
+        input_path: Path | str = ...,
+        input_dir: Path | str | None = ...,
+        val_list: list[str] | None = ...,
+        val_list_path: Path | str | None = ...,
+        predict_dataset: str = ...,
+        device: str | torch.device = ...,
+        num_workers: int = ...,
+        batch_size: int = ...,
+        num_repetitions: int = ...,
+        remove_silent_section: bool = ...,
+        verbose: bool = ...,
+    ) -> float: ...
+    @overload
+    def predict(
+        self,
+        *,
+        data: None = ...,
+        input_path: Path | str | None = ...,
+        input_dir: Path | str = ...,
+        val_list: list[str] | None = ...,
+        val_list_path: Path | str | None = ...,
+        predict_dataset: str = ...,
+        device: str | torch.device = ...,
+        num_workers: int = ...,
+        batch_size: int = ...,
+        num_repetitions: int = ...,
+        remove_silent_section: bool = ...,
+        verbose: bool = ...,
+    ) -> list[dict[str, str | float]]: ...
     def predict(
         self,
         *,
@@ -54,7 +122,7 @@ class UTMOSv2ModelMixin(abc.ABC):
         num_repetitions: int = 1,
         remove_silent_section: bool = True,
         verbose: bool = True,
-    ) -> float | list[dict[str, str | float]]:
+    ) -> torch.Tensor | np.ndarray | float | list[dict[str, str | float]]:
         """
         Predict the MOS (Mean Opinion Score) of audio files.
 
@@ -63,10 +131,10 @@ class UTMOSv2ModelMixin(abc.ABC):
                 Preloaded audio data as a tensor or numpy array. If provided, `input_path` and `input_dir` are ignored.
             input_path (Path | str | None):
                 Path to a single audio file (`.wav`) to predict MOS.
-                Either `input_path` or `input_dir` must be provided, but not both.
+                Either `input_path` or `input_dir` must be provided when `data` is `None`, but not both.
             input_dir (Path | str | None):
                 Path to a directory of `.wav` files to predict MOS.
-                Either `input_path` or `input_dir` must be provided, but not both.
+                Either `input_path` or `input_dir` must be provided when `data` is `None`, but not both.
             val_list (list[str] | None):
                 List of filenames to include for prediction. Defaults to None.
             val_list_path (Path | str | None):
@@ -118,7 +186,9 @@ class UTMOSv2ModelMixin(abc.ABC):
         pred = self._predict_impl(dataloader, num_repetitions, device, verbose)
 
         if data is not None:
-            return pred
+            if data.ndim == 1:
+                pred = pred[0]
+            return torch.from_numpy(pred) if isinstance(data, torch.Tensor) else pred
         assert not isinstance(data_internal, InMemoryData)
         if input_path is not None:
             return float(pred[0])
