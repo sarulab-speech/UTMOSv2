@@ -57,7 +57,7 @@ class BaseDataset(torch.utils.data.Dataset, abc.ABC):
 
 
 class DataDomainMixin:
-    data: pd.DataFrame | list[DatasetItem] | np.ndarray
+    data: pd.DataFrame | list[DatasetItem] | InMemoryData
 
     def __init__(self, cfg: Config) -> None:
         self.dataset_map = get_dataset_map(cfg)
