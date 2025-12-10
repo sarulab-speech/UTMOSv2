@@ -90,7 +90,7 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
       import utmosv2
       model = utmosv2.create_model(pretrained=True)
       # data: torch.Tensor or np.ndarray with shape (batch_size, sequence_length) or (sequence_length,)
-      mos = model.predict(data=data) # Returns a tensor or array with shape (batch_size,) or (1,)
+      mos = model.predict(data=data) # Returns a torch.Tensor or np.ndarray with shape (batch_size,) or (1,)
       ```
 
    - To predict the MOS of a single `.wav` file:
