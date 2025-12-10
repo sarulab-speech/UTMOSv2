@@ -3,7 +3,12 @@ from __future__ import annotations
 import abc
 from typing import TYPE_CHECKING
 
+import numpy as np
 import torch
+
+from utmosv2.dataset._schema import InMemoryData
+from utmosv2.dataset._utils import get_dataset_map, load_audio
+from utmosv2.preprocess._preprocess import remove_silent_section
 
 if TYPE_CHECKING:
     from collections.abc import Callable
