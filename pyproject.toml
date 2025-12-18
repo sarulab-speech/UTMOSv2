@@ -17,6 +17,7 @@ classifiers = [
     "Programming Language :: Python :: 3.13",
     "Programming Language :: Python :: 3 :: Only",
 ]
+# TODO: Reduce dependencies
 dependencies = [
     "numpy>=1.24.4",
     "torch>=2.1.1",
@@ -24,7 +25,8 @@ dependencies = [
     "librosa>=0.10.2",
     "tqdm>=4.66.4",
     "transformers>=4.42.4",
-    "typing-extensions"
+    "typing-extensions",
+    "torchaudio>=2.1.1",
 ]
 requires-python = ">=3.9"
 dynamic = ["version"]
