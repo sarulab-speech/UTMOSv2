@@ -3,10 +3,11 @@ from __future__ import annotations
 import abc
 import warnings
 from pathlib import Path
-from typing import TYPE_CHECKING, overload
+from typing import TYPE_CHECKING, TypeVar, overload
 
 import numpy as np
 import torch
+import torchaudio
 from torch.cuda.amp import autocast
 from tqdm import tqdm
 
@@ -17,6 +18,8 @@ if TYPE_CHECKING:
     import torch.nn as nn
 
     from utmosv2._settings._config import Config
+
+ArrayLike = TypeVar("ArrayLike", torch.Tensor, np.ndarray)
 
 
 class UTMOSv2ModelMixin(abc.ABC):
@@ -31,9 +34,8 @@ class UTMOSv2ModelMixin(abc.ABC):
     def predict(
         self,
         *,
-        data: torch.Tensor = ...,
-        input_path: Path | str | None = ...,
-        input_dir: Path | str | None = ...,
+        data: ArrayLike = ...,
+        sr: int = ...,
         val_list: list[str] | None = ...,
         val_list_path: Path | str | None = ...,
         predict_dataset: str = ...,
@@ -43,31 +45,12 @@ class UTMOSv2ModelMixin(abc.ABC):
         num_repetitions: int = ...,
         remove_silent_section: bool = ...,
         verbose: bool = ...,
-    ) -> torch.Tensor: ...
+    ) -> ArrayLike: ...
     @overload
     def predict(
         self,
         *,
-        data: np.ndarray = ...,
-        input_path: Path | str | None = ...,
-        input_dir: Path | str | None = ...,
-        val_list: list[str] | None = ...,
-        val_list_path: Path | str | None = ...,
-        predict_dataset: str = ...,
-        device: str | torch.device = ...,
-        num_workers: int = ...,
-        batch_size: int = ...,
-        num_repetitions: int = ...,
-        remove_silent_section: bool = ...,
-        verbose: bool = ...,
-    ) -> np.ndarray: ...
-    @overload
-    def predict(
-        self,
-        *,
-        data: None = ...,
         input_path: Path | str = ...,
-        input_dir: None = ...,
         val_list: list[str] | None = ...,
         val_list_path: Path | str | None = ...,
         predict_dataset: str = ...,
@@ -82,8 +65,6 @@ class UTMOSv2ModelMixin(abc.ABC):
     def predict(
         self,
         *,
-        data: None = ...,
-        input_path: None = ...,
         input_dir: Path | str = ...,
         val_list: list[str] | None = ...,
         val_list_path: Path | str | None = ...,
@@ -99,6 +80,7 @@ class UTMOSv2ModelMixin(abc.ABC):
         self,
         *,
         data: torch.Tensor | np.ndarray | None = None,
+        sr: int = 16000,
         input_path: Path | str | None = None,
         input_dir: Path | str | None = None,
         val_list: list[str] | None = None,
@@ -117,6 +99,8 @@ class UTMOSv2ModelMixin(abc.ABC):
         Args:
             data (torch.Tensor | np.ndarray | None):
                 Preloaded audio data as a tensor or numpy array. If provided, `input_path` and `input_dir` are ignored.
+            sr (int):
+                Sampling rate of the provided `data`. Defaults to 16000.
             input_path (Path | str | None):
                 Path to a single audio file (`.wav`) to predict MOS.
                 Either `input_path` or `input_dir` must be provided when `data` is `None`, but not both.
@@ -151,6 +135,7 @@ class UTMOSv2ModelMixin(abc.ABC):
         """
         data_internal = self._prepare_data(
             data,
+            sr,
             input_path,
             input_dir,
             val_list,
@@ -193,6 +178,7 @@ class UTMOSv2ModelMixin(abc.ABC):
     def _prepare_data(
         self,
         data: torch.Tensor | np.ndarray | None,
+        sr: int,
         input_path: Path | str | None,
         input_dir: Path | str | None,
         val_list: list[str] | None,
@@ -208,6 +194,12 @@ class UTMOSv2ModelMixin(abc.ABC):
                 warnings.warn(
                     "`input_dir` is ignored when `data` is provided directly."
                 )
+            if sr != self._cfg.sr:
+                data = torch.from_numpy(data) if isinstance(data, np.ndarray) else data
+                data = torchaudio.transforms.Resample(
+                    orig_freq=sr, new_freq=self._cfg.sr
+                )(data)
+                assert data is not None  # for mypy
             return InMemoryData(
                 data=data if isinstance(data, np.ndarray) else data.cpu().numpy(),
                 dataset_name=predict_dataset,
