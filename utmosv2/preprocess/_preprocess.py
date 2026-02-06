@@ -85,9 +85,11 @@ def _clip_and_select_audio(
 
 def _change_file_path(cfg: Config, data: pd.DataFrame, data_name: str = "bvcc") -> None:
     data.loc[:, "file_path"] = data.loc[:, "file_path"].apply(
-        lambda x: cfg.preprocess.save_path
-        / data_name
-        / x.as_posix().split("/")[-1].replace(".wav", ".npy")
+        lambda x: (
+            cfg.preprocess.save_path
+            / data_name
+            / x.as_posix().split("/")[-1].replace(".wav", ".npy")
+        )
     )
 
 
