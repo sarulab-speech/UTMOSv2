@@ -211,14 +211,14 @@ If you find UTMOSv2 useful in your research, please cite the following paper:
   author    = {Baba, Kaito and Nakata, Wataru and Saito, Yuki and Saruwatari, Hiroshi},
   booktitle = {IEEE Spoken Language Technology Workshop (SLT)},
   year      = {2024},
-  pages={818-824},
+  pages={818--824},
   doi={10.1109/SLT61566.2024.10832315},
 }
 ```
 
 <h2 align="left">
   <div>:octocat: GitHub Star History</div>
-  <a href="https://github.com/sarulab-speech/UTMOSv2/tree/main?tab=readme-ov-file#---github-star-history--------">
+  <a href="https://github.com/sarulab-speech/UTMOSv2/tree/main?tab=readme-ov-file#--octocat-github-star-history--------">
     <img width="85%" height="6px" src="docs/image/line2.svg">
   </a>
 </h2>
