@@ -45,6 +45,9 @@
   <a target="_blank" href="http://arxiv.org/abs/2409.09305">
     <img src="https://img.shields.io/badge/arXiv-2409.09305-b31b1b.svg" alt="arXiv"/>
   </a>
+  <a target="_blank" href="https://ieeexplore.ieee.org/document/10832315">
+    <img src="https://img.shields.io/badge/IEEE%20Xplore-10832315-blue.svg" alt="poster"/>
+  </a>
   <a target="_blank" href="https://github.com/sarulab-speech/UTMOSv2/blob/main/poster.pdf">
     <img src="https://img.shields.io/badge/IEEE%20SLT%202024-Poster-blue.svg" alt="poster"/>
   </a>
@@ -208,5 +211,19 @@ If you find UTMOSv2 useful in your research, please cite the following paper:
   author    = {Baba, Kaito and Nakata, Wataru and Saito, Yuki and Saruwatari, Hiroshi},
   booktitle = {IEEE Spoken Language Technology Workshop (SLT)},
   year      = {2024},
+  pages={818-824},
+  doi={10.1109/SLT61566.2024.10832315},
 }
 ```
+
+<h2 align="left">
+  <div>:octocat: GitHub Star History</div>
+  <a href="https://github.com/sarulab-speech/UTMOSv2/tree/main?tab=readme-ov-file#---github-star-history--------">
+    <img width="85%" height="6px" src="docs/image/line2.svg">
+  </a>
+</h2>
+
+
+<div align="center">
+  <img width="90%" src="https://starchart.cc/sarulab-speech/UTMOSv2.svg?variant=adaptive" alt="GitHub Star History"/>
+</div>
