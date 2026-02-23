@@ -290,6 +290,6 @@ class UTMOSv2ModelMixin(abc.ABC):
                     with autocast():
                         output = self._model(*x).squeeze(1)
                     pred.append(output.cpu().numpy())
-            res += np.concatenate(pred) / num_repetitions
+            res += np.concatenate(pred) / num_repetitions  # type: ignore
         assert isinstance(res, np.ndarray)
         return res
