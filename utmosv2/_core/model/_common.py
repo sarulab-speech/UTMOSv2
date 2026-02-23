@@ -198,7 +198,7 @@ class UTMOSv2ModelMixin(abc.ABC):
                 data = torch.from_numpy(data) if isinstance(data, np.ndarray) else data
                 data = torchaudio.transforms.Resample(
                     orig_freq=sr, new_freq=self._cfg.sr
-                )(data)
+                ).to(data.device)(data)
                 assert data is not None  # for mypy
             return InMemoryData(
                 data=data if isinstance(data, np.ndarray) else data.cpu().numpy(),
@@ -290,6 +290,6 @@ class UTMOSv2ModelMixin(abc.ABC):
                     with autocast():
                         output = self._model(*x).squeeze(1)
                     pred.append(output.cpu().numpy())
-            res += np.concatenate(pred) / num_repetitions
+            res += np.concatenate(pred) / num_repetitions  # type: ignore
         assert isinstance(res, np.ndarray)
         return res
