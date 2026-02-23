@@ -14,4 +14,4 @@ __all__ = [
     "UTMOSv2Model",
 ]
 
-__version__ = "1.2.1"
+__version__ = "1.3.0"
