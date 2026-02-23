@@ -83,7 +83,9 @@ If you want to make predictions using the UTMOSv2 library, follow these steps:
 1. Install the UTMOSv2 library from GitHub
 
    ```bash
-   pip install git+https://github.com/sarulab-speech/UTMOSv2.git
+   uv add git+https://github.com/sarulab-speech/UTMOSv2.git
+   # If you're using pip:
+   # pip install git+https://github.com/sarulab-speech/UTMOSv2.git
    ```
 
 2. Make predictions
@@ -138,8 +140,10 @@ If you want to make predictions using the inference script, follow these steps:
 2. Install Package
 
    ```bash
-   pip install --upgrade pip  # enable PEP 660 support
-   pip install -e .[optional] # install with optional dependencies
+   uv sync --extra optional
+   # If you're using pip:
+   # pip install --upgrade pip  # enable PEP 660 support
+   # pip install -e .[optional] # install with optional dependencies
    ```
 
 3. Make predictions
@@ -211,8 +215,8 @@ If you find UTMOSv2 useful in your research, please cite the following paper:
   author    = {Baba, Kaito and Nakata, Wataru and Saito, Yuki and Saruwatari, Hiroshi},
   booktitle = {IEEE Spoken Language Technology Workshop (SLT)},
   year      = {2024},
-  pages={818--824},
-  doi={10.1109/SLT61566.2024.10832315},
+  pages     = {818--824},
+  doi       = {10.1109/SLT61566.2024.10832315},
 }
 ```
 
