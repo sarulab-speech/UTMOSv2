@@ -87,7 +87,7 @@ class UTMOSv2ModelMixin(abc.ABC):
         val_list_path: Path | str | None = None,
         predict_dataset: str = "sarulab",
         device: str | torch.device = "cuda:0",
-        num_workers: int = 4,
+        num_workers: int = 0,
         batch_size: int = 16,
         num_repetitions: int = 1,
         remove_silent_section: bool = True,
@@ -116,7 +116,7 @@ class UTMOSv2ModelMixin(abc.ABC):
             device (str | torch.device):
                 Device to use for prediction (e.g., "cuda:0" or "cpu"). Defaults to "cuda:0".
             num_workers (int):
-                Number of workers for data loading. Defaults to 4.
+                Number of workers for data loading. Defaults to 0.
             batch_size (int):
                 Batch size for the data loader. Defaults to 16.
             num_repetitions (int):

@@ -29,7 +29,7 @@ class _SSLEncoder(nn.Module):
             sampling_rate=self.sr,
             return_tensors="pt",
         ).to(self.model.device)
-        outputs = self.model(**x, output_hidden_states=True)
+        outputs = self.model(**x, output_hidden_states=True)  # type: ignore
         return outputs.hidden_states
 
 
